@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="175dp"
+    android:layout_height="200dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/folder_card"
+        android:layout_width="@dimen/folder_card_width"
+        android:layout_height="@dimen/folder_card_height"
+        app:cardElevation="@dimen/folder_card_elevation">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="175dp"
+                android:layout_height="160dp"
+                app:srcCompat="@drawable/ic_baseline_folder_24" />
+
+            <TextView
+                android:id="@+id/folder_content_folder_title"
+                android:layout_width="175dp"
+                android:layout_height="40dp"
+                android:text="@string/default_folder_title_text_view_text"
+                android:textAlignment="center"
+                android:textSize="@dimen/folder_card_title_size"
+                android:textStyle="bold">
+
+            </TextView>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

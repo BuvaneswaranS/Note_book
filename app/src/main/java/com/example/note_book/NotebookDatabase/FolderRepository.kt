@@ -8,17 +8,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class FolderRepository(val folderDataDao: FolderDataDao) {
-
+class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDataDao){
 
     init {
 
     }
 
+//    ---------------------------------------------------------------------------------------------------------------------------
+//    Folder Area
+//    ---------------------------------------------------------------------------------------------------------------------------
     suspend fun insertDefaultFolder(){
-        Log.i("TestingApp","Entered Default folder function")
+//        Log.i("TestingApp","Entered Default folder function")
         folderDataDao.insertDefaultFolder(FolderData(folderName = "Default Folder", createdTime = System.currentTimeMillis()))
-        Log.i("TestingApp","inserted successfully")
+//        Log.i("TestingApp","inserted successfully")
     }
 
     suspend fun insert(folderData: FolderData){
@@ -32,8 +34,16 @@ class FolderRepository(val folderDataDao: FolderDataDao) {
     suspend fun getFolderList(): LiveData<List<FolderData>>{
         return folderDataDao.getAllDataByFolder()
     }
+//    ---------------------------------------------------------------------------------------------------------------------------
+//    Note Area
+//    ----------------------------------------------------------------------------------------------------------------------------
 
+    suspend fun insertNoteData(noteData: NoteData){
+        noteDataDao.insertNoteData(noteData)
+    }
 
-
+    suspend fun getDefaultFolderId(): String{
+        return folderDataDao.getDefaultFolderId()
+    }
 
 }

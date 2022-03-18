@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/home_Fragment">
 
     <fragment
         android:id="@+id/home_Fragment"
         android:name="com.example.note_book.HomeFragment.HomeFragment"
-        android:label="Home_Fragment" />
+        android:label="Home_Fragment" >
+        <action
+            android:id="@+id/action_home_Fragment_to_createNewNoteFragment"
+            app:destination="@id/createNewNoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createNewNoteFragment"
+        android:name="com.example.note_book.createNewNote.CreateNewNoteFragment"
+        android:label="CreateNewNoteFragment" />
 </navigation>

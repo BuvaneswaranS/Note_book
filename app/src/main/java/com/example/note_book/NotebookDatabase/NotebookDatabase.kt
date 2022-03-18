@@ -5,10 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [FolderData::class], version = 1, exportSchema = false)
+@Database(entities = [FolderData::class,NoteData::class], version = 2, exportSchema = false)
 abstract class NotebookDatabase: RoomDatabase() {
 
     abstract val folderDataDao: FolderDataDao
+    abstract val noteDataDao: NoteDataDao
+
 
     companion object{
 

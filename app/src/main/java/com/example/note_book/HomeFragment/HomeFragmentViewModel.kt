@@ -1,6 +1,6 @@
 package com.example.note_book.HomeFragment
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.note_book.NotebookDatabase.FolderData
@@ -39,9 +39,5 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
             folderRepository.updatefolderName(folderData)
         }
     }
-
-//    fun contentsPrint(){
-//        Log.i("TestingApp","Size = ${folder_list.value?.size}")
-//    }
 
 }

@@ -28,8 +28,6 @@ class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAd
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DisplayFolderListAdapter.ViewHolder {
 
             var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
-
-
         if(viewType == LAYOUT_ONE){
                 Log.i("TestingApp1","Finally Entered")
                  view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_default_folder, parent, false)

@@ -3,12 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_add_button.xml" value="0.1465" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_back_button.xml" value="0.1465" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_create_new_folder_24.xml" value="0.188" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_folder_24.xml" value="0.1775" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_create_dialog_box.xml" value="0.1465" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_edit.xml" value="0.1465" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1465" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_user_created_folder.xml" value="0.1465" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_create_new_note.xml" value="0.1796875" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_home_.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_default_folder.xml" value="0.1796875" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_user_created_folder.xml" value="0.1796875" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/page_home.xml" value="0.1796875" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/toolbar.xml" value="0.1796875" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/write_note_menu.xml" value="0.1796875" />
       </map>
     </option>
   </component>

@@ -17,6 +17,7 @@ import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.note_book.HomePage
 import com.example.note_book.NotebookDatabase.FolderData
@@ -50,7 +51,8 @@ class HomeFragment : Fragment(), itemClickListener {
 
         val application = requireNotNull(this.activity).application
         val folderDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
-        val repository = FolderRepository(folderDao)
+        val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
+        val repository = FolderRepository(folderDao, noteDataDao)
         val viewModelFactory = HomeFragmentViewModelFactory(repository)
 
         viewModel = ViewModelProvider(this,viewModelFactory).get(HomeFragmentViewModel::class.java)
@@ -76,7 +78,7 @@ class HomeFragment : Fragment(), itemClickListener {
         }
 
         binding.addNoteBtn.setOnClickListener{view ->
-
+            Navigation.findNavController(view).navigate(R.id.action_home_Fragment_to_createNewNoteFragment)
         }
 
         binding.addFolder.setOnClickListener{view ->
@@ -133,7 +135,8 @@ class HomeFragment : Fragment(), itemClickListener {
 //        Log.i("Testing1App","${folder_change_update_name.text}")
         builder.setPositiveButton("OK") { dialogInterface: DialogInterface, i ->
             val data= FolderData(folderId = folderData.folderId,folderName = folder_change_update_name.text.toString(), createdTime = folderData.createdTime, modifiedTime = System.currentTimeMillis())
-//            Log.i("Testing1App","FolderNAME -> ${data.folderName}")
+//
+//          Log.i("Testing1App","FolderNAME -> ${data.folderName}")
 
             viewModel.updateFolderName(data)
         }

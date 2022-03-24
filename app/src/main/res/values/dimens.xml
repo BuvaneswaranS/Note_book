@@ -37,6 +37,7 @@
     <dimen name="note_Title_text_Size">18sp</dimen>
     <dimen name="folder_title_text_Size">18sp</dimen>
 
+    <dimen name="note_card_width">155dp</dimen>
 
     <dimen name="Appbar_side_width">16dp</dimen>
     <dimen name="Appbar_distance_btwn_items">24dp</dimen>

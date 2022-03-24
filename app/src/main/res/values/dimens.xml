@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="catd_width">190dp</dimen>
+
     <dimen name="card_height">190dp</dimen>
+
     <dimen name="card_elevation">8dp</dimen>
+
     <dimen name="titile_text_size">18dp</dimen>
+
     <dimen name="note_descirption_text_size">16dp</dimen>
+
     <dimen name="folder_card_width">175dp</dimen>
+
     <dimen name="folder_card_height">200dp</dimen>
+
     <dimen name="folder_card_elevation">8dp</dimen>
+
     <dimen name="folder_card_title_size">18dp</dimen>
+
     <dimen name="Text_Description_size">20dp</dimen>
+
     <dimen name="note_title_text_size">20dp</dimen>
+
+    <dimen name="App_Bar_Layout">60dp</dimen>
+    <dimen name="Toolbar_height">56dp</dimen>
+    <dimen name="Image_layout_height">160dp</dimen>
+    <dimen name="folder_image_layout_width">175dp</dimen>
+
+    <dimen name="folder_title_layout_height">40dp</dimen>
+    <dimen name="folder_title_layout_width">175dp</dimen>
+
+    <dimen name="App_bar_height">56dp</dimen>
+
+    <dimen name="note_description_height">679dp</dimen>
+
+    <dimen name="note_Title_text_Size">18sp</dimen>
+    <dimen name="folder_title_text_Size">18sp</dimen>
+
+
+    <dimen name="Appbar_side_width">16dp</dimen>
+    <dimen name="Appbar_distance_btwn_items">24dp</dimen>
+
+    <dimen name="note_title_width">24dp</dimen>
+
+    <dimen name="add_btn_margin_bottom_end">40dp</dimen>
+    <dimen name="add_note_btn_margin_Bottom">20dp</dimen>
+    <dimen name="add_folder_btn_margin_Bottom">20dp</dimen>
+
+    <dimen name="Note_Description_padding_Start">10dp</dimen>
+    <dimen name="displayFolderTitle">16sp</dimen>
+    <dimen name="loading_text_size">18sp</dimen>
 </resources>

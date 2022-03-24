@@ -1,9 +1,7 @@
 package com.example.note_book.HomeFragment
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -14,21 +12,18 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.EditText
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.note_book.HomePage
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NotebookDatabase
 import com.example.note_book.R
 import com.example.note_book.databinding.FragmentHomeBinding
-import java.net.InterfaceAddress
 
 
-class HomeFragment : Fragment(), itemClickListener {
+class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeFragmentViewModel
@@ -47,7 +42,9 @@ class HomeFragment : Fragment(), itemClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_, container, false)
+//        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
 
         val application = requireNotNull(this.activity).application
         val folderDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
@@ -56,6 +53,12 @@ class HomeFragment : Fragment(), itemClickListener {
         val viewModelFactory = HomeFragmentViewModelFactory(repository)
 
         viewModel = ViewModelProvider(this,viewModelFactory).get(HomeFragmentViewModel::class.java)
+//        viewModel.getDefaultFolderId()
+
+        if(viewModel.folder_list.value?.isEmpty() == false){
+            Log.i("TestingApp","Ëntered")
+            viewModel.getDefaultFolderId()
+        }
 
         displayfolderAdapter = DisplayFolderListAdapter(this)
 
@@ -73,12 +76,13 @@ class HomeFragment : Fragment(), itemClickListener {
             if(viewModel.folder_list.value?.isEmpty() == true){
                 Log.i("TestingApp","Ëntered")
                 viewModel.updateDefaultFolder()
+                viewModel.getDefaultFolderId()
             }
 
         }
 
         binding.addNoteBtn.setOnClickListener{view ->
-            Navigation.findNavController(view).navigate(R.id.action_home_Fragment_to_createNewNoteFragment)
+            Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToCreateNewNoteFragment(viewModel.data.toString()))
         }
 
         binding.addFolder.setOnClickListener{view ->

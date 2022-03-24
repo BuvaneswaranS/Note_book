@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel() {
 
@@ -21,6 +18,8 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
     init {
         folder_list = folderRepository.folderDataDao.getAllDataByFolder()
     }
+
+    var data: String? =  ""
 
     fun updateDefaultFolder(){
         scope.launch {
@@ -37,6 +36,17 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
     fun updateFolderName(folderData: FolderData){
         scope.launch {
             folderRepository.updatefolderName(folderData)
+        }
+    }
+
+    fun getDefaultFolderId(){
+        scope.launch {
+            return@launch withContext(Dispatchers.Main){
+                data = folderRepository.getDefaultFolderId().folderId
+//                Log.i("TestingApp","folder id -> ${id}")
+
+            }
+
         }
     }
 

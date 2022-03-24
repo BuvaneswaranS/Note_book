@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="175dp"
-    android:layout_height="200dp"
+    android:layout_width="@dimen/folder_card_width"
+    android:layout_height="@dimen/folder_card_height"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/folder_card"
+        android:id="@+id/note_card"
         android:layout_width="@dimen/folder_card_width"
         android:layout_height="@dimen/folder_card_height"
         app:cardElevation="@dimen/folder_card_elevation">
@@ -16,18 +16,16 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="175dp"
-            android:layout_height="160dp"
+            android:layout_width="@dimen/folder_image_layout_width"
+            android:layout_height="@dimen/Image_layout_height"
             app:srcCompat="@drawable/ic_user_created_folder" />
 
         <TextView
             android:id="@+id/folder_content_folder_title"
-            android:layout_width="175dp"
-            android:layout_height="40dp"
-            android:text="@string/default_folder_title_text_view_text"
-            android:textAlignment="center"
-            android:textSize="@dimen/folder_card_title_size"
-            android:textStyle="bold">
+            style="@style/default_folder_title_style_made1"
+            android:layout_width="@dimen/folder_title_layout_width"
+            android:layout_height="@dimen/folder_title_layout_height"
+            android:text="@string/default_folder_title_text_view_text">
 
         </TextView>
 

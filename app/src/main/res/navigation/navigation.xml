@@ -12,9 +12,31 @@
         <action
             android:id="@+id/action_home_Fragment_to_createNewNoteFragment"
             app:destination="@id/createNewNoteFragment" />
+        <action
+            android:id="@+id/action_home_Fragment_to_displayFolderContentFragment"
+            app:destination="@id/displayFolderContentFragment" />
     </fragment>
     <fragment
         android:id="@+id/createNewNoteFragment"
         android:name="com.example.note_book.createNewNote.CreateNewNoteFragment"
-        android:label="CreateNewNoteFragment" />
+        android:label="CreateNewNoteFragment" >
+        <argument
+            android:name="noteFolderId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayFolderContentFragment"
+        android:name="com.example.note_book.displayFolderData.DisplayFolderContentFragment"
+        android:label="fragment_display_folder_content"
+        tools:layout="@layout/fragment_display_folder_content" >
+        <action
+            android:id="@+id/action_displayFolderContentFragment_to_createNewNoteFragment"
+            app:destination="@id/createNewNoteFragment" />
+        <argument
+            android:name="displayFolderId"
+            app:argType="string" />
+        <argument
+            android:name="displayFolderName"
+            app:argType="string" />
+    </fragment>
 </navigation>

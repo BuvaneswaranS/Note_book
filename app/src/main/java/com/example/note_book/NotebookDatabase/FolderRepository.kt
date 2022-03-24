@@ -3,16 +3,10 @@ package com.example.note_book.NotebookDatabase
 import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDataDao){
 
-    init {
-
-    }
 
 //    ---------------------------------------------------------------------------------------------------------------------------
 //    Folder Area
@@ -22,6 +16,7 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         folderDataDao.insertDefaultFolder(FolderData(folderName = "Default Folder", createdTime = System.currentTimeMillis()))
 //        Log.i("TestingApp","inserted successfully")
     }
+
 
     suspend fun insert(folderData: FolderData){
         folderDataDao.insertUserDefinedFolder(folderData)
@@ -34,6 +29,11 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
     suspend fun getFolderList(): LiveData<List<FolderData>>{
         return folderDataDao.getAllDataByFolder()
     }
+
+    suspend fun getFolderData(folderId: String): FolderData{
+        return folderDataDao.getFolderData(folderId)
+    }
+
 //    ---------------------------------------------------------------------------------------------------------------------------
 //    Note Area
 //    ----------------------------------------------------------------------------------------------------------------------------
@@ -42,8 +42,14 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         noteDataDao.insertNoteData(noteData)
     }
 
-    suspend fun getDefaultFolderId(): String{
-        return folderDataDao.getDefaultFolderId()
+    suspend fun getDefaultFolderId(): FolderData{
+        return withContext(Dispatchers.IO){
+            folderDataDao.getDefaultFolderId()
+        }
+    }
+
+    suspend fun getNotesListFolder(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderContent(folderId)
     }
 
 }

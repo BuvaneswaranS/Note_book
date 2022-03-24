@@ -13,9 +13,8 @@ interface FolderDataDao {
     @Insert
     fun insertDefaultFolder(folderData: FolderData)
 
-    @Query("SELECT folderId from folder_table ORDER BY Created_Time ASC")
-    fun getDefaultFolderId(): String
-
+    @Query("SELECT * from folder_table LIMIT 1")
+    fun getDefaultFolderId(): FolderData
 
     @Insert
     fun insertUserDefinedFolder(folderData: FolderData)
@@ -25,4 +24,8 @@ interface FolderDataDao {
 
     @Query("SELECT * from folder_table ORDER BY Created_Time ASC")
     fun getAllDataByFolder(): LiveData<List<FolderData>>
+
+    @Query("SELECT * from folder_table WHERE folderId = :folderId")
+    fun getFolderData(folderId: String): FolderData
+
 }

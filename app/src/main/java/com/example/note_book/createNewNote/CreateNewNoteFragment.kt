@@ -40,7 +40,7 @@ class CreateNewNoteFragment : Fragment(R.layout.fragment_create_new_note) {
         viewModel = ViewModelProvider(this,viewModelFactory).get(CreateNewNoteViewModel::class.java)
 
         binding.createNoteBackArrowButton.setOnClickListener {
-            Log.i("TestingApp","Back Arrow Button Clicked")
+//            Log.i("TestingApp","Back Arrow Button Clicked")
             requireActivity().onBackPressed()
         }
 //        viewModel.getDefaultFolderId()
@@ -51,7 +51,7 @@ class CreateNewNoteFragment : Fragment(R.layout.fragment_create_new_note) {
 
             if(title.isEmpty() && description.isEmpty()){
                 Toast.makeText(this.context,"Title and Description is Empty",Toast.LENGTH_LONG).show()
-                Log.i("TestingApp","Message is Empty")
+//                Log.i("TestingApp","Message is Empty")
 
             }else if((title.isEmpty() == true) && (description.isEmpty() == false)){
                 title = "Default Title"
@@ -60,19 +60,19 @@ class CreateNewNoteFragment : Fragment(R.layout.fragment_create_new_note) {
 
 
 
-                Log.i("TestingApp","----------------------------")
-                Log.i("TestingApp","NoteTitle -> ${title}")
-                Log.i("TestingApp","NoteDescription -> ${description}")
-                Log.i("TestingApp","Inserted Successfully")
+//                Log.i("TestingApp","----------------------------")
+//                Log.i("TestingApp","NoteTitle -> ${title}")
+//                Log.i("TestingApp","NoteDescription -> ${description}")
+//                Log.i("TestingApp","Inserted Successfully")
                 val data = NoteData(folderId = folderId,noteTitle = title, noteDescription = description,createdTime = System.currentTimeMillis(), modifiedTime = System.currentTimeMillis())
                 viewModel.insertNoteData(data)
                 requireActivity().onBackPressed()
             } else{
                 val folderId: String = arguments.noteFolderId
-                Log.i("TestingApp","----------------------------")
-                Log.i("TestingApp","NoteTitle -> ${title}")
-                Log.i("TestingApp","NoteDescription -> ${description}")
-                Log.i("TestingApp","Inserted Successfully")
+//                Log.i("TestingApp","----------------------------")
+//                Log.i("TestingApp","NoteTitle -> ${title}")
+//                Log.i("TestingApp","NoteDescription -> ${description}")
+//                Log.i("TestingApp","Inserted Successfully")
                 val data = NoteData(folderId = folderId,noteTitle = title, noteDescription = description,createdTime = System.currentTimeMillis(), modifiedTime = System.currentTimeMillis())
                 viewModel.insertNoteData(data)
 

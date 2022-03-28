@@ -30,11 +30,11 @@ class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAd
 
             var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
         if(viewType == LAYOUT_ONE){
-                Log.i("TestingApp1","Finally Entered")
+//                Log.i("TestingApp1","Finally Entered")
                  view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_default_folder, parent, false)
 
             }else{
-                Log.i("TestingApp1","Entered")
+//                Log.i("TestingApp1","Entered")
                  view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
             }
         return ViewHolder(view)
@@ -64,7 +64,7 @@ class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAd
 
         fun bind(folderData: FolderData){
             folder_title.setText(folderData.folderName)
-            Log.i("TestingApp","${folderData.folderName}")
+//            Log.i("TestingApp","${folderData.folderName}")
         }
     }
 }

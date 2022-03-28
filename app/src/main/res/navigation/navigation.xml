@@ -38,5 +38,32 @@
         <argument
             android:name="displayFolderName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_displayFolderContentFragment_to_updateNoteFragment"
+            app:destination="@id/updateNoteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateNoteFragment"
+        android:name="com.example.note_book.updateNote.UpdateNoteFragment"
+        android:label="fragment_update_note"
+        tools:layout="@layout/fragment_update_note" >
+        <argument
+            android:name="update_note_id"
+            app:argType="string" />
+        <argument
+            android:name="update_note_folder_id"
+            app:argType="string" />
+        <argument
+            android:name="update_note_note_title"
+            app:argType="string" />
+        <argument
+            android:name="update_note_note_description"
+            app:argType="string" />
+        <argument
+            android:name="update_note_note_created_time"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_updateNoteFragment_to_displayFolderContentFragment"
+            app:destination="@id/displayFolderContentFragment" />
     </fragment>
 </navigation>

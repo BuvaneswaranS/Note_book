@@ -26,6 +26,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         folderDataDao.updateFolderName(folderData)
     }
 
+    suspend fun updatedFolderModifiedTime(folderData: FolderData){
+        folderDataDao.updateFolderModifiedTime(folderData)
+    }
+
     suspend fun getFolderList(): LiveData<List<FolderData>>{
         return folderDataDao.getAllDataByFolder()
     }
@@ -42,6 +46,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         noteDataDao.insertNoteData(noteData)
     }
 
+    suspend fun updateNoteData(noteData: NoteData){
+        noteDataDao.updateNoteData(noteData)
+    }
+
     suspend fun getDefaultFolderId(): FolderData{
         return withContext(Dispatchers.IO){
             folderDataDao.getDefaultFolderId()
@@ -52,4 +60,7 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return noteDataDao.getFolderContent(folderId)
     }
 
+    suspend fun deleteNoteDate(noteId: String){
+        noteDataDao.deleteNoteData(noteId)
+    }
 }

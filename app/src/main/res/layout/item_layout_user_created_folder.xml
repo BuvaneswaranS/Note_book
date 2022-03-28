@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="@dimen/folder_image_layout_width"
             android:layout_height="@dimen/Image_layout_height"
-            app:srcCompat="@drawable/ic_user_created_folder" />
+            app:srcCompat="@drawable/ic_notebook_leather_01" />
 
         <TextView
             android:id="@+id/folder_content_folder_title"

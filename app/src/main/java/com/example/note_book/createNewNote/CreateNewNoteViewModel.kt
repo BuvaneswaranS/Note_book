@@ -10,18 +10,9 @@ import com.example.note_book.NotebookDatabase.NoteData
 import kotlinx.coroutines.*
 
 class CreateNewNoteViewModel(val folderRepository: FolderRepository): ViewModel() {
-
-
     private val viewModelJob = Job()
 
     val scope = CoroutineScope(Dispatchers.IO + viewModelJob)
-
-//    var data: String? = ""
-
-    init {
-//        getDefaultFolderId()
-    }
-
 
     fun insertNoteData(noteData: NoteData){
         scope.launch {

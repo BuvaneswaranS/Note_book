@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".updateNote.UpdateNoteFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/updateNoteGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="?attr/actionBarSize"/>
+
+    <ImageView
+        android:id="@+id/updateNoteBackArrowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/Appbar_side_width"
+        android:layout_marginTop="@dimen/Appbar_side_width"
+        android:src="@drawable/ic_back_button"
+        app:layout_constraintBottom_toTopOf="@id/updateNoteGuideLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/update_note_Description"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/text_description_hint"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/updateNoteGuideLine" />
+
+    <EditText
+        android:id="@+id/update_note_title"
+        style="@style/folder_note_title_style"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:hint="@string/note_title_hint"
+        android:inputType="textPersonName"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/updateNoteGuideLine"
+        app:layout_constraintStart_toEndOf="@+id/updateNoteBackArrowButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/update_note_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/Appbar_side_width"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_done_button"
+        app:layout_constraintBottom_toTopOf="@id/updateNoteGuideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.858"
+        app:layout_constraintStart_toEndOf="@+id/update_note_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

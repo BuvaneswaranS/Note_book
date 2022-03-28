@@ -56,7 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
 //        viewModel.getDefaultFolderId()
 
         if(viewModel.folder_list.value?.isEmpty() == false){
-            Log.i("TestingApp","Ëntered")
+//            Log.i("TestingApp","Ëntered")
             viewModel.getDefaultFolderId()
         }
 
@@ -74,7 +74,7 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
         binding.addBtn.setOnClickListener{
             startAnimation()
             if(viewModel.folder_list.value?.isEmpty() == true){
-                Log.i("TestingApp","Ëntered")
+//                Log.i("TestingApp","Ëntered")
                 viewModel.updateDefaultFolder()
                 viewModel.getDefaultFolderId()
             }

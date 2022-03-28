@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".displayFolderData.DisplayFolderContentFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="?attr/actionBarSize"/>
+        app:layout_constraintGuide_begin="?attr/actionBarSize" />
 
     <ImageView
         android:id="@+id/display_folder_content_back_arrow_button"
@@ -19,24 +19,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_back_button"
+        app:layout_constraintBottom_toTopOf="@id/display_folder_content_guidelines"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/display_folder_content_guidelines"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/folder_title"
+        style="@style/folder_content_title_style"
         android:layout_width="217dp"
         android:layout_height="24dp"
         android:hint="@string/displayFolderContentHint"
         app:layout_constraintBottom_toTopOf="@id/display_folder_content_guidelines"
         app:layout_constraintStart_toEndOf="@+id/display_folder_content_back_arrow_button"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/folder_content_title_style" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/display_folder_content_recyclerView"
-        android:layout_width="414dp"
-        android:layout_height="830dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="#F1E6E6"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -58,6 +58,41 @@
         android:src="@drawable/ic_edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/delete_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_baseline_delete_button"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/selectedBox"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/selectedBox"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/display_folder_content_guidelines"
+        app:layout_constraintEnd_toStartOf="@id/delete_button"
+        app:layout_constraintStart_toEndOf="@+id/folder_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_baseline_close_button"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="App_" />
     <color name="App_title_color">#1E37C2</color>
+    <color name="selected_effect">#E9EAED</color>
 </resources>

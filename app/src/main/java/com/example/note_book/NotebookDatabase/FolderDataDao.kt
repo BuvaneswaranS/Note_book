@@ -22,6 +22,9 @@ interface FolderDataDao {
     @Update
     fun updateFolderName(folderData: FolderData)
 
+    @Update
+    fun updateFolderModifiedTime(folderData: FolderData)
+
     @Query("SELECT * from folder_table ORDER BY Created_Time ASC")
     fun getAllDataByFolder(): LiveData<List<FolderData>>
 

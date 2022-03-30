@@ -6,4 +6,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="displayFolderContentHint">FOLDER TITLE</string>
     <string name="loading_text">Loading.......</string>
+    <string name="change_folder_title">Change Folder Title</string>
+    <string name="change_folder_title_dialog_cancel_text">CANCEL</string>
+    <string name="change_folder_title_dialog_ok_text">OK</string>
 </resources>

@@ -24,5 +24,8 @@ data class NoteData(
     var createdTime: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name="ModifiedTime")
-    var modifiedTime: Long
+    var modifiedTime: Long,
+
+    @ColumnInfo(name="Selected")
+    var selected: Boolean = false
 )

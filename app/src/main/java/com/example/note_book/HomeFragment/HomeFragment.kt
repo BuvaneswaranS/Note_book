@@ -3,6 +3,7 @@ package com.example.note_book.HomeFragment
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.print.PrintAttributes
 import android.text.InputType
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.EditText
+import androidx.core.view.marginTop
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -60,6 +62,7 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
             viewModel.getDefaultFolderId()
         }
 
+
         displayfolderAdapter = DisplayFolderListAdapter(this)
 
         binding.recyclerView.layoutManager = GridLayoutManager(this.context,2)
@@ -89,6 +92,8 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
             val data = FolderData(folderName = "Untitled", createdTime = System.currentTimeMillis())
             viewModel.insertUserDefinedFolder(data)
         }
+
+
 
         return binding.root
     }
@@ -123,31 +128,44 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
 
     override fun changeFolderName(folderData: FolderData) {
 //        This place is for showing dialog
+
+        var dialogBox = UpdateFolderTitleFragment(viewModel, folderData)
+
+        dialogBox.show(childFragmentManager,"dialog")
+
+
+
 //        Initializing the builder
-        val builder = AlertDialog.Builder(this.context)
-        builder.setTitle("Change Folder Name")
-        builder.setIcon(R.drawable.ic_create_dialog_box)
+//        var builder = AlertDialog.Builder(this.context)
+//        builder.setView(layoutInflater.inflate(R.layout.item_layout_update_folder_title, null))
+////
+//        val folder_change_update_name: EditText? =  view?.findViewById(R.id.update_folder_name_input)
+//        Log.i("TestingApp","${folderData.folderName}")
+//        folder_change_update_name?.setText("${folderData.folderName}")
+//        builder.setTitle("Change Folder Name")
+//        builder.setIcon(R.drawable.ic_create_dialog_box)
 
 //        Initiliaze the Edit Text for the Dialog
-        val folder_change_update_name = EditText(this.context)
-        folder_change_update_name.setText("${folderData.folderName}")
-        folder_change_update_name.setHint("Enter your folder name")
-        folder_change_update_name.inputType = InputType.TYPE_CLASS_TEXT
-
-        builder.setView(folder_change_update_name)
-
-//        Log.i("Testing1App","${folder_change_update_name.text}")
-        builder.setPositiveButton("OK") { dialogInterface: DialogInterface, i ->
-            val data= FolderData(folderId = folderData.folderId,folderName = folder_change_update_name.text.toString(), createdTime = folderData.createdTime, modifiedTime = System.currentTimeMillis())
+//        var folder_change_update_name = EditText(this.context)
+//        folder_change_update_name.setText("${folderData.folderName}")
+//        folder_change_update_name.setHint("Enter your folder name")
+//        folder_change_update_name.maxLines = 1
+//        folder_change_update_name.inputType = InputType.TYPE_CLASS_TEXT
 //
+//        builder.setView(folder_change_update_name)
+
+//        Log.i("Testing1App","${folder_change_update_name?.text}")
+//        dialogBox.alertDialog.setPositiveButton("OK") { dialogInterface: DialogInterface, i ->
+//            val data= FolderData(folderId = folderData.folderId,folderName = folder_change_update_name?.text.toString(), createdTime = folderData.createdTime, modifiedTime = System.currentTimeMillis())
+////
 //          Log.i("Testing1App","FolderNAME -> ${data.folderName}")
-
-            viewModel.updateFolderName(data)
-        }
-        builder.setNegativeButton("CANCEL",{dialogInterface: DialogInterface, i -> Int })
-
-        val alertDialog = builder.create()
-        alertDialog.show()
+//
+//            viewModel.updateFolderName(data)
+//        }
+//        builder.setNegativeButton("CANCEL",{dialogInterface: DialogInterface, i -> Int })
+//
+//        val alertDialog = builder.create()
+//        alertDialog.show()
 
     }
 

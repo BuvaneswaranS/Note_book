@@ -63,4 +63,9 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
     suspend fun deleteNoteDate(noteId: String){
         noteDataDao.deleteNoteData(noteId)
     }
+
+    suspend fun getNoteData(folderId: String): MutableList<String>{
+        return noteDataDao.getFolderNoteData(folderId)
+    }
+
 }

@@ -25,4 +25,7 @@ interface NoteDataDao {
     @Query("DELETE  FROM note_table WHERE noteId = :noteId")
     fun deleteNoteData(noteId: String)
 
+    @Query("SELECT noteId FROM note_table WHERE FolderId = :folderId")
+    fun getFolderNoteData(folderId: String): MutableList<String>
+
 }

@@ -15,6 +15,8 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
     var selectedList = MutableLiveData<MutableList<String>>()
 
+    var noteIdFolderList: MutableList<String>? = null
+
     var deletingStarted = MutableLiveData<Boolean>()
 
     var selectedAllItem = MutableLiveData<Boolean>()
@@ -28,6 +30,8 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
     private val scope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
      var notesListFolder: LiveData<List<NoteData>>? = null
+
+
 
     init {
         deletingStarted.value = false
@@ -48,6 +52,25 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
         }
     }
 
+    fun getNoteIdList(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                noteIdFolderList = folderRepository.getNoteData(folderId)
+            }
+        }
+    }
+
+    fun selectAndDeSelectAll(value: Boolean){
+        deletingStarted.value = true
+        for (dat in notesListFolder?.value!!){
+            var data = NoteData(noteId = dat.noteId, folderId = dat.folderId, noteTitle = dat.noteTitle, noteDescription = dat.noteDescription, createdTime = dat.createdTime, modifiedTime = dat.modifiedTime, selected = value)
+            scope.launch {
+                folderRepository.updateNoteData(data)
+            }
+        }
+        deletingStarted.value = false
+    }
+
     fun deleteSelectedItem(){
         deletingStarted.value = true
         for(data in selectedList.value!!){
@@ -59,4 +82,5 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
         deletingStarted.value = false
         isEnabled.value = false
     }
+
 }

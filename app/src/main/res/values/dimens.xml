@@ -51,4 +51,6 @@
     <dimen name="Note_Description_padding_Start">10dp</dimen>
     <dimen name="displayFolderTitle">16sp</dimen>
     <dimen name="loading_text_size">18sp</dimen>
+    <dimen name="change_folder_title_input_size">20sp</dimen>
+    <dimen name="change_folder_title_title_text_size">24sp</dimen>
 </resources>

@@ -31,11 +31,12 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
      var notesListFolder: LiveData<List<NoteData>>? = null
 
-
+    var selectedItemsList = mutableListOf<String>()
 
     init {
         deletingStarted.value = false
         selectedItem.value = false
+        isEnabled.value = false
         selectedAllItem.value = false
     }
 
@@ -79,6 +80,8 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
                 folderRepository.deleteNoteDate(data)
             }
         }
+
+
         deletingStarted.value = false
         isEnabled.value = false
     }

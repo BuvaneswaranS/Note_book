@@ -51,4 +51,10 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="display_no_notes_card_style">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

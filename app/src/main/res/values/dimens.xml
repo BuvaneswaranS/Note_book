@@ -48,9 +48,10 @@
     <dimen name="add_note_btn_margin_Bottom">20dp</dimen>
     <dimen name="add_folder_btn_margin_Bottom">20dp</dimen>
 
-    <dimen name="Note_Description_padding_Start">10dp</dimen>
+    <dimen name="Note_Description_padding_Start">16dp</dimen>
     <dimen name="displayFolderTitle">16sp</dimen>
     <dimen name="loading_text_size">18sp</dimen>
-    <dimen name="change_folder_title_input_size">20sp</dimen>
-    <dimen name="change_folder_title_title_text_size">24sp</dimen>
+    <dimen name="change_folder_title_input_size">17sp</dimen>
+    <dimen name="change_folder_title_title_text_size">21sp</dimen>
+    <dimen name="update_folder_title_button_text_size">15sp</dimen>
 </resources>

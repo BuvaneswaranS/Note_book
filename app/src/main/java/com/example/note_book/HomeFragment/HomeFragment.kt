@@ -60,6 +60,13 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
         if(viewModel.folder_list.value?.isEmpty() == false){
 //            Log.i("TestingApp","Ëntered")
             viewModel.getDefaultFolderId()
+
+        }
+
+        if (viewModel.folder_list.value?.isEmpty() == false){
+            binding.dispalyNoNotesCard.visibility = View.INVISIBLE
+        }else{
+            binding.dispalyNoNotesCard.visibility = View.VISIBLE
         }
 
 
@@ -70,7 +77,10 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
         binding.recyclerView.adapter  = displayfolderAdapter
 
         viewModel.folder_list.observe(this.viewLifecycleOwner, Observer {list ->
-          displayfolderAdapter.submitList(list)
+            if (viewModel.folder_list.value?.isEmpty() == false){
+                binding.dispalyNoNotesCard.visibility = View.INVISIBLE
+            }
+            displayfolderAdapter.submitList(list)
         })
 
 
@@ -80,6 +90,7 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
 //                Log.i("TestingApp","Ëntered")
                 viewModel.updateDefaultFolder()
                 viewModel.getDefaultFolderId()
+                binding.dispalyNoNotesCard.visibility = View.GONE
             }
 
         }

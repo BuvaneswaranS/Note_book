@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.note_book.NotebookDatabase.FolderData
@@ -43,9 +44,14 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
         binding.updateNoteDescription.setText(arguments.updateNoteNoteDescription.toString())
 
+        var description: String = ""
+
+        binding.updateNoteDescription.doOnTextChanged { text, start, before, count ->
+            description = text.toString()
+        }
 
         binding.updateNoteButton.setOnClickListener {view ->
-            val updateNoteData = NoteData(noteId = arguments.updateNoteId, folderId = arguments.updateNoteFolderId, noteTitle = binding.updateNoteTitle.text.toString(), noteDescription = binding.updateNoteDescription.text.toString(), createdTime = arguments.updateNoteNoteCreatedTime, modifiedTime = System.currentTimeMillis())
+            val updateNoteData = NoteData(noteId = arguments.updateNoteId, folderId = arguments.updateNoteFolderId, noteTitle = binding.updateNoteTitle.text.toString(), noteDescription = description, createdTime = arguments.updateNoteNoteCreatedTime, modifiedTime = System.currentTimeMillis())
             viewModel.updateNoteData(updateNoteData)
 //            Navigation.findNavController(view).navigate(R.id.action_displayFolderContentFragment_to_updateNoteFragment)
             requireActivity().onBackPressed()

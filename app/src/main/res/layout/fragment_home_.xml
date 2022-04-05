@@ -73,5 +73,17 @@
                 app:layout_constraintBottom_toTopOf="@+id/add_note_btn"
                 app:layout_constraintEnd_toEndOf="@+id/add_note_btn"
                 app:srcCompat="@drawable/ic_baseline_create_new_folder_24" />
+
+    <TextView
+        android:id="@+id/dispaly_no_notes_card"
+        android:layout_width="307dp"
+        android:layout_height="39dp"
+        android:text="@string/diaplay_no_notes_card_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/display_no_notes_card_style" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

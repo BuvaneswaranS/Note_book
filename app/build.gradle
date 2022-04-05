@@ -61,6 +61,8 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.4.2'
     androidTestImplementation 'androidx.room:room-testing:2.4.2'
 
+//    implementation 'com.airbnb.android:lottie:3.4.0'
+
 //     [MissingType]: Element 'com.example.task_2_notes.notesdatabase.NotesDatabase' references a type that is not present
 //    Below Implementation is for that error
 //    implementation "org.jetbrains:annotations-java5:19.0.0"

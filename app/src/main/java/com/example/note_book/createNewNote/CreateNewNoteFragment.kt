@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.note_book.NotebookDatabase.FolderData
@@ -45,9 +46,17 @@ class CreateNewNoteFragment : Fragment(R.layout.fragment_create_new_note) {
         }
 //        viewModel.getDefaultFolderId()
 
+        var description: String = ""
+
+        binding.noteDescription.doOnTextChanged { text, start, before, count ->
+            description = text.toString()
+        }
+
+
         binding.createNoteDoneButton.setOnClickListener {
             var title: String = binding.createNoteTitleInput.text.toString()
-            val description: String = binding.noteDescription.text.toString()
+//            val description: String = binding.noteDescription.text.toString()
+
 
             if(title.isEmpty() && description.isEmpty()){
                 Toast.makeText(this.context,"Title and Description is Empty",Toast.LENGTH_LONG).show()

@@ -153,6 +153,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
                 displayNoteListAdapter.data = data
                 viewModel.selectedList.value = data
+                viewModel.selectedItemsList = data
 
             }else if (!isChecked){
                 Log.i("TestingApp","Entered False")
@@ -160,6 +161,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                 var data = mutableListOf<String>()
                 displayNoteListAdapter.data = data
                 viewModel.selectedList.value = data
+                viewModel.selectedItemsList = data
             }
         }
 
@@ -171,6 +173,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             var data = mutableListOf<String>()
             displayNoteListAdapter.data = data
             viewModel.selectedList.value = data
+            viewModel.selectedItemsList = data
         }
 
 //        Delete Button
@@ -179,6 +182,8 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             var data = mutableListOf<String>()
             displayNoteListAdapter.data = data
             viewModel.selectedList.value = data
+            viewModel.selectedItemsList = data
+            viewModel.selectedItemsList = data
         }
         return binding.root
     }

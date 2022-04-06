@@ -11,12 +11,21 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 
 class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAdapter<FolderData,DisplayFolderListAdapter.ViewHolder>(folderDataCallBack()) {
 
     val LAYOUT_ONE:Int = 0
     val LAYOUT_TWO:Int = 1
+
+    var viewModelJob = Job()
+    var scope = CoroutineScope(Dispatchers.IO + viewModelJob)
+
+    var data = mutableListOf<String>()
+
 
     override fun getItemViewType(position: Int): Int {
         if(position == 0){

@@ -1,61 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_frame"
     android:layout_width="@dimen/note_card_width"
     android:layout_height="@dimen/folder_card_height"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="10dp"
-    android:elevation="100dp"
-    android:orientation="vertical"
-    app:cardElevation="100dp">
+    android:layout_marginStart="@dimen/guideline_16dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/note_card"
-        android:layout_width="@dimen/note_card_width"
-        android:layout_height="@dimen/folder_card_height"
-        android:elevation="100dp"
-        app:cardElevation="100dp"
-        app:cardMaxElevation="100dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/folder_content_note_title"
-                    android:layout_width="133dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:maxLines="1"
-                    android:paddingStart="8dp"
-                    android:text="TextView"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:maxLines="@integer/folder_title_lines"
+                    tools:text="text"
+                    android:textSize="@dimen/item_layout_note_title_text_size"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:maxWidth="@dimen/item_layout_note_title_max_width"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintEnd_toStartOf="@id/selected_tick_button"/>
 
                 <ImageView
                     android:id="@+id/selected_tick_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
+                    android:layout_gravity="end"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/folder_content_note_title"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_baseline_done_button" />
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <TextView
                 android:id="@+id/folder_content_note_description"
                 android:layout_width="match_parent"
-                android:layout_height="152dp"
-                android:layout_weight="1"
-                android:maxLines="4"
-                android:paddingStart="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="@integer/note_description_min_lines"
+                android:minLines="@integer/item_layout_note_note_description_max_lines"
                 android:text="TextView"
-                android:textSize="16dp" />
+                android:textSize="@dimen/item_layout_note_description_text_size" />
 
 
         </LinearLayout>

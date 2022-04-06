@@ -10,4 +10,7 @@
     <color name="App_" />
     <color name="App_title_color">#1E37C2</color>
     <color name="selected_effect">#E9EAED</color>
+    <color name="display_folder_content_recyclerview_background_color">#70D8CFCF</color>
+    <color name="item_layout_note_if_selected_background_color">#660A8BF1</color>
+    <color name="fab_button_background_color">#98cef2</color>
 </resources>

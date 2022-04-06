@@ -10,18 +10,21 @@
         android:id="@+id/updateNoteGuideLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintGuide_begin="?attr/actionBarSize"/>
 
     <ImageView
         android:id="@+id/updateNoteBackArrowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/Appbar_side_width"
-        android:layout_marginTop="@dimen/Appbar_side_width"
-        android:src="@drawable/ic_back_button"
+        android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginTop="@dimen/guideline_16dp"
+        android:layout_marginBottom="@dimen/guideline_16dp"
         app:layout_constraintBottom_toTopOf="@id/updateNoteGuideLine"
+        app:layout_constraintEnd_toStartOf="@+id/update_note_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back_button" />
 
 <!--    <EditText-->
 <!--        android:id="@+id/update_note_Description"-->
@@ -43,26 +46,26 @@
         android:id="@+id/outlinedUpdatedNoteDescription"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/App_bar_height"
-        android:gravity="start|top"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginTop="@dimen/guideline_16dp"
+        android:layout_marginBottom="@dimen/guideline_16dp"
+        android:layout_marginEnd="@dimen/guideline_16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHeight="match_constraint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/updateNoteGuideLine">
+        app:layout_constraintTop_toBottomOf="@id/updateNoteGuideLine"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/update_note_Description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="start"
             android:hint="@string/text_description_hint"
             android:inputType="textMultiLine"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginBottom="16dp"/>
+            android:minLines="@integer/note_description_min_lines"
+            android:textSize="@dimen/note_description_text_size" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,31 +73,36 @@
     <EditText
         android:id="@+id/update_note_title"
         style="@style/folder_note_title_style"
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginTop="@dimen/guideline_16dp"
+        android:layout_marginBottom="@dimen/guideline_16dp"
+        android:layout_marginEnd="@dimen/guideline_16dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="@string/note_title_hint"
         android:inputType="textPersonName"
+        android:textSize="@dimen/note_Title_text_Size"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/updateNoteGuideLine"
         app:layout_constraintStart_toEndOf="@+id/updateNoteBackArrowButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/update_note_button"/>
 
     <ImageView
         android:id="@+id/update_note_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Appbar_side_width"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/guideline_16dp"
+        android:layout_marginBottom="@dimen/guideline_16dp"
         android:src="@drawable/ic_done_button"
         app:layout_constraintBottom_toTopOf="@id/updateNoteGuideLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.858"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@+id/update_note_title"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

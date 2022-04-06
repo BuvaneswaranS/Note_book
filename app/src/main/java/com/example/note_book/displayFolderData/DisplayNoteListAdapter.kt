@@ -33,8 +33,13 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
 
 
     init {
-        data.addAll(viewModel.selectedItemsList)
+        viewModel.selectedList.value?.let { data.addAll(it) }
         viewModel.selectedList.value = data
+
+//        for (i in data){
+//            Log.i("Testing App","${i}")
+//        }
+
     }
 
 
@@ -64,51 +69,53 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
                     )
                 )
             }else if(viewModel.isEnabled.value == true){
+
                 if(data.contains(noteData.noteId) == false){
                     viewModel.isEnabled.value = true
 //                holder.selectedItem.visibility = View.VISIBLE
 //                viewModel.selectedItem.value = true
                     data.add(noteData.noteId)
-//                    viewModel.selectedItemsList.clear()
-//                    viewModel.selectedItemsList.addAll(data)
+
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = true)
                     scope.launch {
                         viewModel.folderRepository.updateNoteData(noteDataUpdated)
                     }
 
-//                if(data.add(noteData.noteId) == true){
-//                    Log.i("TestingApp"," Mutable List of Adding Process Added Successfully")
-//                }else{
-//                    Log.i("TestingApp"," Mutable List of Adding Process Failed Successfully")
-//
-//                }
-
                     viewModel.selectedList.value = data
+//                    viewModel.selectedItemsList.value?.clear()
+//                    viewModel.selectedItemsList.value?.addAll(data)
+
+//                    Log.i("TestingApp","-----------------------------------")
+//                    for (i in data){
+//                        Log.i("Testing App","${i}")
+//                    }
+//                    viewModel.selectedList.value = data
 //                    viewModel.selectedList.value?.let { viewModel.selectedItemsList.addAll(it) }
+
                 }else if(data.contains(noteData.noteId) == true){
+
                     Log.i("TestingApp","${noteData.noteTitle}")
 //                holder.selectedItem.visibility = View.INVISIBLE
                     viewModel.selectedItem.value = false
 
                     data.remove(noteData.noteId)
-//                    viewModel.selectedItemsList.clear()
-//                    viewModel.selectedItemsList.addAll(data)
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = false)
 
                     scope.launch {
                         viewModel.folderRepository.updateNoteData(noteDataUpdated)
                     }
+//                    Log.i("TestingApp","-----------------------------------")
+//                    for (i in data){
+//                        Log.i("Testing App","${i}")
+//                    }
                     viewModel.selectedList.value = data
+//                    viewModel.selectedItemsList.value?.clear()
+//                    viewModel.selectedItemsList.value?.addAll(data)
+//                    viewModel.selectedList.value = data
 //                    viewModel.selectedList.value?.let { viewModel.selectedItemsList.addAll(it) }
                 }
             }
         }
-//        if (viewModel.selectedAllItem.value == true){
-//            holder.selectedItem.visibility = View.VISIBLE
-//        }else{
-//            holder.selectedItem.visibility = View.INVISIBLE
-//        }
-
 
         holder.itemView.setOnLongClickListener{
             if (viewModel.isEnabled.value == false){
@@ -118,36 +125,24 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
 //                viewModel.selectedItem.value = true
 
                     data.add(noteData.noteId)
-//                    viewModel.selectedItemsList.clear()
-//                    viewModel.selectedItemsList.addAll(data)
-//                    viewModel.selectedList.value = data
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = true)
 
                     scope.launch {
                         viewModel.folderRepository.updateNoteData(noteDataUpdated)
                     }
-
-//                if(data.add(noteData.noteId) == true){
-//                    Log.i("TestingApp"," Mutable List of Adding Process Added Successfully")
-//                }else{
-//                    Log.i("TestingApp"," Mutable List of Adding Process Failed Successfully")
-//
-//                }
-
+//                    Log.i("TestingApp","-----------------------------------")
+//                    for (i in data){
+//                        Log.i("Testing App","${i}")
+//                    }
                     viewModel.selectedList.value = data
-//                    viewModel.selectedList.value?.let { viewModel.selectedItemsList.addAll(it) }
+//                    viewModel.selectedItemsList.value?.clear()
+//                    viewModel.selectedItemsList.value?.addAll(data)
 
-//                if(viewModel.selectedList.value?.add(noteData.noteId) == true){
-//                    Log.i("TestingApp"," Live Data Adding Process Added Successfully")
-//                }else{
-//                    Log.i("TestingApp"," Live Data Adding Process Failed Successfully")
-//
-//                }
-//                Log.i("TestingApp", noteData.noteId)
-//                Log.i("TestingApp2","Data Added")
-//                Log.i("TestingApp2","Size after Adding ${viewModel.selectedList.value?.size}")
+//                    viewModel.selectedList.value = data
+
 
                 }else if(data.contains(noteData.noteId) == true){
+
                     Log.i("TestingApp","${noteData.noteTitle}")
 //                holder.selectedItem.visibility = View.INVISIBLE
                     viewModel.selectedItem.value = false
@@ -155,6 +150,14 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
                     var deleteValue: String = noteData.noteId
 
                     data.remove(deleteValue)
+
+                    Log.i("TestingApp","${viewModel.checkedBoxClicked.value}")
+
+//                    if (viewModel.checkedBoxClicked.value == true){
+//                        viewModel.checkedBoxClicked.value = false
+//                    }
+                    Log.i("TestingApp","${viewModel.checkedBoxClicked.value}")
+
 //                    viewModel.selectedItemsList.addAll(data)
 //                    viewModel.selectedList.value = data
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = false)
@@ -163,25 +166,12 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
                         viewModel.folderRepository.updateNoteData(noteDataUpdated)
                     }
 
-//                if(data.remove(noteData.noteId)){
-//                    Log.i("TestingApp"," Mutable List of Remove Process Added Successfully")
-//                }else{
-//                    Log.i("TestingApp"," Mutable List of Remove Process Failed Successfully")
-//
-//                }
                     viewModel.selectedList.value = data
+//                    viewModel.selectedItemsList.value?.clear()
+//                    viewModel.selectedItemsList.value?.addAll(data)
+
 //                    viewModel.selectedList.value?.let { viewModel.selectedItemsList.addAll(it) }
 
-
-                //                if(viewModel.selectedList.value?.add(noteData.noteId) == true){
-//                    Log.i("TestingApp"," Live Data Removing Process Removed Successfully")
-//                }else{
-//                    Log.i("TestingApp"," Live Data Removing Process Failed Successfully")
-//
-//                }
-//                Log.i("TestingApp2","Size after removing ${viewModel.selectedList.value?.size}")
-//                Log.i("TestingApp", noteData.noteId)
-//                Log.i("TestingApp2","Data Removed")
                 }
             }
             return@setOnLongClickListener true

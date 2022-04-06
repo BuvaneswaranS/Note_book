@@ -2,12 +2,17 @@ package com.example.note_book.HomeFragment
 
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import kotlinx.coroutines.*
 
 class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel() {
+
+
+    var isEnabled = MutableLiveData<Boolean>()
+
 
     lateinit var folder_list: LiveData<List<FolderData>>
 

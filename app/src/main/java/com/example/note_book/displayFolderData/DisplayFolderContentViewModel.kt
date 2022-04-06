@@ -13,6 +13,8 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
     var isEnabled = MutableLiveData<Boolean>()
 
+    var checkedBoxClicked = MutableLiveData<Boolean>()
+
     var selectedList = MutableLiveData<MutableList<String>>()
 
     var noteIdFolderList: MutableList<String>? = null
@@ -31,9 +33,9 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
      var notesListFolder: LiveData<List<NoteData>>? = null
 
-    var selectedItemsList = mutableListOf<String>()
-
+    var selectedItemsList = MutableLiveData<MutableList<String>>()
     init {
+        checkedBoxClicked.value = false
         deletingStarted.value = false
         selectedItem.value = false
         isEnabled.value = false
@@ -64,13 +66,34 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
     fun selectAndDeSelectAll(value: Boolean){
         deletingStarted.value = true
         for (dat in notesListFolder?.value!!){
-            var data = NoteData(noteId = dat.noteId, folderId = dat.folderId, noteTitle = dat.noteTitle, noteDescription = dat.noteDescription, createdTime = dat.createdTime, modifiedTime = dat.modifiedTime, selected = value)
-            scope.launch {
-                folderRepository.updateNoteData(data)
+            if (value == true){
+                var data = NoteData(noteId = dat.noteId, folderId = dat.folderId, noteTitle = dat.noteTitle, noteDescription = dat.noteDescription, createdTime = dat.createdTime, modifiedTime = dat.modifiedTime, selected = value)
+                scope.launch {
+                    folderRepository.updateNoteData(data)
+                }
+            }else if (value == false){
+                if(dat.selected == true){
+                    var data = NoteData(noteId = dat.noteId, folderId = dat.folderId, noteTitle = dat.noteTitle, noteDescription = dat.noteDescription, createdTime = dat.createdTime, modifiedTime = dat.modifiedTime, selected = value)
+                    scope.launch {
+                        folderRepository.updateNoteData(data)
+                    }
+                }
             }
+
         }
-        deletingStarted.value = false
     }
+
+
+//    fun selectAndDeSelectAllLifeCycleChange(value: Boolean){
+//        deletingStarted.value = true
+//        for (dat in notesListFolder?.value!!){
+//            var data = NoteData(noteId = dat.noteId, folderId = dat.folderId, noteTitle = dat.noteTitle, noteDescription = dat.noteDescription, createdTime = dat.createdTime, modifiedTime = dat.modifiedTime, selected = value)
+//            scope.launch {
+//                folderRepository.updateNoteData(data)
+//            }
+//        }
+//    }
+
 
     fun deleteSelectedItem(){
         deletingStarted.value = true
@@ -80,9 +103,6 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
                 folderRepository.deleteNoteDate(data)
             }
         }
-
-
-        deletingStarted.value = false
         isEnabled.value = false
     }
 

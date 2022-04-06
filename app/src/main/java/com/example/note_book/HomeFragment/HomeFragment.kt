@@ -104,6 +104,45 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
             viewModel.insertUserDefinedFolder(data)
         }
 
+//        Selection Enabled
+        viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {Enabled ->
+            if(Enabled){
+//                Making Views Visible
+                binding.displayFolderContentCheckedBox.visibility = View.VISIBLE
+                binding.displayFolderContentDeleteButton.visibility = View.VISIBLE
+                binding.displayFolderContentSelectedSize.visibility = View.VISIBLE
+
+//                Making Views Gone
+                binding.appTitle.visibility = View.GONE
+            }else if(!Enabled){
+//                MAKING VIEWS VISIBLE
+                binding.appTitle.visibility = View.VISIBLE
+//                MAKING VIEWS GONE
+                binding.displayFolderContentCheckedBox.visibility = View.GONE
+                binding.displayFolderContentDeleteButton.visibility = View.GONE
+                binding.displayFolderContentSelectedSize.visibility = View.GONE
+            }
+        })
+
+//        CloseButton
+        binding.folderListCloseButton.setOnClickListener {
+
+        }
+
+//        Delete Button
+        binding.displayFolderContentDeleteButton.setOnClickListener {
+
+        }
+
+//        CheckBox
+        binding.displayFolderContentCheckedBox.setOnCheckedChangeListener{ buttonView, isChecked ->
+            if (isChecked){
+
+            }else if (!isChecked){
+
+            }
+        }
+
 
 
         return binding.root

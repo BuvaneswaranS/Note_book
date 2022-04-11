@@ -58,14 +58,33 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
 
         binding.recyclerView.adapter  = displayfolderAdapter
 
+
+
         viewModel.folder_list.observe(this.viewLifecycleOwner, Observer {list ->
             if (viewModel.folder_list.value?.isEmpty() == false){
                 viewModel.getDefaultFolderId()
                 binding.dispalyNoNotesCard.visibility = View.INVISIBLE
+                viewModel.filesCame.value = true
+                Log.i("TestingApp", viewModel.filesCame.value.toString())
             }
             displayfolderAdapter.submitList(list)
         })
 
+        viewModel.viewModelCreated.observe(this.viewLifecycleOwner, Observer {created ->
+            if(created){
+                Log.i("TestingApp","ViewModelCreated")
+                viewModel.filesCame.observe(this.viewLifecycleOwner, Observer {filesCame ->
+                    if (filesCame){
+                        Log.i("TestingApp","Files Came Created")
+                        if (viewModel.donedeSelectingall.value == false){
+                            Log.i("TestingApp","done deSelecting all ")
+                            viewModel.folder_SelectAll_And_DeSelectAll(false)
+                            viewModel.donedeSelectingall.value = true
+                        }
+                    }
+                })
+            }
+        })
 
 
         binding.addBtn.setOnClickListener{

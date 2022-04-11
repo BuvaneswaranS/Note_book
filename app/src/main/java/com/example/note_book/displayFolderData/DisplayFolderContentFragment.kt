@@ -4,10 +4,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -72,6 +70,8 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         }else{
 
         }
+         setHasOptionsMenu(true)
+
 
         displayNoteListAdapter = DisplayNoteListAdapter(viewModel)
         binding.displayFolderContentRecyclerView.adapter = displayNoteListAdapter
@@ -115,7 +115,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                         binding.selectedBox.isChecked = false
                     }
                 })
-
+//                setHasOptionsMenu(true)
                 binding.addNoteFolderButton.visibility = View.INVISIBLE
 
 //                binding.folderTitle.setText(" ${displayNoteListAdapter.data.size + 1} selected")
@@ -129,7 +129,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                 binding.folderTitle.setText(arguments.displayFolderName)
                 Log.i("TestingApp","Size of the List ${displayNoteListAdapter.data.size}")
                 binding.addNoteFolderButton.visibility = View.VISIBLE
-
+//                setHasOptionsMenu(false)
             }
         })
 
@@ -223,7 +223,16 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu,menu)
+        Log.i("TestingApp","Came into 1 ")
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.i("TestingApp","Came into 2 ")
+        return super.onOptionsItemSelected(item)
+    }
 //    fun getSelectedToDeSelected(){
 //        if (viewModel.isEnabled.value == false){
 //            viewModel.selectAndDeSelectAll(false)
@@ -260,3 +269,4 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //        super.onDestroyView()
 //    }
 }
+

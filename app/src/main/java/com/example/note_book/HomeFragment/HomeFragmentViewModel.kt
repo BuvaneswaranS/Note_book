@@ -16,6 +16,10 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
 
     var allItemsSelected = MutableLiveData<Boolean>()
 
+    var filesCame = MutableLiveData<Boolean>()
+    var viewModelCreated = MutableLiveData<Boolean>()
+    var donedeSelectingall = MutableLiveData<Boolean>()
+
 //    var viewModelCreated = MutableLiveData<Boolean>()
 
     var selectedList = MutableLiveData<MutableList<String>>()
@@ -41,9 +45,17 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
         displayFolderDataDeleted.value = false
         deletedStarted.value = false
         allItemsSelected.value = false
+        viewModelCreated.value = true
+        donedeSelectingall.value = false
+        filesCame.value = false
     }
 
     var data: String? =  ""
+
+    override fun onCleared() {
+        folder_SelectAll_And_DeSelectAll(false)
+        super.onCleared()
+    }
 
     fun updateDefaultFolder(){
         scope.launch {
@@ -113,4 +125,7 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
             }
         }
     }
+
+
+
 }

@@ -11,18 +11,21 @@ import kotlinx.coroutines.launch
 
 class UpdateNoteViewModel(val repository: FolderRepository): ViewModel() {
 
+//    Coroutine Job and Scope is Declared
     private val viewModelJob = Job()
 
     private val scope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
     var folderData: FolderData? = null
 
+//  Function to Update the Note in the DATABASE
     fun updateNoteData(noteData: NoteData){
         scope.launch {
             repository.updateNoteData(noteData)
         }
     }
 
+//  Function to get the Folder Data from the DATABASE
     fun getFolderData(folderId: String) {
         scope.launch {
             folderData = repository.getFolderData(folderId)

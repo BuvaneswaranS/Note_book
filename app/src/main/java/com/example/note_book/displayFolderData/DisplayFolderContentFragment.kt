@@ -8,9 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -39,7 +36,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                 requireActivity().onBackPressed()
         }
 
-        var arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
+        val arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
 
         folderId = arguments.displayFolderId
 
@@ -81,6 +78,11 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         binding.displayFolderContentRecyclerView.layoutManager = GridLayoutManager(this.context, 2)
         binding.folderTitle.setText(arguments.displayFolderName)
         viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
+            if(!list.isEmpty()){
+                binding.displayNoNotesCard.visibility = View.INVISIBLE
+            }else if (list.isEmpty()){
+                binding.displayNoNotesCard.visibility = View.VISIBLE
+            }
             displayNoteListAdapter.submitList(list)
 
         })
@@ -102,6 +104,15 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //                binding.folderTitle.setText(" ${displayNoteListAdapter.data.size} selected")
                         binding.folderTitle.setText(" ${list.size} selected")
                         Log.i("TestingApp","${list.size}")
+                    }
+                    val selectedListSize: Int = list.size
+                    val entireListSize: Int? = viewModel.notesListFolder?.value?.size
+                    if (selectedListSize == entireListSize){
+                        viewModel.allItemsSelected.value = true
+                        binding.selectedBox.isChecked = true
+                    }else{
+                        viewModel.allItemsSelected.value = false
+                        binding.selectedBox.isChecked = false
                     }
                 })
 
@@ -144,39 +155,42 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //            }
 //        })
 
-        viewModel.checkedBoxClicked.observe(this.viewLifecycleOwner, Observer { checkBox ->
-            if (checkBox == true){
-                binding.selectedBox.isChecked = true
-            }else if(checkBox == false){
-                binding.selectedBox.isChecked = false
-            }
-        })
+
+
+//        viewModel.checkedBoxClicked.observe(this.viewLifecycleOwner, Observer { checkBox ->
+//            if (checkBox == true){
+//                binding.selectedBox.isChecked = true
+//            }else if(checkBox == false){
+//                binding.selectedBox.isChecked = false
+//            }
+//        })
 
 
 
 //        CheckBox
         binding.selectedBox.setOnCheckedChangeListener{ buttonView, isChecked ->
             if (isChecked){
-                viewModel.checkedBoxClicked.value = true
-                Log.i("TestingApp","Entered true")
-                viewModel.selectedAllItem.value = true
-                viewModel.selectAndDeSelectAll(true)
-                var data = mutableListOf<String>()
-                viewModel.noteIdFolderList?.let { data.addAll(it) }
+                if(viewModel.allItemsSelected.value == false){
+//                    Log.i("TestingApp","Entered true")
+                    viewModel.selectedAllItem.value = true
+                    viewModel.selectAndDeSelectAll(true)
+                    var data = mutableListOf<String>()
+                    viewModel.noteIdFolderList?.let { data.addAll(it) }
 
-                displayNoteListAdapter.data = data
-                viewModel.selectedList.value = data
-                viewModel.selectedItemsList.value = data
+                    displayNoteListAdapter.data = data
+                    viewModel.selectedList.value = data
+                    viewModel.allItemsSelected.value = true
+                }
 
             }else if (!isChecked){
-
-                viewModel.checkedBoxClicked.value = false
-                Log.i("TestingApp","Entered False")
-                viewModel.selectAndDeSelectAll(false)
-                var data = mutableListOf<String>()
-                displayNoteListAdapter.data = data
-                viewModel.selectedList.value = data
-                viewModel.selectedItemsList.value = data
+                if (viewModel.allItemsSelected.value == true){
+                    Log.i("TestingApp","Entered False")
+                    viewModel.selectAndDeSelectAll(false)
+                    val data = mutableListOf<String>()
+                    displayNoteListAdapter.data = data
+                    viewModel.selectedList.value = data
+                    viewModel.allItemsSelected.value = false
+                }
             }
         }
 
@@ -187,11 +201,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             viewModel.isEnabled.value = false
             binding.selectedBox.isChecked = false
             viewModel.selectAndDeSelectAll(false)
-            var data = mutableListOf<String>()
+            val data = mutableListOf<String>()
             displayNoteListAdapter.data = data
             viewModel.selectedList.value = data
-            viewModel.selectedItemsList.value = data
-            viewModel.checkedBoxClicked.value = false
         }
 
 
@@ -205,7 +217,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             viewModel.getNoteIdList(arguments.displayFolderId)
             displayNoteListAdapter.data = data
             viewModel.selectedList.value = data
-            viewModel.selectedItemsList.value = data
         }
 
 

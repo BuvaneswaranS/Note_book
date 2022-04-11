@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/folder_card_width"
     android:layout_height="@dimen/folder_card_height"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:layout_marginStart="@dimen/margin_padding_10dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/note_card"
@@ -46,8 +47,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/folder_selected"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/folder_image_layout_width"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@color/item_layout_note_if_selected_background_color"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/folder_content_folder_title"

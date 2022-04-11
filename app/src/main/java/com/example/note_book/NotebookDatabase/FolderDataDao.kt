@@ -25,10 +25,19 @@ interface FolderDataDao {
     @Update
     fun updateFolderModifiedTime(folderData: FolderData)
 
+    @Update
+    fun updateFolderData(folderData: FolderData)
+
     @Query("SELECT * from folder_table ORDER BY Created_Time ASC")
     fun getAllDataByFolder(): LiveData<List<FolderData>>
 
     @Query("SELECT * from folder_table WHERE folderId = :folderId")
     fun getFolderData(folderId: String): FolderData
+
+    @Query("SELECT folderId from folder_table")
+    fun getAllFolderId(): MutableList<String>
+
+    @Query("DELETE from folder_table WHERE folderId= :folderId")
+    fun deleteFolderData(folderId: String)
 
 }

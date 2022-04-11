@@ -17,13 +17,17 @@ import com.example.note_book.databinding.FragmentUpdateNoteBinding
 
 class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
+//    ViewBinding Declaration
     private lateinit var binding: FragmentUpdateNoteBinding
+
+//    ViewModel Declaration
     private lateinit var viewModel: UpdateNoteViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = FragmentUpdateNoteBinding.inflate(inflater, container, false)
 
+//        Back Arrow Button OnClickListener to request to the fragment to move back
         binding.updateNoteBackArrowButton.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -38,10 +42,13 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
         viewModel = ViewModelProvider(this,viewModelFactory).get(UpdateNoteViewModel::class.java)
 
+//      Get the Folder Data
         viewModel.getFolderData(arguments.updateNoteFolderId)
 
+//        Set the Note Title
         binding.updateNoteTitle.setText(arguments.updateNoteNoteTitle.toString())
 
+//        Set the Note Description
         binding.updateNoteDescription.setText(arguments.updateNoteNoteDescription.toString())
 
         var description: String = ""
@@ -50,6 +57,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             description = text.toString()
         }
 
+//      Done Button to add the updated note to the DATABASE
         binding.updateNoteButton.setOnClickListener {view ->
             val updateNoteData = NoteData(noteId = arguments.updateNoteId, folderId = arguments.updateNoteFolderId, noteTitle = binding.updateNoteTitle.text.toString(), noteDescription = description, createdTime = arguments.updateNoteNoteCreatedTime, modifiedTime = System.currentTimeMillis())
             viewModel.updateNoteData(updateNoteData)

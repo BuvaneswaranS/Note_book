@@ -14,6 +14,7 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
     var isEnabled = MutableLiveData<Boolean>()
 
     var checkedBoxClicked = MutableLiveData<Boolean>()
+    var allItemsSelected = MutableLiveData<Boolean>()
 
     var selectedList = MutableLiveData<MutableList<String>>()
 
@@ -33,13 +34,15 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
      var notesListFolder: LiveData<List<NoteData>>? = null
 
-    var selectedItemsList = MutableLiveData<MutableList<String>>()
+//    var selectedItemsList = MutableLiveData<MutableList<String>>()
+
     init {
         checkedBoxClicked.value = false
         deletingStarted.value = false
         selectedItem.value = false
         isEnabled.value = false
         selectedAllItem.value = false
+        allItemsSelected.value = false
     }
 
 //    fun insertingData(){
@@ -72,14 +75,11 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
                     folderRepository.updateNoteData(data)
                 }
             }else if (value == false){
-                if(dat.selected == true){
                     var data = NoteData(noteId = dat.noteId, folderId = dat.folderId, noteTitle = dat.noteTitle, noteDescription = dat.noteDescription, createdTime = dat.createdTime, modifiedTime = dat.modifiedTime, selected = value)
                     scope.launch {
                         folderRepository.updateNoteData(data)
                     }
-                }
             }
-
         }
     }
 
@@ -104,6 +104,12 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
             }
         }
         isEnabled.value = false
+    }
+
+    override fun onCleared() {
+        Log.i("TestingApp","Display Folder Content ViewModel OnClear Called")
+        selectAndDeSelectAll(false)
+        super.onCleared()
     }
 
 }

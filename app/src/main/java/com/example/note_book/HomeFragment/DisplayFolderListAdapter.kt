@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,9 +15,12 @@ import com.example.note_book.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 
-class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAdapter<FolderData,DisplayFolderListAdapter.ViewHolder>(folderDataCallBack()) {
+class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentViewModel,val itemClickListener: itemClickListener): ListAdapter<FolderData,DisplayFolderListAdapter.ViewHolder>(folderDataCallBack()) {
+
+    var viewModel: HomeFragmentViewModel = displayFolderListAdapterViewModel
 
     val LAYOUT_ONE:Int = 0
     val LAYOUT_TWO:Int = 1
@@ -26,6 +30,11 @@ class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAd
 
     var data = mutableListOf<String>()
 
+
+    init {
+        viewModel.selectedList.value?.let { data.addAll(it) }
+        viewModel.selectedList.value = data
+    }
 
     override fun getItemViewType(position: Int): Int {
         if(position == 0){
@@ -58,21 +67,101 @@ class DisplayFolderListAdapter(val itemClickListener: itemClickListener): ListAd
             itemClickListener.changeFolderName(getItem(position))
         }
 
+//      This is for the entire card is long clicked
+        holder.itemView.setOnLongClickListener {
+            if(viewModel.isEnabled.value == false){
+                viewModel.isEnabled.value = true
+                if(data.contains(folderData.folderId) == false){
+                    Log.i("TestingApp","${folderData.folderName}")
+                    data.add(folderData.folderId)
+                    if (folderData.folderId == viewModel.data){
+                        viewModel.deleteButtonEnabled.value = false
+                        Log.i("TestingApp","delete Button Diabled")
+                    }
+                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = true)
+
+                    scope.launch {
+                        viewModel.folderRepository.updateFolderData(folderDataupdate)
+                    }
+                    viewModel.selectedList.value = data
+
+                }else if(data.contains(folderData.folderId) == true){
+                    Log.i("TestingApp","${folderData.folderName}")
+                    data.remove(folderData.folderId)
+                    if (folderData.folderId == viewModel.data){
+                        viewModel.deleteButtonEnabled.value = true
+                        Log.i("TestingApp","delete Button Enabled")
+                    }
+                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = false)
+
+                    scope.launch {
+                        viewModel.folderRepository.updateFolderData(folderDataupdate)
+                    }
+                    viewModel.selectedList.value = data
+
+                }
+            }
+            return@setOnLongClickListener true
+        }
+
+
 //       This is for the entire card to clicked
         holder.itemView.setOnClickListener {view ->
-            Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToDisplayFolderContentFragment(folderData.folderId,folderData.folderName))
+            if (viewModel.isEnabled.value == false){
+                Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToDisplayFolderContentFragment(folderData.folderId,folderData.folderName))
+            }else if(viewModel.isEnabled.value == true){
+                if(data.contains(folderData.folderId) == false){
+                    Log.i("TestingApp","${folderData.folderName}")
+                    data.add(folderData.folderId)
+                    Log.i("TestingApp","${viewModel.data}")
+                    Log.i("TestingApp","${folderData.folderId}")
+                    if (folderData.folderId == viewModel.data){
+                        viewModel.deleteButtonEnabled.value = false
+                        Log.i("TestingApp","deleteButtonDiabled")
+                    }
+                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = true)
+
+                    scope.launch {
+                        viewModel.folderRepository.updateFolderData(folderDataupdate)
+                    }
+                    viewModel.selectedList.value = data
+
+                }else if(data.contains(folderData.folderId) == true){
+                    Log.i("TestingApp","${folderData.folderName}")
+                    data.remove(folderData.folderId)
+                    if (folderData.folderId == viewModel.data){
+                        viewModel.deleteButtonEnabled.value = true
+                        Log.i("TestingApp","deleteButtonEnabled")
+                    }
+                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = false)
+
+                    scope.launch {
+                        viewModel.folderRepository.updateFolderData(folderDataupdate)
+                    }
+                    viewModel.selectedList.value = data
+
+                }
+            }
         }
+
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var folder_title: TextView
+        var folder_selected: ConstraintLayout
 
         init {
             folder_title = itemView.findViewById(R.id.folder_content_folder_title)
+            folder_selected = itemView.findViewById(R.id.folder_selected)
         }
 
         fun bind(folderData: FolderData){
             folder_title.setText(folderData.folderName)
+            if (folderData.selected_item){
+                  folder_selected.visibility = View.VISIBLE
+            }else if(!folderData.selected_item){
+                folder_selected.visibility = View.GONE
+            }
 //            Log.i("TestingApp","${folderData.folderName}")
         }
     }

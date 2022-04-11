@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="@dimen/folder_card_width"
-    android:layout_height="@dimen/folder_card_height">
+    android:layout_height="@dimen/folder_card_height"
+    android:layout_marginStart="@dimen/margin_padding_10dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/note_card"
@@ -20,7 +21,7 @@
             <ImageView
                 android:id="@+id/folder_image_default"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="@dimen/Image_layout_height"
                 app:srcCompat="@drawable/ic_notebook"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

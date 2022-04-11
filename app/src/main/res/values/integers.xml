@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="folder_title_lines">1</integer>
-    <integer name="update_folder_title" />
     <integer name="update_folder_title_max_length">120</integer>
     <integer name="item_layout_note_note_description_max_lines">10</integer>
     <integer name="note_description_min_lines">10</integer>
     <integer name="folder_and_note_title_max_lines">1</integer>
+    <integer name="vertical_bias_0">0</integer>
+    <integer name="vertical_bias_1">1</integer>
+    <integer name="horizontal_bias_0">0</integer>
+    <integer name="horizontal_bias_1">1</integer>
 </resources>

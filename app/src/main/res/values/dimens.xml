@@ -66,5 +66,8 @@
     <dimen name="item_layout_note_title_text_size">20sp</dimen>
     <dimen name="item_layout_note_title_max_width">131dp</dimen>
     <dimen name="item_layout_note_description_text_size">14sp</dimen>
+    <dimen name="dialog_box_body_text_size">17sp</dimen>
+    <dimen name="margin_padding_8dp">8dp</dimen>
+    <dimen name="margin_padding_10dp">10dp</dimen>
 
 </resources>

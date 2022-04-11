@@ -38,6 +38,18 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return folderDataDao.getFolderData(folderId)
     }
 
+    suspend fun updateFolderData(folderData: FolderData){
+        folderDataDao.updateFolderData(folderData)
+    }
+
+    suspend fun get_folder_id_list(): MutableList<String>{
+        return folderDataDao.getAllFolderId()
+    }
+
+    suspend fun  deleteFolderData(folderId: String){
+        folderDataDao.deleteFolderData(folderId)
+    }
+
 //    ---------------------------------------------------------------------------------------------------------------------------
 //    Note Area
 //    ----------------------------------------------------------------------------------------------------------------------------
@@ -67,5 +79,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
     suspend fun getNoteData(folderId: String): MutableList<String>{
         return noteDataDao.getFolderNoteData(folderId)
     }
+
+    suspend fun delete_Note_Data_folder_id(folderId: String){
+        noteDataDao.delete_Notedata_Folder_id(folderId)
+    }
+
 
 }

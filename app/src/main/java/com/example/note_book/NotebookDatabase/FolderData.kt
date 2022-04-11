@@ -18,5 +18,8 @@ data class FolderData(
     var createdTime: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name = "Modified_Time")
-    var modifiedTime: Long = 0L
+    var modifiedTime: Long = 0L,
+
+    @ColumnInfo(name="Selected_Item")
+    var selected_item: Boolean = false
 )

@@ -5,6 +5,9 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +28,46 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
     var folderId: String = ""
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value ->
+            if (value){
+                binding.diaplayFolderContentToolbar.inflateMenu(R.menu.menu)
+                binding.diaplayFolderContentToolbar.setOnMenuItemClickListener{ menuItem ->
+                    when(menuItem.itemId){
+                        R.id.delete_button -> {
+//                            Toast.makeText(this.context,"Delete button Clicked",Toast.LENGTH_LONG).show()
+//                            Log.i("TestingApp","Delete Button Clicked")
+                            viewModel.checkedBoxClicked.value = false
+                            viewModel.deleteSelectedItem()
+                            viewModel.selectAndDeSelectAll(false)
+                            val data = mutableListOf<String>()
+                            viewModel.getNoteIdList(folderId)
+                            displayNoteListAdapter.data = data
+                            viewModel.selectedList.value = data
+
+                            true
+                        }
+                        R.id.move_button -> {
+                            Toast.makeText(this.context,"Move button Clicked",Toast.LENGTH_LONG).show()
+                            Log.i("TestingApp","Move Button Clicked")
+                            true
+                        }
+                        else -> {
+                            Toast.makeText(this.context,"Else Called",Toast.LENGTH_LONG).show()
+                            Log.i("TestingApp","Else Called")
+                            true
+                        }
+                    }
+                }
+            }else if(!value){
+                binding.diaplayFolderContentToolbar.menu.clear()
+            }
+        })
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -33,8 +76,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         binding.displayFolderContentBackArrowButton.setOnClickListener {
                 requireActivity().onBackPressed()
         }
-
-        val arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
+         val arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
 
         folderId = arguments.displayFolderId
 
@@ -55,7 +97,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
 //        getSelectedToDeSelected()
 
-
         val builder = AlertDialog.Builder(this.context)
         builder.setView(inflater.inflate(R.layout.loading_menu, null))
         builder.setCancelable(true)
@@ -67,10 +108,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             builder.setView(inflater.inflate(R.layout.loading_menu, null))
             builder.setCancelable(true)
             loadingDialog = builder.create()
-        }else{
+        }else {
 
         }
-         setHasOptionsMenu(true)
 
 
         displayNoteListAdapter = DisplayNoteListAdapter(viewModel)
@@ -94,8 +134,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //      Selection Enabled (OR) Not
         viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { value ->
             if(value == true){
+
                 binding.selectedBox.visibility = View.VISIBLE
-                binding.deleteButton.visibility = View.VISIBLE
+//                binding.deleteButton.visibility = View.VISIBLE
                 binding.closeButton.visibility = View.VISIBLE
                 binding.displayFolderContentBackArrowButton.visibility = View.INVISIBLE
 
@@ -115,7 +156,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                         binding.selectedBox.isChecked = false
                     }
                 })
-//                setHasOptionsMenu(true)
+
                 binding.addNoteFolderButton.visibility = View.INVISIBLE
 
 //                binding.folderTitle.setText(" ${displayNoteListAdapter.data.size + 1} selected")
@@ -123,13 +164,12 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             }else if (value == false){
 
                 binding.selectedBox.visibility = View.INVISIBLE
-                binding.deleteButton.visibility = View.INVISIBLE
+//                binding.deleteButton.visibility = View.INVISIBLE
                 binding.closeButton.visibility = View.INVISIBLE
                 binding.displayFolderContentBackArrowButton.visibility = View.VISIBLE
                 binding.folderTitle.setText(arguments.displayFolderName)
                 Log.i("TestingApp","Size of the List ${displayNoteListAdapter.data.size}")
                 binding.addNoteFolderButton.visibility = View.VISIBLE
-//                setHasOptionsMenu(false)
             }
         })
 
@@ -209,30 +249,20 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
 
 //        Delete Button
-        binding.deleteButton.setOnClickListener {
-            viewModel.checkedBoxClicked.value = false
-            viewModel.deleteSelectedItem()
-            viewModel.selectAndDeSelectAll(false)
-            val data = mutableListOf<String>()
-            viewModel.getNoteIdList(arguments.displayFolderId)
-            displayNoteListAdapter.data = data
-            viewModel.selectedList.value = data
-        }
+//        binding.deleteButton.setOnClickListener {
+//            viewModel.checkedBoxClicked.value = false
+//            viewModel.deleteSelectedItem()
+//            viewModel.selectAndDeSelectAll(false)
+//            val data = mutableListOf<String>()
+//            viewModel.getNoteIdList(arguments.displayFolderId)
+//            displayNoteListAdapter.data = data
+//            viewModel.selectedList.value = data
+//        }
 
 
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu,menu)
-        Log.i("TestingApp","Came into 1 ")
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.i("TestingApp","Came into 2 ")
-        return super.onOptionsItemSelected(item)
-    }
 //    fun getSelectedToDeSelected(){
 //        if (viewModel.isEnabled.value == false){
 //            viewModel.selectAndDeSelectAll(false)
@@ -243,18 +273,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //            viewModel.checkedBoxClicked.value = false
 //        }
 //
-//    }
-
-//    override fun onStop() {
-//        if (viewModel.isEnabled.value == true){
-//            viewModel.selectAndDeSelectAllLifeCycleChange(false)
-//            var data = mutableListOf<String>()
-//            displayNoteListAdapter.data = data
-//            viewModel.selectedList.value = data
-//            viewModel.selectedItemsList = data
-//            viewModel.checkedBoxClicked.value = false
-//        }
-//        super.onStop()
 //    }
 
 //    override fun onDestroyView() {

@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import com.example.note_book.NotebookDatabase.FolderRepository

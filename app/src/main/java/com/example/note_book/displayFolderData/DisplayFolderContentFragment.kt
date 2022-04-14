@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.note_book.NotebookDatabase.FolderRepository
+import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.NotebookDatabase.NotebookDatabase
 import com.example.note_book.R
 import com.example.note_book.databinding.FragmentDisplayFolderContentBinding
@@ -28,30 +29,66 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
     var folderId: String = ""
 
+    var folderName: String = ""
+
+    var defaultid: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value ->
             if (value){
+                binding.diaplayFolderContentToolbar.menu.clear()
                 binding.diaplayFolderContentToolbar.inflateMenu(R.menu.menu)
                 binding.diaplayFolderContentToolbar.setOnMenuItemClickListener{ menuItem ->
                     when(menuItem.itemId){
                         R.id.delete_button -> {
 //                            Toast.makeText(this.context,"Delete button Clicked",Toast.LENGTH_LONG).show()
 //                            Log.i("TestingApp","Delete Button Clicked")
-                            viewModel.checkedBoxClicked.value = false
-                            viewModel.deleteSelectedItem()
-                            viewModel.selectAndDeSelectAll(false)
-                            val data = mutableListOf<String>()
-                            viewModel.getNoteIdList(folderId)
-                            displayNoteListAdapter.data = data
-                            viewModel.selectedList.value = data
-
+                            var builder = AlertDialog.Builder(this.context)
+                            builder.setTitle("Delete notes")
+                            builder.setMessage("Do you want to delete?")
+                            builder.setNegativeButton("No"){DialogInterface, which -> }
+                            builder.setPositiveButton("Yes"){DialogInterface, which ->
+                                viewModel.isEnabled.value = false
+                                viewModel.checkedBoxClicked.value = false
+                                viewModel.deleteSelectedItem()
+                                viewModel.selectAndDeSelectAll(false)
+                                val data = mutableListOf<String>()
+                                viewModel.getNoteIdList(folderId)
+                                displayNoteListAdapter.data = data
+                                viewModel.selectedList.value = data
+                                val emptyData = mutableListOf<NoteData>()
+                                viewModel.notesListSelected = emptyData
+                            }
+                            var dialogBox = builder.create()
+                            builder.show()
+                            builder.setCancelable(false)
                             true
                         }
                         R.id.move_button -> {
-                            Toast.makeText(this.context,"Move button Clicked",Toast.LENGTH_LONG).show()
-                            Log.i("TestingApp","Move Button Clicked")
+                            if (viewModel.size <= 1){
+                                var builder = AlertDialog.Builder(this.context)
+                                builder.setTitle("Move Notes")
+                                builder.setMessage("Don't seem to be another folder to move the note to ")
+                                builder.setNegativeButton("Ok"){DialogInterface, which -> }
+                                var dialogBox = builder.create()
+                                builder.show()
+                                builder.setCancelable(false)
+                            }else if (viewModel.size > 1){
+                                Log.i("TestingApp","${viewModel.defaultId}")
+                                Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid))
+                                viewModel.isEnabled.value = false
+                                viewModel.checkedBoxClicked.value = false
+                                viewModel.selectAndDeSelectAll(false)
+                                val data = mutableListOf<String>()
+                                viewModel.getNoteIdList(folderId)
+                                displayNoteListAdapter.data = data
+                                viewModel.selectedList.value = data
+                                val emptyData = mutableListOf<NoteData>()
+                                viewModel.notesListSelected = emptyData
+                            }
+//                            Toast.makeText(this.context,"Move button Clicked",Toast.LENGTH_LONG).show()
+
                             true
                         }
                         else -> {
@@ -79,7 +116,8 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
          val arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
 
         folderId = arguments.displayFolderId
-
+        folderName = arguments.displayFolderName
+        Log.i("TestingApp","Arguments Id"+ arguments.defaultFolderId)
 
         binding.addNoteFolderButton.setOnClickListener {view ->
             Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToCreateNewNoteFragment(arguments.displayFolderId))
@@ -95,7 +133,27 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
         viewModel.getNotesList(arguments.displayFolderId)
 
+        viewModel.size = arguments.folderListSize
+        Log.i("TestingApp","Folder List Size -> " + viewModel.size)
+
+        defaultid= arguments.defaultFolderId
 //        getSelectedToDeSelected()
+
+        viewModel.viewModelCreated.observe(this.viewLifecycleOwner, Observer {created ->
+            if(created){
+                Log.i("TestingApp","Notes ViewModelCreated")
+                viewModel.filesCame.observe(this.viewLifecycleOwner, Observer {filesCame ->
+                    if (filesCame){
+                        Log.i("TestingApp","Notes Files Came Created")
+                        if (viewModel.donedeSelectingall.value == false){
+                            Log.i("TestingApp","Notes done deSelecting all ")
+                            viewModel.selectAndDeSelectAll(false)
+                            viewModel.donedeSelectingall.value = true
+                        }
+                    }
+                })
+            }
+        })
 
         val builder = AlertDialog.Builder(this.context)
         builder.setView(inflater.inflate(R.layout.loading_menu, null))
@@ -112,6 +170,16 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
         }
 
+//        Log.i("TestingApp","All Items Selected - >"+viewModel.allItemsSelected.value.toString())
+
+        viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer {allSelected ->
+//            Log.i("TestingApp","2. All Items Selected -> "+viewModel.allItemsSelected.value.toString())
+            if (allSelected){
+                binding.selectedBox.isChecked = true
+            }else if (!allSelected){
+                binding.selectedBox.isChecked = false
+            }
+        })
 
         displayNoteListAdapter = DisplayNoteListAdapter(viewModel)
         binding.displayFolderContentRecyclerView.adapter = displayNoteListAdapter
@@ -120,21 +188,28 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
             if(!list.isEmpty()){
                 binding.displayNoNotesCard.visibility = View.INVISIBLE
+                viewModel.filesCame.value = true
             }else if (list.isEmpty()){
                 binding.displayNoNotesCard.visibility = View.VISIBLE
             }
             displayNoteListAdapter.submitList(list)
-
         })
 
         viewModel.getNoteIdList(arguments.displayFolderId)
 
+        viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer {allSelected ->
+            if (allSelected){
+                binding.selectedBox.isChecked = true
+            }else if (!allSelected){
+                binding.selectedBox.isChecked = false
+            }
+        })
 
 
 //      Selection Enabled (OR) Not
         viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { value ->
             if(value == true){
-
+//                Log.i("TestingApp","Checked Box - > " + binding.selectedBox.isChecked.toString())
                 binding.selectedBox.visibility = View.VISIBLE
 //                binding.deleteButton.visibility = View.VISIBLE
                 binding.closeButton.visibility = View.VISIBLE
@@ -144,18 +219,28 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     if (viewModel.isEnabled.value == true){
 //                binding.folderTitle.setText(" ${displayNoteListAdapter.data.size} selected")
                         binding.folderTitle.setText(" ${list.size} selected")
-                        Log.i("TestingApp","${list.size}")
+//                        Log.i("TestingApp","${list.size}")
                     }
                     val selectedListSize: Int = list.size
                     val entireListSize: Int? = viewModel.notesListFolder?.value?.size
-                    if (selectedListSize == entireListSize){
-                        viewModel.allItemsSelected.value = true
-                        binding.selectedBox.isChecked = true
-                    }else{
-                        viewModel.allItemsSelected.value = false
-                        binding.selectedBox.isChecked = false
-                    }
+                    viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
+                        if (selectedListSize == list.size){
+                            viewModel.allItemsSelected.value = true
+                            binding.selectedBox.isChecked = true
+                        }else{
+                            viewModel.allItemsSelected.value = false
+                            binding.selectedBox.isChecked = false
+                        }
+                    })
+//                    if (selectedListSize == entireListSize){
+//
+//                    }else{
+//
+//                    }
+//                    Log.i("TestingApp","Place 2 -> Checked Box - > " + binding.selectedBox.isChecked.toString())
+
                 })
+
 
                 binding.addNoteFolderButton.visibility = View.INVISIBLE
 
@@ -242,8 +327,10 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             binding.selectedBox.isChecked = false
             viewModel.selectAndDeSelectAll(false)
             val data = mutableListOf<String>()
+            val emptyData = mutableListOf<NoteData>()
             displayNoteListAdapter.data = data
             viewModel.selectedList.value = data
+            viewModel.notesListSelected = emptyData
         }
 
 
@@ -286,5 +373,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //        }
 //        super.onDestroyView()
 //    }
+
 }
 

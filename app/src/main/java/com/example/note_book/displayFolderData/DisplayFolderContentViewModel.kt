@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
 import kotlinx.coroutines.*
@@ -28,6 +29,8 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
     var selectedItem = MutableLiveData<Boolean>()
 
+    var defaultId: String = ""
+
     private val viewModelJob = Job()
 
     private val scope = CoroutineScope(Dispatchers.IO + viewModelJob)
@@ -36,6 +39,14 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
 
 //    var selectedItemsList = MutableLiveData<MutableList<String>>()
 
+    var size: Int = 0
+
+    var notesListSelected = mutableListOf<NoteData>()
+
+    var filesCame = MutableLiveData<Boolean>()
+    var viewModelCreated = MutableLiveData<Boolean>()
+    var donedeSelectingall = MutableLiveData<Boolean>()
+
     init {
         checkedBoxClicked.value = false
         deletingStarted.value = false
@@ -43,6 +54,10 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
         isEnabled.value = false
         selectedAllItem.value = false
         allItemsSelected.value = false
+//        getFolderListSize()
+        viewModelCreated.value = true
+        donedeSelectingall.value = false
+        filesCame.value = false
     }
 
 //    fun insertingData(){
@@ -57,6 +72,16 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
             }
         }
     }
+
+//    fun getFolderListSize(){
+//        scope.launch {
+//            return@launch withContext(Dispatchers.IO){
+//                folderListSize = folderRepository.getFolderListSize()
+//            }
+//        }
+//    }
+
+
 
     fun getNoteIdList(folderId: String){
         scope.launch {
@@ -106,10 +131,21 @@ class DisplayFolderContentViewModel(val folderRepository: FolderRepository): Vie
         isEnabled.value = false
     }
 
-    override fun onCleared() {
-        Log.i("TestingApp","Display Folder Content ViewModel OnClear Called")
-        selectAndDeSelectAll(false)
-        super.onCleared()
+    fun getDefaultFolderId(){
+        scope.launch {
+            return@launch withContext(Dispatchers.Main){
+                defaultId = folderRepository.getDefaultFolderId().folderId
+//                Log.i("TestingApp","folder id -> ${id}")
+
+            }
+
+        }
     }
+
+//    override fun onCleared() {
+//        Log.i("TestingApp","Display Folder Content ViewModel OnClear Called")
+//        selectAndDeSelectAll(false)
+//        super.onCleared()
+//    }
 
 }

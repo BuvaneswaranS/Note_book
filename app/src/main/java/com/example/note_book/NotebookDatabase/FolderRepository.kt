@@ -34,6 +34,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return folderDataDao.getAllDataByFolder()
     }
 
+    suspend fun getFolderListMove(folderId: String): LiveData<List<FolderData>>{
+        return folderDataDao.getAllDataByFolderMove(folderId)
+    }
+
     suspend fun getFolderData(folderId: String): FolderData{
         return folderDataDao.getFolderData(folderId)
     }
@@ -50,6 +54,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         folderDataDao.deleteFolderData(folderId)
     }
 
+    suspend fun getFolderListSize(): LiveData<Int>{
+        return folderDataDao.getSizeFolders()
+    }
+
 //    ---------------------------------------------------------------------------------------------------------------------------
 //    Note Area
 //    ----------------------------------------------------------------------------------------------------------------------------
@@ -60,6 +68,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
 
     suspend fun updateNoteData(noteData: NoteData){
         noteDataDao.updateNoteData(noteData)
+    }
+
+    suspend fun getNotesData(noteId: String): NoteData{
+        return noteDataDao.getNoteData(noteId)
     }
 
     suspend fun getDefaultFolderId(): FolderData{

@@ -17,4 +17,6 @@
     <string name="fragment_delete_dialog_box">No</string>
     <string name="menu_delete_text">Delete</string>
     <string name="menu_move_text">Move</string>
+    <string name="fragment_move_title_text">Move</string>
+    <string name="fragment_move_cancel_button_text">Cancel</string>
 </resources>

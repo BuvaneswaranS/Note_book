@@ -3,6 +3,7 @@ package com.example.note_book.NotebookDatabase
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = "Note_Table")
@@ -28,4 +29,4 @@ data class NoteData(
 
     @ColumnInfo(name="Selected")
     var selected: Boolean = false
-)
+):Serializable

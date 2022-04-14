@@ -30,7 +30,6 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
 
     var data = mutableListOf<String>()
 
-
     init {
         viewModel.selectedList.value?.let { data.addAll(it) }
         viewModel.selectedList.value = data
@@ -108,7 +107,9 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
 //       This is for the entire card to clicked
         holder.itemView.setOnClickListener {view ->
             if (viewModel.isEnabled.value == false){
-                Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToDisplayFolderContentFragment(folderData.folderId,folderData.folderName))
+                Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToDisplayFolderContentFragment(folderData.folderId,folderData.folderName, viewModel.data.toString(),
+                    viewModel.folder_list.value?.size ?: 0
+                ))
             }else if(viewModel.isEnabled.value == true){
                 if(data.contains(folderData.folderId) == false){
                     Log.i("TestingApp","${folderData.folderName}")

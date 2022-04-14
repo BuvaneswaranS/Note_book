@@ -31,7 +31,6 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
 
     var data = mutableListOf<String>()
 
-
     init {
         viewModel.selectedList.value?.let { data.addAll(it) }
         viewModel.selectedList.value = data
@@ -41,8 +40,6 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
 //        }
 
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DisplayNoteListAdapter.ViewHolder {
 
@@ -75,7 +72,7 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
 //                holder.selectedItem.visibility = View.VISIBLE
 //                viewModel.selectedItem.value = true
                     data.add(noteData.noteId)
-
+                    viewModel.notesListSelected.add(noteData)
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = true)
                     scope.launch {
                         viewModel.folderRepository.updateNoteData(noteDataUpdated)
@@ -99,6 +96,7 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
                     viewModel.selectedItem.value = false
 
                     data.remove(noteData.noteId)
+                    viewModel.notesListSelected.remove(noteData)
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = false)
 
                     scope.launch {
@@ -125,6 +123,7 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
 //                viewModel.selectedItem.value = true
 
                     data.add(noteData.noteId)
+                    viewModel.notesListSelected.add(noteData)
                     var noteDataUpdated = NoteData(noteId = noteData.noteId, folderId = noteData.folderId, noteTitle = noteData.noteTitle, noteDescription = noteData.noteDescription, createdTime = noteData.createdTime, modifiedTime = noteData.modifiedTime, selected = true)
 
                     scope.launch {
@@ -150,6 +149,7 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
                     var deleteValue: String = noteData.noteId
 
                     data.remove(deleteValue)
+                    viewModel.notesListSelected.remove(noteData)
 
                     Log.i("TestingApp","${viewModel.checkedBoxClicked.value}")
 
@@ -199,8 +199,6 @@ class DisplayNoteListAdapter(viewModelAdapter: DisplayFolderContentViewModel): L
                 }
 
         }
-
-
     }
 }
 

@@ -52,7 +52,7 @@ class HomeFragment : Fragment(R.layout.fragment_home_), itemClickListener {
 
         viewModel = ViewModelProvider(this,viewModelFactory).get(HomeFragmentViewModel::class.java)
 
-        displayfolderAdapter = DisplayFolderListAdapter(viewModel,this)
+        displayfolderAdapter = viewModel.data?.let { DisplayFolderListAdapter(viewModel,this) }!!
 
         binding. recyclerView.layoutManager = GridLayoutManager(this.context,2)
 

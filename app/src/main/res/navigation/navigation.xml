@@ -41,6 +41,15 @@
         <action
             android:id="@+id/action_displayFolderContentFragment_to_updateNoteFragment"
             app:destination="@id/updateNoteFragment" />
+        <action
+            android:id="@+id/action_displayFolderContentFragment_to_moveFragment"
+            app:destination="@id/moveFragment" />
+        <argument
+            android:name="default_folder_id"
+            app:argType="string" />
+        <argument
+            android:name="folder_list_size"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/updateNoteFragment"
@@ -65,5 +74,26 @@
         <action
             android:id="@+id/action_updateNoteFragment_to_displayFolderContentFragment"
             app:destination="@id/displayFolderContentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/moveFragment"
+        android:name="com.example.note_book.moveNotes.MoveFragment"
+        android:label="fragment_move"
+        tools:layout="@layout/fragment_move" >
+        <action
+            android:id="@+id/action_moveFragment_to_displayFolderContentFragment"
+            app:destination="@id/displayFolderContentFragment" />
+        <argument
+            android:name="folderId"
+            app:argType="string" />
+        <argument
+            android:name="folderName"
+            app:argType="string" />
+        <argument
+            android:name="selectedList"
+            app:argType="string[]" />
+        <argument
+            android:name="defaultFolderId"
+            app:argType="string" />
     </fragment>
 </navigation>

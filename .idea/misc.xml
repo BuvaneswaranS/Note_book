@@ -17,6 +17,7 @@
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_notebook_leather_01.xml" value="0.1385" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_user_created_folder.xml" value="0.1465" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment.xml" value="0.1" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_create_new_note.xml" value="0.12" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_delete_dialog_box.xml" value="0.12828649138712603" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_develop.xml" value="0.1" />
@@ -24,6 +25,9 @@
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_display_note_content.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_display_note_folder_content.xml" value="0.10924750679963735" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_home_.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_move.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_move_default_folder.xml" value="0.22" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_move_user_defined_folder.xml" value="0.22" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_update_note.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_default_folder.xml" value="0.1796875" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_note.xml" value="0.16666666666666666" />

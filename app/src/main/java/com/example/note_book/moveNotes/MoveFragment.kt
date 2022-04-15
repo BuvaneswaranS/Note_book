@@ -1,5 +1,6 @@
 package com.example.note_book.moveNotes
 
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -53,7 +56,17 @@ class MoveFragment : Fragment(), moveItemClickListener {
 //      Initliazing the ViewModel
         viewModel = ViewModelProvider(this,viewModelFactory).get(MoveFragmentViewModel::class.java)
 
-        viewModel.getFolderListMove(arguments.folderId)
+        viewModel.useType = arguments.fragmentType
+
+        //      Set the Title of the Move Fragment
+        if (arguments.fragmentType == "move"){
+            binding.fragmentMoveTitle.setText("Move from "+ arguments.folderName)
+            viewModel.getFolderListMove(arguments.folderId)
+
+        }else if (arguments.fragmentType == "copy"){
+            binding.fragmentMoveTitle.setText("Copy from "+ arguments.folderName)
+            viewModel.getCopyFolderList()
+        }
 
         viewModel.moveFolderId = arguments.folderId
 
@@ -61,9 +74,8 @@ class MoveFragment : Fragment(), moveItemClickListener {
 //      ViewModel of selected List
         viewModel.selected.addAll(arguments.selectedList)
         Log.i("TestingApp","Selected Size${viewModel.selected.size}")
-//      Set the Title of the Move Fragment
         viewModel.getNotes()
-        binding.fragmentMoveTitle.setText("Move from "+ arguments.folderName )
+
 
 //      Back Button set onClickListener
         binding.fragmentMoveBackArrowButton.setOnClickListener {
@@ -71,20 +83,29 @@ class MoveFragment : Fragment(), moveItemClickListener {
         }
 
         val builder = AlertDialog.Builder(this.context)
-        builder.setView(inflater.inflate(R.layout.loading_menu, null))
+        if(arguments.fragmentType == "move"){
+            builder.setView(inflater.inflate(R.layout.loading_menu_moving, null))
+        }else if(arguments.fragmentType == "copy"){
+            builder.setView(inflater.inflate(R.layout.layout_menu_copying, null))
+        }
+
         val dialog = builder.create()
 
         viewModel.movingStarted.observe(this.viewLifecycleOwner, Observer {value ->
             if (value){
+                val moveText = view?.findViewById<TextView>(R.id.loading_move_text)
+                moveText?.setText("Move from "+arguments.folderName+" to "+viewModel.moveFolderTo)
+                val progressBar = view?.findViewById<ProgressBar>(R.id.progressBar_loading_move)
+                progressBar?.max = 10
+                var currentProgress = 10
                 dialog.show()
+                ObjectAnimator.ofInt(progressBar,"progress",currentProgress).setDuration(500).start()
                 val timer = Timer()
                 timer.schedule(object : TimerTask(){
                     override fun run() {
                         dialog.dismiss()
                     }
-                }, 700)
-            }else{
-                dialog.dismiss()
+                }, 1000)
             }
         })
 

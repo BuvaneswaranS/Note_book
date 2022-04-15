@@ -5,7 +5,8 @@
     <string name="note_title_hint">Title</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="displayFolderContentHint">Folder title</string>
-    <string name="loading_text">Loading.......</string>
+    <string name="loading_text_move">Moving.....</string>
+    <string name="loading_text_copy">Copying.....</string>
     <string name="change_folder_title">Folder title</string>
     <string name="change_folder_title_dialog_cancel_text">CANCEL</string>
     <string name="change_folder_title_dialog_ok_text">OK</string>
@@ -17,6 +18,7 @@
     <string name="fragment_delete_dialog_box">No</string>
     <string name="menu_delete_text">Delete</string>
     <string name="menu_move_text">Move</string>
+    <string name="menu_copy_text">Copy</string>
     <string name="fragment_move_title_text">Move</string>
     <string name="fragment_move_cancel_button_text">Cancel</string>
 </resources>

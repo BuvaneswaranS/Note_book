@@ -57,4 +57,9 @@
         <item name="android:textSize">34sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="loading_menu_text_style">
+        <item name="android:textSize">@dimen/loading_menu_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

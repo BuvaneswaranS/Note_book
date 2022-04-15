@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -76,7 +74,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                                 builder.setCancelable(false)
                             }else if (viewModel.size > 1){
                                 Log.i("TestingApp","${viewModel.defaultId}")
-                                Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid))
+                                Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"move"))
                                 viewModel.isEnabled.value = false
                                 viewModel.checkedBoxClicked.value = false
                                 viewModel.selectAndDeSelectAll(false)
@@ -91,6 +89,33 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
                             true
                         }
+
+                        R.id.copy_button -> {
+                            Toast.makeText(this.context,"Copy Button Clicked",Toast.LENGTH_LONG).show()
+                            if (viewModel.size <= 1){
+                                var builder = AlertDialog.Builder(this.context)
+                                builder.setTitle("Copy Notes")
+                                builder.setMessage("Don't seem to be another folder to copy the note to ")
+                                builder.setNegativeButton("Ok"){DialogInterface, which -> }
+                                var dialogBox = builder.create()
+                                builder.show()
+                                builder.setCancelable(false)
+                            }else if (viewModel.size > 1){
+                                Log.i("TestingApp","${viewModel.defaultId}")
+                                Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"copy"))
+                                viewModel.isEnabled.value = false
+                                viewModel.checkedBoxClicked.value = false
+                                viewModel.selectAndDeSelectAll(false)
+                                val data = mutableListOf<String>()
+                                viewModel.getNoteIdList(folderId)
+                                displayNoteListAdapter.data = data
+                                viewModel.selectedList.value = data
+                                val emptyData = mutableListOf<NoteData>()
+                                viewModel.notesListSelected = emptyData
+                            }
+                            true
+                        }
+
                         else -> {
                             Toast.makeText(this.context,"Else Called",Toast.LENGTH_LONG).show()
                             Log.i("TestingApp","Else Called")
@@ -156,14 +181,14 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         })
 
         val builder = AlertDialog.Builder(this.context)
-        builder.setView(inflater.inflate(R.layout.loading_menu, null))
+        builder.setView(inflater.inflate(R.layout.loading_menu_moving, null))
         builder.setCancelable(true)
         loadingDialog = builder.create()
 
 
         if(viewModel.notesListFolder == null){
             val builder = AlertDialog.Builder(this.context)
-            builder.setView(inflater.inflate(R.layout.loading_menu, null))
+            builder.setView(inflater.inflate(R.layout.loading_menu_moving, null))
             builder.setCancelable(true)
             loadingDialog = builder.create()
         }else {

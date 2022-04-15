@@ -51,9 +51,11 @@ class MoveFragmentAdapter(moveFragmentViewModel: MoveFragmentViewModel, defaultF
         var folderData: FolderData = getItem(position)
         holder.bind(folderData)
         holder.itemView.setOnClickListener {
+            viewModel.moveFolderTo = folderData.folderName
 //            Log.i("TestingApp","MoveFolderItemClicked")
             moveToFolderClickListener.moveFiles(folderData)
             viewModel.movingStarted.value = true
+
         }
     }
 

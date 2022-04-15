@@ -19,6 +19,8 @@ class MoveFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
     var selected = mutableListOf<String>()
     var moveFolderId: String = ""
 
+    var moveFolderTo: String = ""
+
     val job = Job()
     val scope = CoroutineScope(Dispatchers.IO + job)
 
@@ -26,6 +28,8 @@ class MoveFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
     var folder_list: LiveData<List<FolderData>>? = null
 
     var getNoteList = mutableListOf<NoteData>()
+
+    var useType: String = ""
 
     init {
 //        folder_list = folderRepository.folderDataDao.getAllDataByFolderMove()
@@ -36,6 +40,14 @@ class MoveFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
         scope.launch {
             return@launch withContext(Dispatchers.IO){
                 folder_list = folderRepository.getFolderListMove(folderId)
+            }
+        }
+    }
+
+    fun getCopyFolderList(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                folder_list = folderRepository.getFolderList()
             }
         }
     }
@@ -58,16 +70,20 @@ class MoveFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
     }
 
     fun moveAllNotes(folderId: String) {
-        Log.i("TestingApp","Size of the noteList -> ${getNoteList.size}")
-        Log.i("TestingApp","Size -> "+ getNoteList.size )
-        Log.i("TestingApp","Note Id -> "+ getNoteList[0].noteId)
-        Log.i("TestingApp","Folder Id -> "+ getNoteList[0].folderId)
-        Log.i("TestingApp","Note Title -> "+ getNoteList[0].noteTitle)
-        Log.i("TestingApp","Note Description -> "+ getNoteList[0].noteDescription)
+//        Log.i("TestingApp","Size of the noteList -> ${getNoteList.size}")
+//        Log.i("TestingApp","Size -> "+ getNoteList.size )
+//        Log.i("TestingApp","Note Id -> "+ getNoteList[0].noteId)
+//        Log.i("TestingApp","Folder Id -> "+ getNoteList[0].folderId)
+//        Log.i("TestingApp","Note Title -> "+ getNoteList[0].noteTitle)
+//        Log.i("TestingApp","Note Description -> "+ getNoteList[0].noteDescription)
+
         for(data in getNoteList){
-            scope.launch {
-                folderRepository.deleteNoteDate(data.noteId)
+            if (useType == "move"){
+                scope.launch {
+                    folderRepository.deleteNoteDate(data.noteId)
+                }
             }
+
             var uploadNoteData = NoteData(
                 folderId = folderId,
                 noteTitle = data.noteTitle ,

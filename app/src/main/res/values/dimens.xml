@@ -72,5 +72,9 @@
     <dimen name="margin_padding_8dp">8dp</dimen>
 
     <dimen name="margin_padding_10dp">10dp</dimen>
+    <dimen name="loading_menu_text_size">24sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="progressBar_height">20dp</dimen>
+    <dimen name="layout_progress_bar_width_272dp">272dp</dimen>
 
 </resources>

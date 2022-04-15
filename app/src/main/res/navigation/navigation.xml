@@ -95,5 +95,8 @@
         <argument
             android:name="defaultFolderId"
             app:argType="string" />
+        <argument
+            android:name="fragmentType"
+            app:argType="string" />
     </fragment>
 </navigation>

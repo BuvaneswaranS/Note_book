@@ -67,14 +67,19 @@
     <dimen name="item_layout_note_title_max_width">131dp</dimen>
     <dimen name="item_layout_note_description_text_size">14sp</dimen>
     <dimen name="dialog_box_body_text_size">17sp</dimen>
+
     <dimen name="margin_padding_4dp">4dp</dimen>
     <dimen name="margin_padding_6dp">6dp</dimen>
     <dimen name="margin_padding_8dp">8dp</dimen>
-
     <dimen name="margin_padding_10dp">10dp</dimen>
+
     <dimen name="loading_menu_text_size">24sp</dimen>
-    <dimen name="text_size_18">18sp</dimen>
-    <dimen name="progressBar_height">20dp</dimen>
+
     <dimen name="layout_progress_bar_width_272dp">272dp</dimen>
+
+    <dimen name="text_size_14sp">14sp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_18sp">18sp</dimen>
+    <dimen name="text_size_20sp">20sp</dimen>
 
 </resources>

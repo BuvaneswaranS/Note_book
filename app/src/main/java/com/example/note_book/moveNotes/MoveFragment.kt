@@ -93,13 +93,7 @@ class MoveFragment : Fragment(), moveItemClickListener {
 
         viewModel.movingStarted.observe(this.viewLifecycleOwner, Observer {value ->
             if (value){
-                val moveText = view?.findViewById<TextView>(R.id.loading_move_text)
-                moveText?.setText("Move from "+arguments.folderName+" to "+viewModel.moveFolderTo)
-                val progressBar = view?.findViewById<ProgressBar>(R.id.progressBar_loading_move)
-                progressBar?.max = 10
-                var currentProgress = 10
                 dialog.show()
-                ObjectAnimator.ofInt(progressBar,"progress",currentProgress).setDuration(500).start()
                 val timer = Timer()
                 timer.schedule(object : TimerTask(){
                     override fun run() {

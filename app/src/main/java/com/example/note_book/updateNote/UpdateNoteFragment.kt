@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
-import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.NotebookDatabase.NotebookDatabase
@@ -53,12 +51,19 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
         var description: String = ""
 
+        var startChanging: Boolean = false
+
         binding.updateNoteDescription.doOnTextChanged { text, start, before, count ->
+            startChanging = true
             description = text.toString()
         }
 
+
 //      Done Button to add the updated note to the DATABASE
         binding.updateNoteButton.setOnClickListener {view ->
+            if (!startChanging){
+                description = arguments.updateNoteNoteDescription
+            }
             val updateNoteData = NoteData(noteId = arguments.updateNoteId, folderId = arguments.updateNoteFolderId, noteTitle = binding.updateNoteTitle.text.toString(), noteDescription = description, createdTime = arguments.updateNoteNoteCreatedTime, modifiedTime = System.currentTimeMillis())
             viewModel.updateNoteData(updateNoteData)
 //            Navigation.findNavController(view).navigate(R.id.action_displayFolderContentFragment_to_updateNoteFragment)

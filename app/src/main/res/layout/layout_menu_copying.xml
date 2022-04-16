@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/loading_copy_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/guideline_16dp"
-        android:layout_marginStart="@dimen/guideline_16dp"
-        android:layout_marginBottom="@dimen/guideline_16dp"
-        android:layout_marginEnd="@dimen/guideline_16dp"
-        android:text="@string/loading_text_copy"
-        android:textAlignment="center"
-        android:textSize="@dimen/text_size_18"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/progressBar_loading_move"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
-        android:id="@+id/progressBar_loading_move"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
+        android:id="@+id/moving_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginTop="@dimen/guideline_16dp"
+        android:layout_marginBottom="@dimen/guideline_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/menu_moving_text"
+        app:layout_constraintVertical_bias="@integer/vertical_bias_0" />
+
+    <TextView
+        android:id="@+id/menu_moving_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginTop="@dimen/guideline_16dp"
         android:layout_marginEnd="@dimen/guideline_16dp"
         android:layout_marginBottom="@dimen/guideline_16dp"
-        android:indeterminate="true"
+        android:text="@string/loading_text_copy"
+        android:textSize="@dimen/text_size_20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loading_copy_text" />
-
+        app:layout_constraintHorizontal_bias="@integer/horizontal_bias_0"
+        app:layout_constraintStart_toEndOf="@+id/moving_progress_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="@integer/vertical_bias_0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

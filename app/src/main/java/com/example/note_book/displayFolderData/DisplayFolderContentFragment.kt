@@ -91,17 +91,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                         }
 
                         R.id.copy_button -> {
-                            Toast.makeText(this.context,"Copy Button Clicked",Toast.LENGTH_LONG).show()
-                            if (viewModel.size <= 1){
-                                var builder = AlertDialog.Builder(this.context)
-                                builder.setTitle("Copy Notes")
-                                builder.setMessage("Don't seem to be another folder to copy the note to ")
-                                builder.setNegativeButton("Ok"){DialogInterface, which -> }
-                                var dialogBox = builder.create()
-                                builder.show()
-                                builder.setCancelable(false)
-                            }else if (viewModel.size > 1){
-                                Log.i("TestingApp","${viewModel.defaultId}")
+//                                Log.i("TestingApp","${viewModel.defaultId}")
                                 Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"copy"))
                                 viewModel.isEnabled.value = false
                                 viewModel.checkedBoxClicked.value = false
@@ -112,7 +102,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                                 viewModel.selectedList.value = data
                                 val emptyData = mutableListOf<NoteData>()
                                 viewModel.notesListSelected = emptyData
-                            }
                             true
                         }
 

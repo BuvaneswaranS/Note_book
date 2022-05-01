@@ -26,8 +26,10 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
     val LAYOUT_TWO:Int = 1
 
     var viewModelJob = Job()
+
     var scope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
+//  This "data" --> will store the selected list of the note Data Id
     var data = mutableListOf<String>()
 
     init {
@@ -36,62 +38,88 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
     }
 
     override fun getItemViewType(position: Int): Int {
+
         if(position == 0){
             return LAYOUT_ONE
         }else{
             return LAYOUT_TWO
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DisplayFolderListAdapter.ViewHolder {
 
-            var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
-        if(viewType == LAYOUT_ONE){
-//                Log.i("TestingApp1","Finally Entered")
-                 view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_default_folder, parent, false)
+        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
 
-            }else{
-//                Log.i("TestingApp1","Entered")
-                 view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
-            }
+        if(viewType == LAYOUT_ONE){
+
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_default_folder, parent, false)
+
+        }else{
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout_user_created_folder, parent, false)
+
+        }
         return ViewHolder(view)
 
     }
 
     override fun onBindViewHolder(holder: DisplayFolderListAdapter.ViewHolder, position: Int) {
+
         var folderData: FolderData = getItem(position)
+
         holder.bind(folderData)
+
 //        This is for the title textView Clicking
+
         holder.folder_title.setOnClickListener {
+
             itemClickListener.changeFolderName(getItem(position))
-        }
+
+       }
 
 //      This is for the entire card is long clicked
         holder.itemView.setOnLongClickListener {
             if(viewModel.isEnabled.value == false){
+
+//              isEnabled MutableLiveData is set to true
                 viewModel.isEnabled.value = true
+
+//              If the data list doesn't have the  folder Id
                 if(data.contains(folderData.folderId) == false){
-                    Log.i("TestingApp","${folderData.folderName}")
+
+//                  Folder id is added to the data mutable List
                     data.add(folderData.folderId)
+
+//                  If the default folder is long pressed selected --> if statement to check
                     if (folderData.folderId == viewModel.data){
+
+//                      The delete button is diabled
                         viewModel.deleteButtonEnabled.value = false
-                        Log.i("TestingApp","delete Button Diabled")
+
                     }
-                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = true)
+
+//                  Folder Data is updated
+                    val folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = true)
 
                     scope.launch {
                         viewModel.folderRepository.updateFolderData(folderDataupdate)
                     }
+
                     viewModel.selectedList.value = data
 
-                }else if(data.contains(folderData.folderId) == true){
-                    Log.i("TestingApp","${folderData.folderName}")
+                }
+//              If the data is all
+                else if(data.contains(folderData.folderId) == true){
+
                     data.remove(folderData.folderId)
+
                     if (folderData.folderId == viewModel.data){
+
                         viewModel.deleteButtonEnabled.value = true
-                        Log.i("TestingApp","delete Button Enabled")
+
                     }
-                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = false)
+
+                    val folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = false)
 
                     scope.launch {
                         viewModel.folderRepository.updateFolderData(folderDataupdate)
@@ -106,38 +134,48 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
 
 //       This is for the entire card to clicked
         holder.itemView.setOnClickListener {view ->
+
             if (viewModel.isEnabled.value == false){
-                Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToDisplayFolderContentFragment(folderData.folderId,folderData.folderName, viewModel.data.toString(),
-                    viewModel.folder_list.value?.size ?: 0
-                ))
+
+                Navigation.findNavController(view).navigate(HomeFragmentDirections.actionHomeFragmentToDisplayFolderContentFragment(folderData.folderId,folderData.folderName, viewModel.data.toString(), viewModel.folder_list.value?.size ?: 0))
+
             }else if(viewModel.isEnabled.value == true){
+
                 if(data.contains(folderData.folderId) == false){
-                    Log.i("TestingApp","${folderData.folderName}")
+
                     data.add(folderData.folderId)
-                    Log.i("TestingApp","${viewModel.data}")
-                    Log.i("TestingApp","${folderData.folderId}")
+
                     if (folderData.folderId == viewModel.data){
+
                         viewModel.deleteButtonEnabled.value = false
-                        Log.i("TestingApp","deleteButtonDiabled")
+
                     }
-                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = true)
+
+                    val folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = true)
 
                     scope.launch {
+
                         viewModel.folderRepository.updateFolderData(folderDataupdate)
+
                     }
                     viewModel.selectedList.value = data
 
                 }else if(data.contains(folderData.folderId) == true){
-                    Log.i("TestingApp","${folderData.folderName}")
+
                     data.remove(folderData.folderId)
+
                     if (folderData.folderId == viewModel.data){
+
                         viewModel.deleteButtonEnabled.value = true
-                        Log.i("TestingApp","deleteButtonEnabled")
+
                     }
-                    var folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = false)
+
+                    val folderDataupdate = FolderData(folderId = folderData.folderId, folderName = folderData.folderName, createdTime = folderData.createdTime, modifiedTime = folderData.modifiedTime, selected_item = false)
 
                     scope.launch {
+
                         viewModel.folderRepository.updateFolderData(folderDataupdate)
+
                     }
                     viewModel.selectedList.value = data
 
@@ -163,7 +201,7 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
             }else if(!folderData.selected_item){
                 folder_selected.visibility = View.GONE
             }
-//            Log.i("TestingApp","${folderData.folderName}")
+
         }
     }
 }

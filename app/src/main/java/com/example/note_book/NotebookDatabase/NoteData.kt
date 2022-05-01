@@ -28,5 +28,9 @@ data class NoteData(
     var modifiedTime: Long,
 
     @ColumnInfo(name="Selected")
-    var selected: Boolean = false
+    var selected: Boolean = false,
+
+    @ColumnInfo(name = "Favourite")
+    var favourite: Boolean = false
+
 ):Serializable

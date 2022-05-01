@@ -1,57 +1,83 @@
 package com.example.note_book.moveNotes
 
-import android.util.Log
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
+import com.example.note_book.NotebookDatabase.NotebookDatabase
 import kotlinx.coroutines.*
 
-class MoveFragmentViewModel(val folderRepository: FolderRepository): ViewModel() {
+class MoveFragmentViewModel(val application: Application): ViewModel() {
 
-    var noteListFolder = MutableLiveData<MutableList<FolderData>>()
+//  Declaration of folderRepository
+    private var folderRepository: FolderRepository
 
-    var movingStarted = MutableLiveData<Boolean>()
-
-//    lateinit var folder_list: LiveData<List<FolderData>>
-    var selected = mutableListOf<String>()
-    var moveFolderId: String = ""
-
-    var moveFolderTo: String = ""
-
+//  Declaration of Coroutine Job
     val job = Job()
+
+//  Declaration of Coroutine Scope
     val scope = CoroutineScope(Dispatchers.IO + job)
 
+//  To Check whether the moving/copying is started (or) Note
+    var movingStarted = MutableLiveData<Boolean>()
 
-    var folder_list: LiveData<List<FolderData>>? = null
+//  Declaration and initialization of empty mutableList
+//  This list will the initialized to the list of the selected items, we got using safeArgs
+    var selected = mutableListOf<String>()
 
+//  Folder id of the Folder in which the selected list should move from
+    var moveFolderId: String = ""
+
+//  Fodler id of the Folder in which the selected list should move to
+    var moveFolderTo: String = ""
+
+//  Declaration and Initialization of FolderData to null that has to be displayed to the user
+    var folderList: LiveData<List<FolderData>>? = null
+
+//  getNoteList -->  Have all the NoteData of the selected list of NoteId
     var getNoteList = mutableListOf<NoteData>()
 
+//  Declaration and Initialization of useType
+//  useType  --> type whether this fragment is used for [move/copy]
     var useType: String = ""
 
     init {
-//        folder_list = folderRepository.folderDataDao.getAllDataByFolderMove()
+//      Declaration and Initialization of FolderDao
+        val folderDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
+
+//      Declaration and Initialization of NoteDataDao
+        val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
+
+//      Initialization of FolderRepository
+        folderRepository = FolderRepository(folderDao, noteDataDao)
+
+//     movingStarted is initialized to false
         movingStarted.value = false
     }
 
+//  Function to launch a coroutine for getting the list of FolderData for moving except the FolderData in which they came
     fun getFolderListMove(folderId: String){
         scope.launch {
             return@launch withContext(Dispatchers.IO){
-                folder_list = folderRepository.getFolderListMove(folderId)
+                folderList = folderRepository.getFolderListMove(folderId)
             }
         }
     }
 
+//  Function to launch a coroutine for getting the list of FolderData for Copy Operation
     fun getCopyFolderList(){
         scope.launch {
             return@launch withContext(Dispatchers.IO){
-                folder_list = folderRepository.getFolderList()
+                folderList = folderRepository.getFolderList()
             }
         }
     }
 
+//  Function to launch a coroutine to Get all the NoteData from the selected list of NoteId
+//  and add it to the  getNoteList[mutableList] variable
     fun getNotes(){
         for (data in selected){
             var noteData = NoteData("","","","",0,0,false)
@@ -61,37 +87,28 @@ class MoveFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
 
                 }
             }
-            Log.i("TestingApp","Size -> "+ getNoteList.size )
-            Log.i("TestingApp","Note Id -> "+ noteData.noteId)
-            Log.i("TestingApp","Folder Id -> "+ noteData.folderId)
-            Log.i("TestingApp","Note Title -> "+ noteData.noteTitle)
-            Log.i("TestingApp","Note Description -> "+ noteData.noteDescription)
         }
     }
 
+//  Function to Move / Copy  all the Note Data to the Folder
     fun moveAllNotes(folderId: String) {
-//        Log.i("TestingApp","Size of the noteList -> ${getNoteList.size}")
-//        Log.i("TestingApp","Size -> "+ getNoteList.size )
-//        Log.i("TestingApp","Note Id -> "+ getNoteList[0].noteId)
-//        Log.i("TestingApp","Folder Id -> "+ getNoteList[0].folderId)
-//        Log.i("TestingApp","Note Title -> "+ getNoteList[0].noteTitle)
-//        Log.i("TestingApp","Note Description -> "+ getNoteList[0].noteDescription)
-
+//      For Each NoteData in the getNoteList
         for(data in getNoteList){
+
+//          useType will be checked
+
+//          If the useType is "move"
             if (useType == "move"){
+//              Database delete Operation is done for all NoteData
                 scope.launch {
                     folderRepository.deleteNoteDate(data.noteId)
                 }
             }
 
-            var uploadNoteData = NoteData(
-                folderId = folderId,
-                noteTitle = data.noteTitle ,
-                noteDescription = data.noteDescription ,
-                createdTime = data.createdTime ,
-                modifiedTime = System.currentTimeMillis(),
-                selected = false
-            )
+//          Declaration and Initialization of NoteData
+            val uploadNoteData = NoteData(folderId = folderId, noteTitle = data.noteTitle , noteDescription = data.noteDescription , createdTime = data.createdTime , modifiedTime = System.currentTimeMillis(), selected = false, favourite = data.favourite)
+
+//          Database Insert Operation to insert all the selected NoteData to the database with the specific folderId
             scope.launch {
                 folderRepository.insertNoteData(uploadNoteData)
             }

@@ -8,9 +8,10 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/notebook"
         android:supportsRtl="true"
+        android:name=".ApplicationInitialize"
         android:theme="@style/Theme.Note_book">
         <activity
-            android:name=".HomePage"
+            android:name=".HomePageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

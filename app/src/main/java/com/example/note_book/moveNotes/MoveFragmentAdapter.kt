@@ -1,11 +1,9 @@
 package com.example.note_book.moveNotes
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,15 +19,10 @@ class MoveFragmentAdapter(moveFragmentViewModel: MoveFragmentViewModel, defaultF
     val LAYOUT_ONE: Int = 0
     val LAYOUT_TWO: Int = 1
 
-    init {
-        Log.i("TestingApp","Default Folder id -> ${defaultFolderIdAdapter}")
-    }
 
     override fun getItemViewType(position: Int): Int {
-        Log.i("TestingApp","Position ${position}")
-        Log.i("TestingApp","Default Id from the Adapter -> ${viewModel.noteListFolder.value?.get(position)?.folderId.toString()}")
-        if (defaultFolderIdAdapter == viewModel.folder_list?.value?.get(position)?.folderId.toString()){
-            Log.i("TestingApp","Default Id from the Adapter -> ${viewModel.noteListFolder.value?.get(position)?.folderId.toString()}")
+
+        if (defaultFolderIdAdapter == viewModel.folderList?.value?.get(position)?.folderId.toString()){
             return LAYOUT_ONE
         }else{
             return LAYOUT_TWO
@@ -48,12 +41,16 @@ class MoveFragmentAdapter(moveFragmentViewModel: MoveFragmentViewModel, defaultF
     }
 
     override fun onBindViewHolder(holder: MoveFragmentAdapter.ViewHolder, position: Int) {
-        var folderData: FolderData = getItem(position)
+        val folderData: FolderData = getItem(position)
+
         holder.bind(folderData)
+
         holder.itemView.setOnClickListener {
+
             viewModel.moveFolderTo = folderData.folderName
-//            Log.i("TestingApp","MoveFolderItemClicked")
+
             moveToFolderClickListener.moveFiles(folderData)
+
             viewModel.movingStarted.value = true
 
         }

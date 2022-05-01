@@ -82,4 +82,6 @@
     <dimen name="text_size_18sp">18sp</dimen>
     <dimen name="text_size_20sp">20sp</dimen>
 
+    <dimen name="elevation_4dp">4dp</dimen>
+
 </resources>

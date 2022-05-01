@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/select_deselect_all_button"
+        android:title="@android:string/selectAll"
+        android:icon="@drawable/ic_baseline_select_all_24"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/favourite_delete_button"
+        android:title="@string/menu_delete_text"
+        android:icon="@drawable/ic_baseline_delete_button"/>
+    <item
+        android:id="@+id/unfavourite_button" android:title="@string/favourite_menu_unfavourite_text" />
+</menu>

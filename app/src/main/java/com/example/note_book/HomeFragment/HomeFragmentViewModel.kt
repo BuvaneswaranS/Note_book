@@ -1,20 +1,27 @@
 package com.example.note_book.HomeFragment
 
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
+import com.example.note_book.NotebookDatabase.NoteData
+import com.example.note_book.NotebookDatabase.NotebookDatabase
 import kotlinx.coroutines.*
 
-class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel() {
+class HomeFragmentViewModel(val application: Application): ViewModel() {
 
+//   Declaration of FolderRepository
+     val folderRepository: FolderRepository
 
     var isEnabled = MutableLiveData<Boolean>()
 
     var allItemsSelected = MutableLiveData<Boolean>()
+
+    var checkBoxSelected = MutableLiveData<Boolean>()
 
     var filesCame = MutableLiveData<Boolean>()
     var viewModelCreated = MutableLiveData<Boolean>()
@@ -23,6 +30,8 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
 //    var viewModelCreated = MutableLiveData<Boolean>()
 
     var selectedList = MutableLiveData<MutableList<String>>()
+
+    var drawerState = MutableLiveData<String>()
 
     var deleteButtonEnabled = MutableLiveData<Boolean>()
 
@@ -34,11 +43,16 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
 
     var all_folder_id_list: MutableList<String>? = null
 
+    var allNotesCard: LiveData<List<NoteData>>? = null
+
     val viewModelJob = Job()
 
     val scope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
     init {
+        val folderDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
+        val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
+        folderRepository = FolderRepository(folderDao, noteDataDao)
         folder_list = folderRepository.folderDataDao.getAllDataByFolder()
         isEnabled.value = false
         deleteButtonEnabled.value = true
@@ -48,6 +62,9 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
         viewModelCreated.value = true
         donedeSelectingall.value = false
         filesCame.value = false
+        getNotesCard()
+        drawerState.value = "notebooks"
+        checkBoxSelected.value = false
     }
 
     var data: String? =  ""
@@ -126,6 +143,12 @@ class HomeFragmentViewModel(val folderRepository: FolderRepository): ViewModel()
         }
     }
 
-
+    fun getNotesCard(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                allNotesCard = folderRepository.getAllNotesCard()
+            }
+        }
+    }
 
 }

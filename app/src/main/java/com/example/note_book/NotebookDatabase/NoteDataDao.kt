@@ -12,12 +12,23 @@ interface NoteDataDao {
     @Update
     fun updateNoteData(noteData: NoteData)
 
-//    @Query("SELECT * FROM note_table")
-//    fun getFolderContent(): LiveData<List<NoteData>>
+    @Update
+    fun updateFavouriteNoteData(noteData: NoteData)
+
+    @Update
+    fun updateUnFavouriteNoteData(noteData: NoteData)
+
+    @Query("SELECT * FROM note_table")
+    fun getAllNotesCard(): LiveData<List<NoteData>>
+
+    @Query("SELECT noteId FROM note_table")
+    fun getAllNoteId(): MutableList<String>
 
     @Query("SELECT * from note_table WHERE FolderId = :folderId")
     fun getFolderContent(folderId: String): LiveData<List<NoteData>>
 
+    @Query("SELECT * FROM note_table WHERE favourite = :isFavourite")
+    fun getFavouriteNotes(isFavourite: Boolean): LiveData<List<NoteData>>
 
     @Query("SELECT * FROM note_table WHERE noteId = :noteId")
     fun getNoteData(noteId: String): NoteData

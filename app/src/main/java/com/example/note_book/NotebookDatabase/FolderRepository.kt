@@ -70,6 +70,14 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         noteDataDao.updateNoteData(noteData)
     }
 
+    suspend fun updateFavouriteNoteData(noteData: NoteData){
+        noteDataDao.updateFavouriteNoteData(noteData)
+    }
+
+    suspend fun updateUnFavouriteNoteData(noteData: NoteData){
+        noteDataDao.updateFavouriteNoteData(noteData)
+    }
+
     suspend fun getNotesData(noteId: String): NoteData{
         return noteDataDao.getNoteData(noteId)
     }
@@ -78,6 +86,10 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return withContext(Dispatchers.IO){
             folderDataDao.getDefaultFolderId()
         }
+    }
+
+    suspend fun getAllNotesCard(): LiveData<List<NoteData>>{
+        return noteDataDao.getAllNotesCard()
     }
 
     suspend fun getNotesListFolder(folderId: String): LiveData<List<NoteData>>{
@@ -92,9 +104,15 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return noteDataDao.getFolderNoteData(folderId)
     }
 
+    suspend fun getAllNoteId(): MutableList<String>{
+        return noteDataDao.getAllNoteId()
+    }
+
     suspend fun delete_Note_Data_folder_id(folderId: String){
         noteDataDao.delete_Notedata_Folder_id(folderId)
     }
 
-
+    suspend fun getFavouriteNotes(favourite: Boolean): LiveData<List<NoteData>>{
+        return noteDataDao.getFavouriteNotes(favourite)
+    }
 }

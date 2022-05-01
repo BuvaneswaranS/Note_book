@@ -8,13 +8,22 @@
     <fragment
         android:id="@+id/home_Fragment"
         android:name="com.example.note_book.HomeFragment.HomeFragment"
-        android:label="Home_Fragment" >
+        android:label="@string/app_name">
         <action
             android:id="@+id/action_home_Fragment_to_createNewNoteFragment"
             app:destination="@id/createNewNoteFragment" />
         <action
             android:id="@+id/action_home_Fragment_to_displayFolderContentFragment"
             app:destination="@id/displayFolderContentFragment" />
+        <action
+            android:id="@+id/action_home_Fragment_to_updateNoteFragment"
+            app:destination="@id/updateNoteFragment" />
+        <action
+            android:id="@+id/action_home_Fragment_to_moveFragment"
+            app:destination="@id/moveFragment" />
+        <action
+            android:id="@+id/action_home_Fragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/createNewNoteFragment"
@@ -27,8 +36,7 @@
     <fragment
         android:id="@+id/displayFolderContentFragment"
         android:name="com.example.note_book.displayFolderData.DisplayFolderContentFragment"
-        android:label="fragment_display_folder_content"
-        tools:layout="@layout/fragment_display_folder_content" >
+        tools:layout="@layout/fragment_display_folder_content">
         <action
             android:id="@+id/action_displayFolderContentFragment_to_createNewNoteFragment"
             app:destination="@id/createNewNoteFragment" />
@@ -50,6 +58,9 @@
         <argument
             android:name="folder_list_size"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_displayFolderContentFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateNoteFragment"
@@ -74,6 +85,9 @@
         <action
             android:id="@+id/action_updateNoteFragment_to_displayFolderContentFragment"
             app:destination="@id/displayFolderContentFragment" />
+        <argument
+            android:name="favourite"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/moveFragment"
@@ -98,5 +112,46 @@
         <argument
             android:name="fragmentType"
             app:argType="string" />
+        <action
+            android:id="@+id/action_moveFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_moveFragment_to_searchFragment2"
+            app:destination="@id/searchFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/allNotesCardFragment"
+        android:name="com.example.note_book.allNotesCard.AllNotesCardFragment"
+        android:label="@string/nav_menu_all_note_card"
+        tools:layout="@layout/fragment_all_notes_card">
+        <action
+            android:id="@+id/action_allNotesCardFragment_to_createNewNoteFragment"
+            app:destination="@id/createNewNoteFragment" />
+        <action
+            android:id="@+id/action_allNotesCardFragment_to_moveFragment"
+            app:destination="@id/moveFragment" />
+        <action
+            android:id="@+id/action_allNotesCardFragment_to_updateNoteFragment"
+            app:destination="@id/updateNoteFragment" />
+        <action
+            android:id="@+id/action_allNotesCardFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.example.note_book.favourite.favouriteFragment"
+        android:label="@string/nav_menu_favourties_menu"
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_favouriteFragment_to_updateNoteFragment"
+            app:destination="@id/updateNoteFragment" />
+        <action
+            android:id="@+id/action_favouriteFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.note_book.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

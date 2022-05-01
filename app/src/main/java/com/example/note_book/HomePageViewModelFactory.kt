@@ -1,14 +1,15 @@
 package com.example.note_book
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.note_book.NotebookDatabase.FolderRepository
 import java.lang.IllegalArgumentException
 
-class HomePageViewModelFactory(private val folderRepository: FolderRepository): ViewModelProvider.Factory {
+class HomePageViewModelFactory(private val application: Application): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomePageViewModel::class.java)){
-            return HomePageViewModel(folderRepository) as T
+            return HomePageViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

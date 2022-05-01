@@ -21,4 +21,17 @@
     <string name="menu_copy_text">Copy</string>
     <string name="fragment_move_title_text">Move</string>
     <string name="fragment_move_cancel_button_text">Cancel</string>
+
+    <string name="nav_menu_all_note_card">All Note Cards</string>
+    <string name="nav_menu_favourties_menu">Favourites</string>
+    <string name="nav_menu_noteBook_menu">Notebooks</string>
+
+    <string name="open_nav_drawer">open</string>
+    <string name="close_nav_drawer">close</string>
+
+    <string name="menu_check_box">checkBox</string>
+    <string name="menu_item_favouite">Make Favourite</string>
+    <string name="favourite_menu_unfavourite_text">Unfavourite</string>
+    <string name="menu_item_Search_button">Search</string>
+
 </resources>

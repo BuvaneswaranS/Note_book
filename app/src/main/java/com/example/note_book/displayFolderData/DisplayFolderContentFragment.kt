@@ -2,168 +2,137 @@ package com.example.note_book.displayFolderData
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.note_book.NotebookDatabase.FolderRepository
+import com.example.note_book.HomePageActivity
 import com.example.note_book.NotebookDatabase.NoteData
-import com.example.note_book.NotebookDatabase.NotebookDatabase
 import com.example.note_book.R
 import com.example.note_book.databinding.FragmentDisplayFolderContentBinding
 
 class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_content) {
 
+//  ViewBinding Declaration
     private lateinit var binding: FragmentDisplayFolderContentBinding
+
+//  ViewModel Declaration
     private lateinit var viewModel: DisplayFolderContentViewModel
+
+//  Adapter Declaration
     private lateinit var displayNoteListAdapter: DisplayNoteListAdapter
 
     private lateinit var loadingDialog: AlertDialog
 
+//  Declaration and Initialzation  of the SharedPreference
+    private val selected = "sharedSelect"
+
+//  Initializing the FolderId to a Variable "folderId"
     var folderId: String = ""
 
+//  Initializing the Folder Name to a Variable "folderName"
     var folderName: String = ""
 
+//  Initialiing the Default Folder Id to a variable "defaultid"
     var defaultid: String = ""
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    val shared_value = "drawer_shared"
 
-        viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value ->
-            if (value){
-                binding.diaplayFolderContentToolbar.menu.clear()
-                binding.diaplayFolderContentToolbar.inflateMenu(R.menu.menu)
-                binding.diaplayFolderContentToolbar.setOnMenuItemClickListener{ menuItem ->
-                    when(menuItem.itemId){
-                        R.id.delete_button -> {
-//                            Toast.makeText(this.context,"Delete button Clicked",Toast.LENGTH_LONG).show()
-//                            Log.i("TestingApp","Delete Button Clicked")
-                            var builder = AlertDialog.Builder(this.context)
-                            builder.setTitle("Delete notes")
-                            builder.setMessage("Do you want to delete?")
-                            builder.setNegativeButton("No"){DialogInterface, which -> }
-                            builder.setPositiveButton("Yes"){DialogInterface, which ->
-                                viewModel.isEnabled.value = false
-                                viewModel.checkedBoxClicked.value = false
-                                viewModel.deleteSelectedItem()
-                                viewModel.selectAndDeSelectAll(false)
-                                val data = mutableListOf<String>()
-                                viewModel.getNoteIdList(folderId)
-                                displayNoteListAdapter.data = data
-                                viewModel.selectedList.value = data
-                                val emptyData = mutableListOf<NoteData>()
-                                viewModel.notesListSelected = emptyData
-                            }
-                            var dialogBox = builder.create()
-                            builder.show()
-                            builder.setCancelable(false)
-                            true
-                        }
-                        R.id.move_button -> {
-                            if (viewModel.size <= 1){
-                                var builder = AlertDialog.Builder(this.context)
-                                builder.setTitle("Move Notes")
-                                builder.setMessage("Don't seem to be another folder to move the note to ")
-                                builder.setNegativeButton("Ok"){DialogInterface, which -> }
-                                var dialogBox = builder.create()
-                                builder.show()
-                                builder.setCancelable(false)
-                            }else if (viewModel.size > 1){
-                                Log.i("TestingApp","${viewModel.defaultId}")
-                                Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"move"))
-                                viewModel.isEnabled.value = false
-                                viewModel.checkedBoxClicked.value = false
-                                viewModel.selectAndDeSelectAll(false)
-                                val data = mutableListOf<String>()
-                                viewModel.getNoteIdList(folderId)
-                                displayNoteListAdapter.data = data
-                                viewModel.selectedList.value = data
-                                val emptyData = mutableListOf<NoteData>()
-                                viewModel.notesListSelected = emptyData
-                            }
-//                            Toast.makeText(this.context,"Move button Clicked",Toast.LENGTH_LONG).show()
-
-                            true
-                        }
-
-                        R.id.copy_button -> {
-//                                Log.i("TestingApp","${viewModel.defaultId}")
-                                Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"copy"))
-                                viewModel.isEnabled.value = false
-                                viewModel.checkedBoxClicked.value = false
-                                viewModel.selectAndDeSelectAll(false)
-                                val data = mutableListOf<String>()
-                                viewModel.getNoteIdList(folderId)
-                                displayNoteListAdapter.data = data
-                                viewModel.selectedList.value = data
-                                val emptyData = mutableListOf<NoteData>()
-                                viewModel.notesListSelected = emptyData
-                            true
-                        }
-
-                        else -> {
-                            Toast.makeText(this.context,"Else Called",Toast.LENGTH_LONG).show()
-                            Log.i("TestingApp","Else Called")
-                            true
-                        }
-                    }
-                }
-            }else if(!value){
-                binding.diaplayFolderContentToolbar.menu.clear()
-            }
-        })
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//      For Setting the Options Menu
+        setHasOptionsMenu(true)
     }
+
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+//      Initializing the ViewBinding
         binding = FragmentDisplayFolderContentBinding.inflate(inflater, container, false)
 
-        binding.displayFolderContentBackArrowButton.setOnClickListener {
-                requireActivity().onBackPressed()
-        }
-         val arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
+        val sharedPreference = activity?.getSharedPreferences(shared_value, Context.MODE_PRIVATE)
+        var editor: SharedPreferences.Editor? = sharedPreference?.edit()
+        editor?.putBoolean("IN",false)
+        editor?.apply()
+        editor?.commit()
 
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+
+        (activity as HomePageActivity).drawerLocked()
+
+//  -------------------------------------------------------------------------------------------------------------------
+
+//      Safe Args Declaration
+        val arguments = DisplayFolderContentFragmentArgs.fromBundle(requireArguments())
+
+//      folderId in the arguments[Safe Args] is initialized to the "folderId" variable
         folderId = arguments.displayFolderId
-        folderName = arguments.displayFolderName
-        Log.i("TestingApp","Arguments Id"+ arguments.defaultFolderId)
 
+//      folderName in the arguments[Safe Args] is initialized to the "folderName" variable
+        folderName = arguments.displayFolderName
+
+//      defaultFolderId in the arguments[Safe Args] is initialized to the "defaultid" variable
+        defaultid= arguments.defaultFolderId
+
+//      Setting the Title of the Toolbar from the safeArgs arguments
+
+
+
+//      Add Note OnClickListener
         binding.addNoteFolderButton.setOnClickListener {view ->
             Navigation.findNavController(view).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToCreateNewNoteFragment(arguments.displayFolderId))
         }
 
         val application = requireNotNull(this.activity).application
-        val folderDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
-        val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
-        val repository = FolderRepository(folderDao, noteDataDao)
-        val viewModelFactory = displayFolderContentViewModelFactory(repository)
 
+//     Declaration and Initialization of ViewModel Factory
+        val viewModelFactory = displayFolderContentViewModelFactory(application)
+
+//      viewModel is initialized
         viewModel = ViewModelProvider(this, viewModelFactory).get(DisplayFolderContentViewModel::class.java)
 
+//
         viewModel.getNotesList(arguments.displayFolderId)
 
+//
         viewModel.size = arguments.folderListSize
-        Log.i("TestingApp","Folder List Size -> " + viewModel.size)
 
-        defaultid= arguments.defaultFolderId
-//        getSelectedToDeSelected()
+//      Initializing the Adapter[displayNoteListAdapter]
+        displayNoteListAdapter = DisplayNoteListAdapter(viewModel)
+
+//      Setting the RecyclerView's Adapter as the Adapter[displayNoteListAdapter]
+        binding.displayFolderContentRecyclerView.adapter = displayNoteListAdapter
+
+//      Setting the Recyclerview --> LayoutManager
+        binding.displayFolderContentRecyclerView.layoutManager = GridLayoutManager(this.context, 2)
+
 
         viewModel.viewModelCreated.observe(this.viewLifecycleOwner, Observer {created ->
+
             if(created){
-                Log.i("TestingApp","Notes ViewModelCreated")
+
                 viewModel.filesCame.observe(this.viewLifecycleOwner, Observer {filesCame ->
+
                     if (filesCame){
-                        Log.i("TestingApp","Notes Files Came Created")
+
                         if (viewModel.donedeSelectingall.value == false){
-                            Log.i("TestingApp","Notes done deSelecting all ")
+
                             viewModel.selectAndDeSelectAll(false)
                             viewModel.donedeSelectingall.value = true
+
                         }
+
                     }
                 })
             }
@@ -184,209 +153,650 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
         }
 
-//        Log.i("TestingApp","All Items Selected - >"+viewModel.allItemsSelected.value.toString())
 
-        viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer {allSelected ->
-//            Log.i("TestingApp","2. All Items Selected -> "+viewModel.allItemsSelected.value.toString())
-            if (allSelected){
-                binding.selectedBox.isChecked = true
-            }else if (!allSelected){
-                binding.selectedBox.isChecked = false
-            }
-        })
 
-        displayNoteListAdapter = DisplayNoteListAdapter(viewModel)
-        binding.displayFolderContentRecyclerView.adapter = displayNoteListAdapter
-        binding.displayFolderContentRecyclerView.layoutManager = GridLayoutManager(this.context, 2)
-        binding.folderTitle.setText(arguments.displayFolderName)
         viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
+
             if(!list.isEmpty()){
+
                 binding.displayNoNotesCard.visibility = View.INVISIBLE
+
                 viewModel.filesCame.value = true
+
             }else if (list.isEmpty()){
+
                 binding.displayNoNotesCard.visibility = View.VISIBLE
+
             }
+
             displayNoteListAdapter.submitList(list)
+
         })
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.setTitle(arguments.displayFolderName)
+
+        val drawerLayout = view?.findViewById<DrawerLayout>(R.id.drawerLayoutHome)
+
+        drawerLayout?.isEnabled = false
 
         viewModel.getNoteIdList(arguments.displayFolderId)
 
-        viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer {allSelected ->
-            if (allSelected){
-                binding.selectedBox.isChecked = true
-            }else if (!allSelected){
-                binding.selectedBox.isChecked = false
-            }
-        })
+        viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value ->
 
+            if (value){
 
-//      Selection Enabled (OR) Not
-        viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { value ->
-            if(value == true){
-//                Log.i("TestingApp","Checked Box - > " + binding.selectedBox.isChecked.toString())
-                binding.selectedBox.visibility = View.VISIBLE
-//                binding.deleteButton.visibility = View.VISIBLE
-                binding.closeButton.visibility = View.VISIBLE
-                binding.displayFolderContentBackArrowButton.visibility = View.INVISIBLE
+                val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+                val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+                editor?.putBoolean("SELECTED",true)
+                editor?.apply()
+                editor?.commit()
+
 
                 viewModel.selectedList.observe(this.viewLifecycleOwner, Observer {list ->
+
                     if (viewModel.isEnabled.value == true){
-//                binding.folderTitle.setText(" ${displayNoteListAdapter.data.size} selected")
-                        binding.folderTitle.setText(" ${list.size} selected")
-//                        Log.i("TestingApp","${list.size}")
+
+//                        binding.diaplayFolderContentToolbar.setTitle(" ${list.size} selected")
+                        (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("${list.size} selected")
+
                     }
+
                     val selectedListSize: Int = list.size
                     val entireListSize: Int? = viewModel.notesListFolder?.value?.size
                     viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
+
                         if (selectedListSize == list.size){
+
                             viewModel.allItemsSelected.value = true
-                            binding.selectedBox.isChecked = true
-                        }else{
-                            viewModel.allItemsSelected.value = false
-                            binding.selectedBox.isChecked = false
+
                         }
+
+                        else{
+
+                            viewModel.allItemsSelected.value = false
+
+                        }
+
                     })
-//                    if (selectedListSize == entireListSize){
-//
-//                    }else{
-//
-//                    }
-//                    Log.i("TestingApp","Place 2 -> Checked Box - > " + binding.selectedBox.isChecked.toString())
 
                 })
 
-
-                binding.addNoteFolderButton.visibility = View.INVISIBLE
-
-//                binding.folderTitle.setText(" ${displayNoteListAdapter.data.size + 1} selected")
-//                binding.folderTitle.setText("${viewModel.selectedList.value?.size?.plus(1)} selected")
-            }else if (value == false){
-
-                binding.selectedBox.visibility = View.INVISIBLE
-//                binding.deleteButton.visibility = View.INVISIBLE
-                binding.closeButton.visibility = View.INVISIBLE
-                binding.displayFolderContentBackArrowButton.visibility = View.VISIBLE
-                binding.folderTitle.setText(arguments.displayFolderName)
-                Log.i("TestingApp","Size of the List ${displayNoteListAdapter.data.size}")
-                binding.addNoteFolderButton.visibility = View.VISIBLE
             }
-        })
 
-        viewModel.deletingStarted.observe(this.viewLifecycleOwner, Observer {deletingStartedValue ->
+            else if(!value){
 
-            if(deletingStartedValue == false){
-                loadingDialog.dismiss()
-            }else if(deletingStartedValue == true){
-                val thread = Thread( Runnable {
-                    loadingDialog.show()
-                    Thread.sleep(5000)
-                    loadingDialog.dismiss()
-                })
+                (requireActivity() as AppCompatActivity).supportActionBar?.setTitle(arguments.displayFolderName)
 
             }
+
         })
 
-//        viewModel.selectedAllItem.observe(this.viewLifecycleOwner, Observer { selected ->
-//            if(selected){
-//
-//            }else if(!selected){
-//                viewModel.deSelectAll()
-//            }
-//        })
-
-
-
-//        viewModel.checkedBoxClicked.observe(this.viewLifecycleOwner, Observer { checkBox ->
-//            if (checkBox == true){
-//                binding.selectedBox.isChecked = true
-//            }else if(checkBox == false){
-//                binding.selectedBox.isChecked = false
-//            }
-//        })
-
-
-
-//        CheckBox
-        binding.selectedBox.setOnCheckedChangeListener{ buttonView, isChecked ->
-            if (isChecked){
-                if(viewModel.allItemsSelected.value == false){
-//                    Log.i("TestingApp","Entered true")
-                    viewModel.selectedAllItem.value = true
-                    viewModel.selectAndDeSelectAll(true)
-                    var data = mutableListOf<String>()
-                    viewModel.noteIdFolderList?.let { data.addAll(it) }
-
-                    displayNoteListAdapter.data = data
-                    viewModel.selectedList.value = data
-                    viewModel.allItemsSelected.value = true
-                }
-
-            }else if (!isChecked){
-                if (viewModel.allItemsSelected.value == true){
-                    Log.i("TestingApp","Entered False")
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if (viewModel.isEnabled.value == true){
+                    viewModel.isEnabled.value = false
+                    viewModel.checkedBoxClicked.value = false
                     viewModel.selectAndDeSelectAll(false)
                     val data = mutableListOf<String>()
                     displayNoteListAdapter.data = data
                     viewModel.selectedList.value = data
-                    viewModel.allItemsSelected.value = false
+                    val emptyData = mutableListOf<NoteData>()
+                    viewModel.notesListSelected = emptyData
+                    goBack()
+
                 }
             }
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,callback)
 
 
+        viewModel.favourite_item.observe(this.viewLifecycleOwner, Observer { favouriteItems ->
+            viewModel.unfavourtie_item.observe(this.viewLifecycleOwner, Observer {unFavourite ->
+                if ((favouriteItems == 0) && (unFavourite == 0)){
 
-//     Close Button
-        binding.closeButton.setOnClickListener {
-            viewModel.isEnabled.value = false
-            binding.selectedBox.isChecked = false
-            viewModel.selectAndDeSelectAll(false)
-            val data = mutableListOf<String>()
-            val emptyData = mutableListOf<NoteData>()
-            displayNoteListAdapter.data = data
-            viewModel.selectedList.value = data
-            viewModel.notesListSelected = emptyData
-        }
+                    viewModel.favouriteState.value = "makeFavourite"
+
+                }
+                else if ((favouriteItems > 0) && (unFavourite == 0)){
+
+                    viewModel.favouriteState.value = "unFavourite"
+
+                }else if ((favouriteItems == 0) && (unFavourite > 0)){
+
+                    viewModel.favouriteState.value = "makeFavourite"
+
+                }else if ((favouriteItems > 0) && (unFavourite > 0)){
+                    viewModel.favouriteState.value = "Nothing"
+
+                }
+            })
+        })
 
 
+        viewModel.favouriteState.observe(this.viewLifecycleOwner, Observer { value ->
+            if (viewModel.isEnabled.value == true){
+                if (value == "makeFavourite"){
 
-//        Delete Button
-//        binding.deleteButton.setOnClickListener {
-//            viewModel.checkedBoxClicked.value = false
-//            viewModel.deleteSelectedItem()
-//            viewModel.selectAndDeSelectAll(false)
-//            val data = mutableListOf<String>()
-//            viewModel.getNoteIdList(arguments.displayFolderId)
-//            displayNoteListAdapter.data = data
-//            viewModel.selectedList.value = data
-//        }
+                    requireActivity().invalidateOptionsMenu()
 
+                }else if (value == "unFavourite"){
+
+                    requireActivity().invalidateOptionsMenu()
+
+                }else if (value == "Nothing"){
+
+                    requireActivity().invalidateOptionsMenu()
+
+                }
+            }
+        })
+
+//  -----------------------------------------------------------------------------------------------------------------------------------
 
         return binding.root
     }
 
-//    fun getSelectedToDeSelected(){
-//        if (viewModel.isEnabled.value == false){
-//            viewModel.selectAndDeSelectAll(false)
-//            var data = mutableListOf<String>()
-//            displayNoteListAdapter.data = data
-//            viewModel.selectedList.value = data
-//            viewModel.selectedItemsList = data
-//            viewModel.checkedBoxClicked.value = false
-//        }
-//
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
-//    override fun onDestroyView() {
-//        if (viewModel.isEnabled.value == true){
-//            viewModel.selectAndDeSelectAllLifeCycleChange(false)
-//            var data = mutableListOf<String>()
-//            displayNoteListAdapter.data = data
-//            viewModel.selectedList.value = data
-//            viewModel.selectedItemsList = data
-//            viewModel.checkedBoxClicked.value = false
-//        }
-//        super.onDestroyView()
-//    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == android.R.id.home){
+            if (viewModel.isEnabled.value == true){
+                requireActivity().onBackPressed()
+            }else{
+                onDestroy()
+            }
+        }
+
+        if (item.itemId == R.id.move_button){
+
+            if (viewModel.size <= 1){
+
+                val builder = AlertDialog.Builder(this.context)
+                builder.setTitle("Move Notes")
+                builder.setMessage("Don't seem to be another folder to move the note to ")
+                builder.setNegativeButton("Ok"){DialogInterface, which -> }
+                val dialogBox = builder.create()
+                dialogBox.show()
+                builder.setCancelable(false)
+            }else if (viewModel.size > 1){
+                Log.i("TestingApp","${viewModel.defaultId}")
+                view?.let { Navigation.findNavController(it).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"move")) }
+                viewModel.isEnabled.value = false
+                viewModel.checkedBoxClicked.value = false
+                viewModel.selectAndDeSelectAll(false)
+                val data = mutableListOf<String>()
+                viewModel.getNoteIdList(folderId)
+                displayNoteListAdapter.data = data
+                viewModel.selectedList.value = data
+                val emptyData = mutableListOf<NoteData>()
+                viewModel.notesListSelected = emptyData
+            }
+            val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+            editor?.putBoolean("SELECTED",false)
+            editor?.apply()
+            editor?.commit()
+
+
+        }
+
+        else if (item.itemId == R.id.copy_button){
+
+            view?.let { Navigation.findNavController(it).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToMoveFragment(folderId,folderName, displayNoteListAdapter.data.toTypedArray(),defaultid,"copy")) }
+            viewModel.isEnabled.value = false
+            viewModel.checkedBoxClicked.value = false
+            viewModel.selectAndDeSelectAll(false)
+            val data = mutableListOf<String>()
+            viewModel.getNoteIdList(folderId)
+            displayNoteListAdapter.data = data
+            viewModel.selectedList.value = data
+            val emptyData = mutableListOf<NoteData>()
+            viewModel.notesListSelected = emptyData
+
+            val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+            editor?.putBoolean("SELECTED",false)
+            editor?.apply()
+            editor?.commit()
+
+
+        }
+
+        else if (item.itemId == R.id.delete_button) {
+            val builder = AlertDialog.Builder(this.context)
+            builder.setTitle("Delete notes")
+            builder.setMessage("Do you want to delete?")
+            builder.setNegativeButton("No") { DialogInterface, which -> }
+            builder.setPositiveButton("Yes") { DialogInterface, which ->
+
+                viewModel.isEnabled.value = false
+
+                viewModel.checkedBoxClicked.value = false
+
+                viewModel.deleteSelectedItem()
+
+                viewModel.selectAndDeSelectAll(false)
+
+                val data = mutableListOf<String>()
+
+                viewModel.getNoteIdList(folderId)
+
+                displayNoteListAdapter.data = data
+
+                viewModel.selectedList.value = data
+
+                val emptyData = mutableListOf<NoteData>()
+
+                viewModel.notesListSelected = emptyData
+
+            }
+            val dialogBox = builder.create()
+            dialogBox.show()
+            builder.setCancelable(false)
+            val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+            editor?.putBoolean("SELECTED",false)
+            editor?.apply()
+            editor?.commit()
+
+        }
+
+        else if(item.itemId == R.id.select_button){
+
+            if (viewModel.checkedBoxClicked.value == false){
+
+                viewModel.checkedBoxClicked.value = true
+
+            }else if(viewModel.checkedBoxClicked.value == true){
+
+                viewModel.checkedBoxClicked.value = false
+
+            }
+
+            if (viewModel.checkedBoxClicked.value == true){
+
+                if (viewModel.allItemsSelected.value == false){
+
+                    viewModel.selectedAllItem.value = true
+
+                    viewModel.selectAndDeSelectAll(true)
+
+                    var data = mutableListOf<String>()
+
+                    viewModel.noteIdFolderList?.let { data.addAll(it) }
+
+                    displayNoteListAdapter.data = data
+
+                    viewModel.selectedList.value = data
+
+                    viewModel.allItemsSelected.value = true
+
+                    requireActivity().invalidateOptionsMenu()
+
+                }
+
+            }
+
+            else if(viewModel.checkedBoxClicked.value == false){
+
+                if (viewModel.allItemsSelected.value == true){
+
+                    viewModel.selectAndDeSelectAll(false)
+
+                    val data = mutableListOf<String>()
+
+                    displayNoteListAdapter.data = data
+
+                    viewModel.selectedList.value = data
+
+                    viewModel.allItemsSelected.value = false
+
+                    requireActivity().invalidateOptionsMenu()
+
+                }
+            }
+        }
+
+        else if (item.itemId == R.id.favourite_button){
+            viewModel.getNotesList()
+
+            if (viewModel.favouriteState.value == "makeFavourite"){
+
+                viewModel.isEnabled.value = false
+
+                viewModel.checkedBoxClicked.value = false
+
+                val data = mutableListOf<String>()
+                viewModel.makeFavourite(true)
+                displayNoteListAdapter.data = data
+                viewModel.selectedList.value = data
+                val emptyData = mutableListOf<NoteData>()
+                viewModel.notesListSelected = emptyData
+                displayNoteListAdapter.noteDataList = emptyData
+                viewModel.selectedListNoteData.value = emptyData
+                viewModel.noteListSelectedFav = emptyData
+                viewModel.noteListSelectedFav.add(NoteData("","","","",0,0,false,false))
+                viewModel.favourite_item.value = 0
+                viewModel.unfavourtie_item.value = 0
+                val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+                val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+                editor?.putBoolean("SELECTED",false)
+                editor?.apply()
+                editor?.commit()
+
+            }else if (viewModel.favouriteState.value == "unFavourite"){
+
+                viewModel.makeFavourite(false)
+
+                viewModel.isEnabled.value = false
+
+                viewModel.checkedBoxClicked.value = false
+
+
+                val data = mutableListOf<String>()
+
+                displayNoteListAdapter.data = data
+
+                viewModel.selectedList.value = data
+
+                val emptyData = mutableListOf<NoteData>()
+
+                viewModel.notesListSelected = emptyData
+
+                displayNoteListAdapter.noteDataList = emptyData
+
+                viewModel.selectedListNoteData.value = emptyData
+
+                viewModel.noteListSelectedFav = emptyData
+
+                viewModel.noteListSelectedFav.add(NoteData("","","","",0,0,false,false))
+
+                viewModel.favourite_item.value = 0
+
+                viewModel.unfavourtie_item.value = 0
+
+                val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+                val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+                editor?.putBoolean("SELECTED",false)
+                editor?.apply()
+                editor?.commit()
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+
+    }
+
+
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+
+        viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value->
+
+            if (value){
+                if (viewModel.favouriteState.value == "makeFavourite"){
+
+                    if (viewModel.checkedBoxClicked.value == true){
+
+                        if (viewModel.allItemsSelected.value == false){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+
+                        else if (viewModel.allItemsSelected.value == true){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }
+
+                    }
+
+                    else if (viewModel.checkedBoxClicked.value == false) {
+
+                        if (viewModel.allItemsSelected.value == true) {
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }
+
+                        else if (viewModel.allItemsSelected.value == false) {
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+
+                    }
+
+                    viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
+
+                        if (value){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }else if(!value){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+                    })
+
+
+                    val moveItem = menu.findItem(R.id.move_button)
+                    moveItem.setVisible(true)
+
+                    val copyItem = menu.findItem(R.id.copy_button)
+                    copyItem.setVisible(true)
+
+                    val deleteItem = menu.findItem(R.id.delete_button)
+                    deleteItem.setVisible(true)
+
+                    val checkBox = menu.findItem(R.id.select_button)
+                    checkBox.setVisible(true)
+
+                    val favourite = menu.findItem(R.id.favourite_button)
+                    favourite.setTitle("Make Favourite")
+                    favourite.setVisible(true)
+
+                    val searchItem = menu.findItem(R.id.search_button)
+                    searchItem.setVisible(false)
+
+                }
+
+                else if (viewModel.favouriteState.value == "unFavourite"){
+                    if (viewModel.checkedBoxClicked.value == true){
+
+                        if (viewModel.allItemsSelected.value == false){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+
+                        else if (viewModel.allItemsSelected.value == true){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }
+
+                    }
+
+                    else if (viewModel.checkedBoxClicked.value == false) {
+
+                        if (viewModel.allItemsSelected.value == true) {
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }
+
+                        else if (viewModel.allItemsSelected.value == false) {
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+
+                    }
+
+                    viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
+
+                        if (value){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }else if(!value){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+                    })
+
+
+                    val moveItem = menu.findItem(R.id.move_button)
+                    moveItem.setVisible(true)
+
+                    val copyItem = menu.findItem(R.id.copy_button)
+                    copyItem.setVisible(true)
+
+                    val deleteItem = menu.findItem(R.id.delete_button)
+                    deleteItem.setVisible(true)
+
+                    val checkBox = menu.findItem(R.id.select_button)
+                    checkBox.setVisible(true)
+
+                    val favourite = menu.findItem(R.id.favourite_button)
+                    favourite.setTitle("Unfavourite")
+                    favourite.setVisible(true)
+
+                    val searchItem = menu.findItem(R.id.search_button)
+                    searchItem.setVisible(false)
+
+                }
+
+                else if (viewModel.favouriteState.value == "Nothing"){
+                    if (viewModel.checkedBoxClicked.value == true){
+
+                        if (viewModel.allItemsSelected.value == false){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+
+                        else if (viewModel.allItemsSelected.value == true){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }
+
+                    }
+
+                    else if (viewModel.checkedBoxClicked.value == false) {
+
+                        if (viewModel.allItemsSelected.value == true) {
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }
+
+                        else if (viewModel.allItemsSelected.value == false) {
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+
+                    }
+
+                    viewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
+
+                        if (value){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_select_all_on)
+
+                        }else if(!value){
+
+                            val selectButton = menu.findItem(R.id.select_button)
+                            selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
+
+                        }
+                    })
+
+                    val searchItem = menu.findItem(R.id.search_button)
+                    searchItem.setVisible(false)
+
+                    val moveItem = menu.findItem(R.id.move_button)
+                    moveItem.setVisible(true)
+
+                    val copyItem = menu.findItem(R.id.copy_button)
+                    copyItem.setVisible(true)
+
+                    val deleteItem = menu.findItem(R.id.delete_button)
+                    deleteItem.setVisible(true)
+
+                    val checkBox = menu.findItem(R.id.select_button)
+                    checkBox.setVisible(true)
+
+                    val favourite = menu.findItem(R.id.favourite_button)
+                    favourite.setVisible(false)
+
+                }
+            }
+
+            else if (!value){
+
+                val searchItem = menu.findItem(R.id.search_button)
+                searchItem.setVisible(true)
+
+                val moveItem = menu.findItem(R.id.move_button)
+                moveItem.setVisible(false)
+
+                val copyItem = menu.findItem(R.id.copy_button)
+                copyItem.setVisible(false)
+
+                val deleteItem = menu.findItem(R.id.delete_button)
+                deleteItem.setVisible(false)
+
+                val checkBox = menu.findItem(R.id.select_button)
+                checkBox.setVisible(false)
+
+                val favourite = menu.findItem(R.id.favourite_button)
+                favourite.setVisible(false)
+
+            }
+
+        })
+
+        super.onPrepareOptionsMenu(menu)
+
+    }
+
+    fun goBack(){
+        activity?.onBackPressed()
+    }
+
+    override fun onDestroyView() {
+        (activity as HomePageActivity).drawerUnLocked()
+        super.onDestroyView()
+    }
 
 }
-

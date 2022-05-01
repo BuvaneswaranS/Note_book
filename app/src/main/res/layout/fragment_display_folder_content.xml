@@ -6,95 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".displayFolderData.DisplayFolderContentFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/display_folder_content_recyclerView">
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:id="@+id/appBarLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/display_folder_content_recyclerView">-->
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/diaplay_folder_content_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/display_folder_content_back_arrow_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    android:layout_marginTop="@dimen/guideline_16dp"
-                    android:layout_marginBottom="@dimen/guideline_16dp"
-                    app:layout_constraintEnd_toStartOf="@id/folder_title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:srcCompat="@drawable/ic_back_button" />
-
-                <TextView
-                    android:id="@+id/folder_title"
-                    style="@style/folder_content_title_style"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/guideline_16dp"
-                    android:layout_marginStart="@dimen/guideline_16dp"
-                    android:layout_marginEnd="56dp"
-                    android:ellipsize="end"
-                    android:hint="@string/displayFolderContentHint"
-                    android:maxLines="1"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="@id/diaplay_folder_content_toolbar"
-                    app:layout_constraintEnd_toStartOf="@id/selectedBox"
-                    app:layout_constraintStart_toEndOf="@+id/display_folder_content_back_arrow_button"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="NotSibling" />
-
-                <CheckBox
-                    android:id="@+id/selectedBox"
-                    android:layout_width="@dimen/items_size"
-                    android:layout_height="@dimen/items_size"
-                    android:layout_marginStart="@dimen/items_size"
-                    android:layout_marginTop="@dimen/guideline_16dp"
-                    android:layout_marginEnd="@dimen/margin_32"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/diaplay_folder_content_toolbar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toEndOf="@+id/folder_title"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="NotSibling" />
-
-                <ImageView
-                    android:id="@+id/close_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/guideline_16dp"
-                    android:layout_marginEnd="@dimen/guideline_16dp"
-                    android:src="@drawable/ic_baseline_close_button"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/diaplay_folder_content_toolbar"
-                    app:layout_constraintEnd_toStartOf="@id/folder_title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="NotSibling" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/diaplay_folder_content_toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="@color/white"-->
+<!--            android:minHeight="?attr/actionBarSize"-->
+<!--            android:theme="?attr/actionBarTheme"-->
+<!--            app:navigationIcon="@drawable/ic_back_button"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/display_folder_content_recyclerView"
@@ -107,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight="match_constraint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="NotSibling" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -14,4 +14,10 @@
         <!-- Customize your theme here. -->
         <item name="colorTertiary">@color/fab_button_background_color</item>
     </style>
+
+    <style name="DialogBoxAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
+<!--        <item name="android:windowExitAnimation">@anim/side_bottom_dialog</item>-->
+    </style>
+
 </resources>

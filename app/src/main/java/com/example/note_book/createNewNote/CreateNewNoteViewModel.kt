@@ -1,33 +1,46 @@
 package com.example.note_book.createNewNote
 
-
-import android.util.Log
-import androidx.lifecycle.LiveData
+import android.app.Application
 import androidx.lifecycle.ViewModel
-import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
+import com.example.note_book.NotebookDatabase.NotebookDatabase
 import kotlinx.coroutines.*
 
-class CreateNewNoteViewModel(val folderRepository: FolderRepository): ViewModel() {
+class CreateNewNoteViewModel(application: Application): ViewModel() {
+
+//  Declaration of FolderRepository
+    private var folderRepository: FolderRepository
+
+//  Coroutine Job Declaration
     private val viewModelJob = Job()
 
+//  Coroutine Scope Declaration
     val scope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
-    fun insertNoteData(noteData: NoteData){
-        scope.launch {
-            folderRepository.insertNoteData(noteData)
-        }
+    init {
+
+//      Declaration and Initialization of folderDataDao
+        val folderDataDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
+
+//      Declaration and Initialization of noteDataDao
+        val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
+
+//      Initialization of folderRepository
+        folderRepository = FolderRepository(folderDataDao,noteDataDao)
+
     }
 
-//    fun getDefaultFolderId(){
-//        scope.launch {
-//            return@launch withContext(Dispatchers.Main){
-//                data = folderRepository.getDefaultFolderId().folderId
-////                Log.i("TestingApp","folder id -> ${id}")
-//
-//            }
-//
-//        }
-//    }
+//  Function for inserting the NoteData to the Database
+    fun insertNoteData(noteData: NoteData){
+
+//      This below operation scope.launch --> launch an database insert operation
+        scope.launch {
+
+            folderRepository.insertNoteData(noteData)
+
+        }
+
+    }
+
 }

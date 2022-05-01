@@ -1,14 +1,14 @@
 package com.example.note_book.displayFolderData
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.note_book.NotebookDatabase.FolderRepository
 import java.lang.IllegalArgumentException
 
-class displayFolderContentViewModelFactory(private val folderRepository: FolderRepository): ViewModelProvider.Factory {
+class displayFolderContentViewModelFactory(private val application: Application): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DisplayFolderContentViewModel::class.java)){
-            return DisplayFolderContentViewModel(folderRepository) as T
+            return DisplayFolderContentViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

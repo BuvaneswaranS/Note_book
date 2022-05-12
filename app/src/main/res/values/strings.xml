@@ -34,4 +34,12 @@
     <string name="favourite_menu_unfavourite_text">Unfavourite</string>
     <string name="menu_item_Search_button">Search</string>
 
+    <string name="content_description_done_button">Save</string>
+    <string name="content_Description_back_button">Back</string>
+
+    <string name="menu_item_search_text">Search</string>
+    <string name="fragment_search_notes_head">Notes</string>
+
+    <string name="test_string">textView</string>
+
 </resources>

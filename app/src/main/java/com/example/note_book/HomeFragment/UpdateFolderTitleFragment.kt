@@ -33,6 +33,7 @@ class UpdateFolderTitleFragment(viewModel: HomeFragmentViewModel, folderData: Fo
         }
 
         okButton.setOnClickListener {
+            Log.i("TestingApp","Input text --> ${inputData.text.toString()}")
             val data= FolderData(folderId = folderData.folderId,folderName = inputData.text.toString(), createdTime = folderData.createdTime, modifiedTime = System.currentTimeMillis())
 
           Log.i("Testing1App","FolderNAME -> ${data.folderName}")

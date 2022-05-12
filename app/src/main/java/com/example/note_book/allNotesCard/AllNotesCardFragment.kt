@@ -212,6 +212,8 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                     allNoteCardViewModel.unfavourtie_item.value = 0
 
                 }
+                (activity as HomePageActivity).onSupportNavigateUp()
+                Log.i("TestingApp","All Note Card Fragment --> On Back Pressed ")
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,callback)
@@ -369,6 +371,11 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                 editor?.commit()
             }
         }
+
+        else if (item.itemId == R.id.search_button){
+            view?.let { Navigation.findNavController(it).navigate(AllNotesCardFragmentDirections.actionAllNotesCardFragmentToSearchFragment()) }
+        }
+
     else if(item.itemId == R.id.select_button) {
 
         if (allNoteCardViewModel.checkedBoxClicked.value == false) {

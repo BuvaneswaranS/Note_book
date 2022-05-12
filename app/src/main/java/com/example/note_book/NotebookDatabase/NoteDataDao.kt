@@ -2,6 +2,7 @@ package com.example.note_book.NotebookDatabase
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import java.util.concurrent.Flow
 
 @Dao
 interface NoteDataDao {
@@ -20,6 +21,13 @@ interface NoteDataDao {
 
     @Query("SELECT * FROM note_table")
     fun getAllNotesCard(): LiveData<List<NoteData>>
+
+    @Query("SELECT * FROM note_table")
+    fun getAllNotesSearchCard(): kotlinx.coroutines.flow.Flow<List<NoteData>>
+
+    @Query("SELECT * FROM note_table WHERE NoteTitle LIKE :search_Text OR NoteDescription LIKE :search_Text ")
+    fun getSearchNotesCard(search_Text: String): kotlinx.coroutines.flow.Flow<List<NoteData>>
+
 
     @Query("SELECT noteId FROM note_table")
     fun getAllNoteId(): MutableList<String>

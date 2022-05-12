@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.note_book.HomeFragment.HomeFragmentDirections
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.R
 import com.example.note_book.databinding.FragmentMoveBinding
@@ -133,10 +135,14 @@ class MoveFragment : Fragment(), moveItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.move_search, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.move_search_button){
+            view?.let { Navigation.findNavController(it).navigate(MoveFragmentDirections.actionMoveFragmentToSearchFragment()) }
+        }
         return super.onOptionsItemSelected(item)
     }
 

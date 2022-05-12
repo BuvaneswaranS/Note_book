@@ -75,6 +75,7 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
 
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
 
+        Log.i("Tester","Clicked Value [ onCreate View ] --> ${clicked}")
 
         val sharedPreference = activity?.getSharedPreferences(shared_value, Context.MODE_PRIVATE)
         var editor: SharedPreferences.Editor? = sharedPreference?.edit()
@@ -198,12 +199,13 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
 
                 viewModel.selectedList.observe(this.viewLifecycleOwner, Observer { list ->
                     (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("${list.size} selected")
-                    if (list.size == 0){
-                        (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("NoteBook")
+                    if ((list.size == 0) && viewModel.isEnabled.value == false){
+                        (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("Notebook")
                     }
                 })
 
             } else if (!Enabled) {
+                    Log.i("TestingApp","Called")
                 (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("Notebook")
                 val sharedPreference = activity?.getSharedPreferences(shared_value, Context.MODE_PRIVATE)
                 val editor: SharedPreferences.Editor? = sharedPreference?.edit()
@@ -215,6 +217,7 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                 (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("NoteBook")
                 (activity as HomePageActivity).drawerUnLocked()
 //                requireActivity().invalidateOptionsMenu()
+                (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("Notebook")
             }
         })
 
@@ -223,7 +226,7 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
 //      ---------------------------------------------------------------------------------------------------------------------------
 
         viewModel.deleteButtonEnabled.observe(this.viewLifecycleOwner, Observer { enabled ->
-            if (viewModel.drawerState.value == "notebooks") {
+//            if (viewModel.drawerState.value == "notebooks") {
                 if (enabled == true) {
                     requireActivity().invalidateOptionsMenu()
 //                        binding.displayFolderContentDeleteButton.isEnabled = true
@@ -237,12 +240,13 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
 //                Log.i("TestingApp","Entered into !Enabled ${enabled}")
 //                binding.displayFolderContentDeleteButton.visibility = View.INVISIBLE
                 }
-            }
+//            }
             })
         return binding.root
     }
 
     private fun startAnimation() {
+        Log.i("Tester","Clicked Value [ start Animation ] --> ${clicked}")
         setVisibility(clicked)
         setAnimation(clicked)
         clicked = !clicked
@@ -280,6 +284,12 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
         }
     }
 
+    override fun onStart() {
+        (activity as HomePageActivity).drawerLocked()
+        (activity as HomePageActivity).drawerUnLocked()
+        super.onStart()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -302,9 +312,13 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
             }
         }
 
+         else if (item.itemId == R.id.search_button){
+            view?.let { Navigation.findNavController(it).navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment()) }
+         }
+
          else if (item.itemId == R.id.delete_button) {
 
-                if (viewModel.drawerState.value == "notebooks"){
+//                if (viewModel.drawerState.value == "notebooks"){
 
                     if (viewModel.selectedList.value?.isEmpty() == true) {
 
@@ -331,7 +345,7 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                         builder.setCancelable(false)
                     }
 
-                }
+//                }
 
 
         }else if(item.itemId == R.id.select_button){
@@ -364,14 +378,25 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                         requireActivity().invalidateOptionsMenu()
                     }
                 }
+            else if (viewModel.checkBoxSelected.value == true){
+                if (viewModel.allItemsSelected.value == true){
+                    viewModel.folder_SelectAll_And_DeSelectAll(true)
+                    var full_list = mutableListOf<String>()
+                    viewModel.all_folder_id_list?.let { full_list.addAll(it) }
+                    displayfolderAdapter.data = full_list
+                    viewModel.selectedList.value = full_list
+                    viewModel.deleteButtonEnabled.value = false
+                    viewModel.allItemsSelected.value = true
+                    viewModel.deleteButtonEnabled.value = false
+                    requireActivity().invalidateOptionsMenu()
+                }
+            }
             }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
 
-        viewModel.drawerState.observe(this.viewLifecycleOwner, Observer { value ->
-                if (value == "notebooks") {
                     viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { value ->
                         if (value) {
 
@@ -457,9 +482,12 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
 
                         }
                     })
-                }
-            })
         super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onStop() {
+        clicked = false
+        super.onStop()
     }
 
 }

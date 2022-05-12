@@ -5,37 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <ProgressBar
-        android:id="@+id/moving_progress_bar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/search_item_layout_user_Definied_folder_icon"
+        android:layout_width="@dimen/item_layout_default_folder_user_Definied_folder_width_and_height"
+        android:layout_height="@dimen/item_layout_default_folder_user_Definied_folder_width_and_height"
         android:layout_marginStart="@dimen/guideline_16dp"
-        android:layout_marginTop="@dimen/guideline_16dp"
-        android:layout_marginBottom="@dimen/guideline_16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/search_item_folder_title"
+        app:layout_constraintHorizontal_bias="@integer/horizontal_bias_0"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/menu_moving_text"
-        app:layout_constraintVertical_bias="@integer/vertical_bias_0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_notebook_leather_01" />
 
     <TextView
-        android:id="@+id/menu_moving_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/search_item_folder_title"
+        style="@style/search_folder_title_style"
         android:layout_marginStart="@dimen/guideline_16dp"
         android:layout_marginTop="@dimen/guideline_16dp"
-        android:layout_marginEnd="@dimen/guideline_16dp"
-        android:layout_marginBottom="@dimen/guideline_16dp"
-        android:text="@string/loading_text_copy"
-        android:textSize="@dimen/text_size_18sp"
-        android:textStyle="bold"
+        android:text="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="@integer/horizontal_bias_0"
-        app:layout_constraintStart_toEndOf="@+id/moving_progress_bar"
+        app:layout_constraintStart_toEndOf="@+id/search_item_layout_user_Definied_folder_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="@integer/vertical_bias_0" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

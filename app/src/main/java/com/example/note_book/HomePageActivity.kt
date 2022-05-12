@@ -4,16 +4,17 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.*
-import com.example.note_book.NotebookDatabase.FolderRepository
-import com.example.note_book.NotebookDatabase.NotebookDatabase
 import com.example.note_book.databinding.PageHomeBinding
 
 // interface for Drawer Controller
@@ -35,8 +36,8 @@ class HomePageActivity : AppCompatActivity(), DrawerControler {
 //  Shared Preferences Name To Check Selection is turned ON (or) OFF
     private val select = "sharedSelect"
 
-//    ViewModel declaration
-    private lateinit var viewModel: HomePageViewModel
+    private val sharedPref = "sharedPref"
+
 
 //  AppBar Configuration declaration
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -64,25 +65,11 @@ class HomePageActivity : AppCompatActivity(), DrawerControler {
 //      Toolbar has been setted as the supportActionBar
         setSupportActionBar(binding.toolbar)
 
+        supportActionBar?.setDisplayShowHomeEnabled(false)
+
 //      Function for setting up the Drawer Layout
         setupDrawerLayout()
 
-//      Declaration and Initialization of ViewModelFactory
-        val viewModelFactory = HomePageViewModelFactory(this.application)
-
-//      Initialization of the ViewModel
-        viewModel = ViewModelProvider(this,viewModelFactory).get(HomePageViewModel::class.java)
-
-//      Application Class Declaration
-        val applicationClass = ApplicationInitialize()
-
-//      If statement to check whether the DEFAULT FOLDER is already created (or) not
-        if(applicationClass.insertDefaultFolder){
-
-//          If the default folder is not created, the below function in the viewModel is called to insert the default folder to the database.
-            viewModel.updateDefaultFolder()
-
-        }
     }
 
 
@@ -158,6 +145,24 @@ class HomePageActivity : AppCompatActivity(), DrawerControler {
             return NavigationUI.navigateUp(navController!!, binding.drawerLayoutHome)
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
+    fun openKeyboard(view: View){
+            val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    fun hideKeyboard(){
+        val view = this.currentFocus
+        if (view != null){
+            val hideKeyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            hideKeyboard.hideSoftInputFromWindow(view.windowToken,0)
+        }
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     private fun setupDrawerLayout() {

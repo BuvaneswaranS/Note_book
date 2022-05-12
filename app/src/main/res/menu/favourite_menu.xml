@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/favourite_search_button"
+        android:icon="@drawable/ic_search_button"
+        android:title="@string/menu_item_search_text"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/select_deselect_all_button"
         android:title="@android:string/selectAll"
         android:icon="@drawable/ic_baseline_select_all_24"

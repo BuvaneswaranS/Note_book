@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.note_book.HomeFragment.HomeFragmentDirections
 import com.example.note_book.HomePageActivity
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.R
@@ -206,13 +207,13 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
 
                         if (selectedListSize == list.size){
-
+                            Log.i("TestingApp", "Called 1")
                             viewModel.allItemsSelected.value = true
 
                         }
 
                         else{
-
+                            Log.i("TestingApp", "Called 2")
                             viewModel.allItemsSelected.value = false
 
                         }
@@ -243,8 +244,12 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     val emptyData = mutableListOf<NoteData>()
                     viewModel.notesListSelected = emptyData
                     goBack()
-
+                    Log.i("TestingApp","Display Folder Content --> On Back Pressed Inside Enabled ")
+                }else{
+                    Log.i("TestingApp","Display Folder Content --> On Back Pressed ")
+                    (activity as HomePageActivity).onSupportNavigateUp()
                 }
+                Log.i("TestingApp","Display Folder Content --> On Back Pressed ")
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,callback)
@@ -306,7 +311,16 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
         if (item.itemId == android.R.id.home){
             if (viewModel.isEnabled.value == true){
-                requireActivity().onBackPressed()
+                Log.i("TestingApp","OnOptionsItems Selected Method Called")
+                viewModel.isEnabled.value = false
+                viewModel.checkedBoxClicked.value = false
+                viewModel.selectAndDeSelectAll(false)
+                val data = mutableListOf<String>()
+                displayNoteListAdapter.data = data
+                viewModel.selectedList.value = data
+                val emptyData = mutableListOf<NoteData>()
+                viewModel.notesListSelected = emptyData
+//                requireActivity().onBackPressed()
             }else{
                 onDestroy()
             }
@@ -407,7 +421,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         }
 
         else if(item.itemId == R.id.select_button){
-
+            Log.i("TestingApp","Select All Button called")
             if (viewModel.checkedBoxClicked.value == false){
 
                 viewModel.checkedBoxClicked.value = true
@@ -419,10 +433,29 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             }
 
             if (viewModel.checkedBoxClicked.value == true){
+                if (viewModel.allItemsSelected.value == true){
+                    Log.i("TestingApp","Called Display folder 3")
+//                    viewModel.selectedAllItem.value = true
 
+                    viewModel.selectAndDeSelectAll(false)
+
+                    val data = mutableListOf<String>()
+
+                    displayNoteListAdapter.data = data
+
+                    viewModel.selectedList.value = data
+
+                    viewModel.allItemsSelected.value = false
+
+                    requireActivity().invalidateOptionsMenu()
+                }
+            }
+
+            else if (viewModel.checkedBoxClicked.value == true){
+                Log.i("TestingApp","Called Display folder 1")
                 if (viewModel.allItemsSelected.value == false){
-
-                    viewModel.selectedAllItem.value = true
+                    Log.i("TestingApp","Called Display 2")
+//                    viewModel.selectedAllItem.value = true
 
                     viewModel.selectAndDeSelectAll(true)
 
@@ -443,9 +476,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             }
 
             else if(viewModel.checkedBoxClicked.value == false){
-
+                Log.i("TestingApp","Called Display folder 2")
                 if (viewModel.allItemsSelected.value == true){
-
+                    Log.i("TestingApp","Called Diaplya Folder 2 inner")
                     viewModel.selectAndDeSelectAll(false)
 
                     val data = mutableListOf<String>()
@@ -460,6 +493,28 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
                 }
             }
+//            else if (viewModel.checkedBoxClicked.value == true){
+//                if (viewModel.allItemsSelected.value == true){
+//                    Log.i("TestingApp","Called Display folder 3")
+////                    viewModel.selectedAllItem.value = true
+//
+//                    viewModel.selectAndDeSelectAll(false)
+//
+//                    val data = mutableListOf<String>()
+//
+//                    displayNoteListAdapter.data = data
+//
+//                    viewModel.selectedList.value = data
+//
+//                    viewModel.allItemsSelected.value = false
+//
+//                    requireActivity().invalidateOptionsMenu()
+//                }
+//            }
+        }
+
+        else if (item.itemId == R.id.search_button){
+            view?.let { Navigation.findNavController(it).navigate(DisplayFolderContentFragmentDirections.actionDisplayFolderContentFragmentToSearchFragment()) }
         }
 
         else if (item.itemId == R.id.favourite_button){
@@ -798,5 +853,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         (activity as HomePageActivity).drawerUnLocked()
         super.onDestroyView()
     }
+
 
 }

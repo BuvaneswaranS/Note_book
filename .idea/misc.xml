@@ -5,9 +5,11 @@
       <map>
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_add_button.xml" value="0.1465" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_back_button.xml" value="0.1465" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_close_button.xml" value="0.176" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_create_new_folder_24.xml" value="0.188" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_delete_button.xml" value="0.1555" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_delete_menu.xml" value="0.1555" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_done_24.xml" value="0.117" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_done_button.xml" value="0.1385" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_done_select.xml" value="0.1385" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_baseline_folder_24.xml" value="0.1775" />
@@ -19,6 +21,7 @@
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1465" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_notebook.xml" value="0.1385" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_notebook_leather_01.xml" value="0.1385" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_search_button.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/drawable/ic_user_created_folder.xml" value="0.1465" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_.xml" value="0.1" />
@@ -34,10 +37,13 @@
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_move.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_move_default_folder.xml" value="0.22" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_move_user_defined_folder.xml" value="0.22" />
-        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_search.xml" value="0.1056210335448776" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_search.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/fragment_update_note.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_default_folder.xml" value="0.1796875" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_default_folder_display.xml" value="0.1" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_folder_search_display.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_note.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_search_note.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_update_folder_title.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/item_layout_user_created_folder.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/layout_menu_copying.xml" value="0.16666666666666666" />
@@ -45,10 +51,13 @@
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/loading_menu_moving.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/page_home.xml" value="0.1796875" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/layout/toolbar.xml" value="0.1796875" />
-        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/favourite_menu.xml" value="0.14749893116716545" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/favourite_menu.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/menu.xml" value="0.14749893116716545" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/menu_search.xml" value="0.1" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/move_search.xml" value="0.1" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/navigation_menu.xml" value="0.14749893116716545" />
         <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/menu/write_note_menu.xml" value="0.1796875" />
+        <entry key="..\:/Users/buvan-pt5164/AndroidStudioProjects/Note_book4/app/src/main/res/xml/xml.xml" value="0.1" />
       </map>
     </option>
   </component>

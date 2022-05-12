@@ -11,7 +11,8 @@
         android:id="@+id/note_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardElevation="@dimen/folder_card_elevation">
+        app:cardElevation="@dimen/folder_card_elevation"
+        app:cardBackgroundColor="@color/design_default_color_on_primary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

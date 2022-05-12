@@ -6,19 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".allNotesCard.AllNotesCardFragment">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/all_notes_toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?attr/actionBarSize"-->
-<!--        android:elevation="@dimen/elevation_4dp"-->
-<!--        android:theme="@style/Widget.AppCompat.ActionBar"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/add_note_allNotes_recyclerview"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        app:title="@string/nav_menu_all_note_card" />-->
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/allNotes_recyclerview"

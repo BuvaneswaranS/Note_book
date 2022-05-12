@@ -2,7 +2,6 @@ package com.example.note_book.HomeFragment
 
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,7 @@ class HomeFragmentViewModel(val application: Application): ViewModel() {
 
     var selectedList = MutableLiveData<MutableList<String>>()
 
-    var drawerState = MutableLiveData<String>()
+//    var drawerState = MutableLiveData<String>()
 
     var deleteButtonEnabled = MutableLiveData<Boolean>()
 
@@ -63,7 +62,7 @@ class HomeFragmentViewModel(val application: Application): ViewModel() {
         donedeSelectingall.value = false
         filesCame.value = false
         getNotesCard()
-        drawerState.value = "notebooks"
+//        drawerState.value = "notebooks"
         checkBoxSelected.value = false
     }
 

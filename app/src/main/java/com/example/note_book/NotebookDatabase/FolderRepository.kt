@@ -3,7 +3,11 @@ package com.example.note_book.NotebookDatabase
 import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import java.time.Duration
+import kotlin.coroutines.coroutineContext
 
 class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDataDao){
 
@@ -58,6 +62,14 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return folderDataDao.getSizeFolders()
     }
 
+    fun getSearchData(): Flow<List<FolderData>>{
+        return folderDataDao.getSearchFolderData()
+    }
+
+    fun getSearchFolderData(searchText: String): LiveData<List<FolderData>>{
+        return folderDataDao.getSearchFolderData(searchText)
+    }
+
 //    ---------------------------------------------------------------------------------------------------------------------------
 //    Note Area
 //    ----------------------------------------------------------------------------------------------------------------------------
@@ -77,6 +89,7 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
     suspend fun updateUnFavouriteNoteData(noteData: NoteData){
         noteDataDao.updateFavouriteNoteData(noteData)
     }
+
 
     suspend fun getNotesData(noteId: String): NoteData{
         return noteDataDao.getNoteData(noteId)
@@ -115,4 +128,13 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
     suspend fun getFavouriteNotes(favourite: Boolean): LiveData<List<NoteData>>{
         return noteDataDao.getFavouriteNotes(favourite)
     }
+
+    fun getSearchNoteData(): Flow<List<NoteData>>{
+        return noteDataDao.getAllNotesSearchCard()
+    }
+
+    fun getSearchNoteData(searchText: String): Flow<List<NoteData>>{
+        return noteDataDao.getSearchNotesCard(searchText)
+    }
+
 }

@@ -6,6 +6,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 
 @Dao
 interface FolderDataDao {
@@ -28,6 +30,8 @@ interface FolderDataDao {
     @Update
     fun updateFolderData(folderData: FolderData)
 
+
+
     @Query("SELECT * from folder_table ORDER BY Created_Time ASC")
     fun getAllDataByFolder(): LiveData<List<FolderData>>
 
@@ -38,6 +42,11 @@ interface FolderDataDao {
     @Query("SELECT * from folder_table WHERE folderId = :folderId")
     fun getFolderData(folderId: String): FolderData
 
+    @Query("SELECT * from folder_table")
+    fun getSearchFolderData(): Flow<List<FolderData>>
+
+    @Query("SELECT * from folder_table WHERE Folder_Name LIKE :searchData")
+    fun getSearchFolderData(searchData: String): LiveData<List<FolderData>>
 
     @Query("SELECT folderId from folder_table")
     fun getAllFolderId(): MutableList<String>

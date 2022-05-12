@@ -1,5 +1,7 @@
 package com.example.note_book.updateNote
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,6 +23,9 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 //  ViewModel Declaration
     private lateinit var viewModel: UpdateNoteViewModel
 
+    //  Declaration and Initialzation  of the SharedPreference
+    private val selected = "sharedSelect"
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
 //      ViewBinding Initializition
@@ -33,9 +38,18 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
             (requireActivity() as AppCompatActivity).supportActionBar?.show()
 
 //           onBackPressed is called to move back
-            requireActivity().onBackPressed()
+//            requireActivity().onBackPressed()
+            (activity as HomePageActivity).onSupportNavigateUp()
+            (activity as HomePageActivity).drawerUnLocked()
+            (requireActivity() as AppCompatActivity).supportActionBar?.hide()
 
         }
+
+        val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor? = sharedPreference?.edit()
+        editor?.putBoolean("SELECTED",false)
+        editor?.apply()
+        editor?.commit()
 
 //      Declaration and Initializing of SafeArgs Arguments
         val arguments = UpdateNoteFragmentArgs.fromBundle(requireArguments())
@@ -99,11 +113,14 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 //          Set the supportActionBar  to show it to the user
             (requireActivity() as AppCompatActivity).supportActionBar?.show()
 
-            requireActivity().onBackPressed()
+//            requireActivity().onBackPressed()
+
+            (activity as HomePageActivity).onSupportNavigateUp()
+            (requireActivity() as AppCompatActivity).supportActionBar?.hide()
 
 //          onDestroyView is called
-            onDestroyView()
-
+//            onDestroyView()
+            (activity as HomePageActivity).drawerUnLocked()
         }
 
         return binding.root

@@ -38,7 +38,7 @@ class DisplayFolderContentViewModel(val application: Application): ViewModel() {
 
     var deletingStarted = MutableLiveData<Boolean>()
 
-    var selectedAllItem = MutableLiveData<Boolean>()
+//    var selectedAllItem = MutableLiveData<Boolean>()
 
 //    var isEnabled: Boolean = false
 
@@ -85,7 +85,7 @@ class DisplayFolderContentViewModel(val application: Application): ViewModel() {
         deletingStarted.value = false
         selectedItem.value = false
         isEnabled.value = false
-        selectedAllItem.value = false
+//        selectedAllItem.value = false
         allItemsSelected.value = false
 //        getFolderListSize()
         viewModelCreated.value = true

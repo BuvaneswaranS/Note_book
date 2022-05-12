@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_frame"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/guideline_16dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/note_card"
+        android:layout_width="@dimen/item_layout_search_note_width"
+        android:layout_height="@dimen/item_layout_search_note_height"
+        app:cardElevation="10dp"
+        app:cardBackgroundColor="@color/design_default_color_on_primary"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/folder_content_note_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:paddingStart="@dimen/margin_padding_8dp"
+                    android:maxWidth="@dimen/item_layout_note_title_max_width"
+                    android:maxLines="@integer/folder_title_lines"
+                    android:textSize="@dimen/item_layout_search_note_title_text_size"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/selected_tick_button"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="text" />
+
+                <ImageView
+                    android:id="@+id/selected_tick_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/folder_content_note_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_done_button" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/folder_content_note_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_8dp"
+                android:paddingStart="@dimen/margin_padding_8dp"
+                android:maxLines="@integer/note_description_min_lines"
+                android:minLines="@integer/item_layout_note_note_description_max_lines"
+                android:text="@string/test_string"
+                android:textSize="@dimen/item_layout_search_note_description_text_size" />
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/item_layout_note_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_18sp"
+        tools:text="@string/test_string"
+        app:layout_constraintVertical_bias="@integer/vertical_bias_0"
+        android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginEnd="@dimen/guideline_16dp"
+        android:ellipsize="end"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/note_card"
+        app:layout_constraintBottom_toTopOf="@id/item_layout_note_description_Text"
+        app:layout_constraintWidth="match_constraint"/>
+
+    <TextView
+        android:id="@+id/item_layout_note_description_Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:textSize="@dimen/text_size_16sp"
+        android:ellipsize="end"
+        app:layout_constraintVertical_bias="@integer/vertical_bias_0"
+        android:layout_marginStart="@dimen/guideline_16dp"
+        android:layout_marginEnd="@dimen/guideline_16dp"
+        app:layout_constraintStart_toEndOf="@id/note_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_layout_note_title_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth="match_constraint"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

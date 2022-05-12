@@ -11,14 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.note_book.HomePageActivity
-import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
-import com.example.note_book.NotebookDatabase.NotebookDatabase
+
 import com.example.note_book.R
 import com.example.note_book.databinding.FragmentFavouriteBinding
-import com.example.note_book.displayFolderData.displayFolderContentViewModelFactory
 
 class favouriteFragment : Fragment(R.layout.fragment_favourite) {
 
@@ -148,6 +147,8 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
                     val emptyData = mutableListOf<NoteData>()
                     favouriteViewModel.notesListSelected = emptyData
                 }
+                Log.i("TestingApp","Favourite Fragment --> On Back Pressed ")
+                (activity as HomePageActivity).onSupportNavigateUp()
             }
         }
 
@@ -250,6 +251,10 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
             }
         }
 
+        else if (item.itemId == R.id.favourite_search_button){
+            view?.let { Navigation.findNavController(it).navigate(favouriteFragmentDirections.actionFavouriteFragmentToSearchFragment()) }
+        }
+
         else if (item.itemId == R.id.unfavourite_button){
             favouriteViewModel.getNotesList()
             favouriteViewModel.isEnabled.value = false
@@ -347,12 +352,12 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
                 val favourite = menu.findItem(R.id.unfavourite_button)
                 favourite.setVisible(true)
 
-                val searchItem = menu.findItem(R.id.search_button)
+                val searchItem = menu.findItem(R.id.favourite_search_button)
                 searchItem.setVisible(false)
 
             } else if (!value) {
 
-                val searchItem = menu.findItem(R.id.search_button)
+                val searchItem = menu.findItem(R.id.favourite_search_button)
                 searchItem.setVisible(true)
 
                 val deleteItem = menu.findItem(R.id.favourite_delete_button)

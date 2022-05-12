@@ -62,4 +62,12 @@
         <item name="android:textSize">@dimen/loading_menu_text_size</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="search_folder_title_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

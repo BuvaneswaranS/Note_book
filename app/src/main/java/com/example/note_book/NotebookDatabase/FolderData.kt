@@ -11,7 +11,7 @@ data class FolderData(
     @PrimaryKey
     var folderId: String = UUID.randomUUID().toString(),
 
-    @ColumnInfo(name = "Folder Name")
+    @ColumnInfo(name = "Folder_Name")
     var folderName: String,
 
     @ColumnInfo(name = "Created_Time")

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.NotebookDatabase.NotebookDatabase
@@ -58,6 +59,17 @@ class AllNotesCardViewModel(val application: Application): ViewModel() {
     //  For Detecting the state of the favourite [Make Favourite / Unfavourite / Nothing will be displayed]
     var favouriteState = MutableLiveData<String>()
 
+    //  -------------------------------------------------------------
+    var sortState = MutableLiveData<String>()
+
+    lateinit var sortOrderA1 : LiveData<List<NoteData>>
+    lateinit var sortOrderA2 : LiveData<List<NoteData>>
+    lateinit var sortOrderA3 : LiveData<List<NoteData>>
+    lateinit var sortOrderA4 : LiveData<List<NoteData>>
+    lateinit var sortOrderA5 : LiveData<List<NoteData>>
+    lateinit var sortOrderA6 : LiveData<List<NoteData>>
+//  -----------------------------------------------------------------
+
 
     init {
         val allNotesfolderDao =
@@ -79,6 +91,16 @@ class AllNotesCardViewModel(val application: Application): ViewModel() {
         favourite_item.value = 0
         unfavourtie_item.value = 0
         favouriteState.value = "makeFavourite"
+        sortState.value = "A1"
+//      ------------------------------------------
+        getSortOrderA1()
+        getSortOrderA2()
+        getSortOrderA3()
+        getSortOrderA4()
+        getSortOrderA5()
+        getSortOrderA6()
+//     ------------------------------------------
+
     }
 
     fun getAllNotesList(){
@@ -163,6 +185,54 @@ class AllNotesCardViewModel(val application: Application): ViewModel() {
                 scope.launch {
                     folderRepository.updateUnFavouriteNoteData(data)
                 }
+            }
+        }
+    }
+
+    fun getSortOrderA1(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA1 = folderRepository.getNoteListSortTitleAscending()
+            }
+        }
+    }
+
+    fun getSortOrderA2(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA2 = folderRepository.getNoteListSortTitleDescending()
+            }
+        }
+    }
+
+    fun getSortOrderA3(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA3 = folderRepository.getNoteListSortModifiedTimeAscending()
+            }
+        }
+    }
+
+    fun getSortOrderA4(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA4 = folderRepository.getNoteListSortModifiedTimeDescending()
+            }
+        }
+    }
+
+    fun getSortOrderA5(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA5 = folderRepository.getNoteListSortCreatedTimeAscending()
+            }
+        }
+    }
+
+    fun getSortOrderA6(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA6 = folderRepository.getNoteListSortCreatedTimeDescending()
             }
         }
     }

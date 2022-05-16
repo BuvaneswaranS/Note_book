@@ -9,6 +9,7 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -17,6 +18,7 @@ import com.example.note_book.HomeFragment.HomeFragmentDirections
 import com.example.note_book.HomePageActivity
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.R
+import com.example.note_book.Sort.SortBottomSheet
 import com.example.note_book.databinding.FragmentAllNotesCardBinding
 
 
@@ -25,8 +27,8 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 //  ViewBinding Declaration
     private lateinit var binding: FragmentAllNotesCardBinding
 
-//  Declaration of the ViewModel
-    private lateinit var allNoteCardViewModel: AllNotesCardViewModel
+//  Declaration of the allNoteCardViewModel
+    private lateinit var allNoteCardallNoteCardViewModel: AllNotesCardViewModel
 
 //  Declaration of the Adapter used in the recyclerView
     private lateinit var allNoteCardAdapter: AllNotesCardAdapter
@@ -36,6 +38,12 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
 //  SharedPreference Name for the Drawer
     val shared_value = "drawer_shared"
+
+    private val sharedPref = "sharedPref"
+
+//  Bottom Sheet for the Sort Selection
+    var sortDialogFragment = SortBottomSheet()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,20 +72,20 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 //      Set the supportActionBar Title
         (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("All Notes Card")
 
-//     Declaration and initialization of the ViewModelFactory
-        val allNoteCardViewModelFactory = AllNotesCardViewModelFactory(allNotesapplication)
+//     Declaration and initialization of the allNoteCardViewModelFactory
+        val allNoteCardallNoteCardViewModelFactory = AllNotesCardViewModelFactory(allNotesapplication)
 
-//     Initialization of the ViewModel
-        allNoteCardViewModel = ViewModelProvider(this, allNoteCardViewModelFactory).get(AllNotesCardViewModel::class.java)
+//     Initialization of the allNoteCardViewModel
+        allNoteCardallNoteCardViewModel = ViewModelProvider(this, allNoteCardallNoteCardViewModelFactory).get(AllNotesCardViewModel::class.java)
 
-//      Function Call in the viewModel to get all the Notes List
-        allNoteCardViewModel.getAllNotesList()
+//      Function Call in the allNoteCardViewModel to get all the Notes List
+        allNoteCardallNoteCardViewModel.getAllNotesList()
 
-//      Function Call in the ViewModel to get all the Notes Id list
-        allNoteCardViewModel.getAllNoteIdList()
+//      Function Call in the allNoteCardViewModel to get all the Notes Id list
+        allNoteCardallNoteCardViewModel.getAllNoteIdList()
 
 //      Initialization of the Adapter
-        allNoteCardAdapter = AllNotesCardAdapter(allNoteCardViewModel)
+        allNoteCardAdapter = AllNotesCardAdapter(allNoteCardallNoteCardViewModel)
 
 //      Declaration and Initialization of the type if the layoutManager of the recyclerView
         binding.allNotesRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
@@ -85,19 +93,67 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 //      Declaration of the Adapter for the recyclerView
         binding.allNotesRecyclerview.adapter = allNoteCardAdapter
 
-        allNoteCardViewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer {list ->
-            allNoteCardAdapter.submitList(list)
+        allNoteCardallNoteCardViewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer {list ->
+//            allNoteCardAdapter.submitList(list)
         })
 
 //      Click Listener for the Add Note
         binding.addNoteAllNotesRecyclerview.setOnClickListener { view ->
 
-            Navigation.findNavController(view).navigate(AllNotesCardFragmentDirections.actionAllNotesCardFragmentToCreateNewNoteFragment(allNoteCardViewModel.defaultId))
+            Navigation.findNavController(view).navigate(AllNotesCardFragmentDirections.actionAllNotesCardFragmentToCreateNewNoteFragment(allNoteCardallNoteCardViewModel.defaultId))
 
         }
+        
+//      -----------------------------------------------------------------------------------------------------------
+//      SORTING IMPLEMENTATION
+//       -----------------------------------------------------------------------------------------------------------
+        val sharedPreferenceInsertDefaultFolder =
+            activity?.getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val shared = sharedPreferenceInsertDefaultFolder?.getString("SORT_OPTION","A1")
+
+
+        allNoteCardallNoteCardViewModel.sortState.value = shared
+        
+//      -----------------------------------------------------------------------------------------------------------  
+        allNoteCardallNoteCardViewModel.sortState.observe(this.viewLifecycleOwner, Observer { order ->
+            if (order == "A1"){
+                allNoteCardallNoteCardViewModel.sortOrderA1.observe(this.viewLifecycleOwner, Observer {list ->
+                    allNoteCardAdapter.submitList(list)
+                })
+
+            }else if (order == "A2"){
+                allNoteCardallNoteCardViewModel.sortOrderA2.observe(this.viewLifecycleOwner, Observer {list ->
+                    allNoteCardAdapter.submitList(list)
+                })
+
+            }else if (order == "A3"){
+                allNoteCardallNoteCardViewModel.sortOrderA3.observe(this.viewLifecycleOwner, Observer {list ->
+                    allNoteCardAdapter.submitList(list)
+                })
+
+            }else if (order == "A4"){
+                allNoteCardallNoteCardViewModel.sortOrderA4.observe(this.viewLifecycleOwner, Observer {list ->
+                    allNoteCardAdapter.submitList(list)
+                })
+
+            }else if (order == "A5"){
+                allNoteCardallNoteCardViewModel.sortOrderA5.observe(this.viewLifecycleOwner, Observer {list ->
+                    allNoteCardAdapter.submitList(list)
+                })
+
+            }else if (order == "A6"){
+                allNoteCardallNoteCardViewModel.sortOrderA6.observe(this.viewLifecycleOwner, Observer {list ->
+                    allNoteCardAdapter.submitList(list)
+                })
+
+            }
+        })
+
+
+//      -----------------------------------------------------------------------------------------------------------  
 
 //      To Check whether the Selection is Enabled (or) Not
-        allNoteCardViewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { enabled ->
+        allNoteCardallNoteCardViewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { enabled ->
 
 //          If Enabled
             if (enabled) {
@@ -128,9 +184,9 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                 requireActivity().invalidateOptionsMenu()
 
 //              Line 131 - 137  --> is used to display the size of the selected list
-                allNoteCardViewModel.selectedList.observe(this.viewLifecycleOwner, Observer { list ->
+                allNoteCardallNoteCardViewModel.selectedList.observe(this.viewLifecycleOwner, Observer { list ->
 
-                        if (allNoteCardViewModel.isEnabled.value == true) {
+                        if (allNoteCardallNoteCardViewModel.isEnabled.value == true) {
 
                             (requireActivity() as AppCompatActivity).supportActionBar?.setTitle("${list.size} selected")
 
@@ -138,12 +194,12 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 //              Line 139 - 148 --> is used to set whether all the items are selected
                         val selectedListSize: Int = list.size
 
-                        allNoteCardViewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
+                        allNoteCardallNoteCardViewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
 
                             if (selectedListSize == list.size) {
-                                    allNoteCardViewModel.allItemsSelected.value = true
+                                    allNoteCardallNoteCardViewModel.allItemsSelected.value = true
                                 } else {
-                                    allNoteCardViewModel.allItemsSelected.value = false
+                                    allNoteCardallNoteCardViewModel.allItemsSelected.value = false
                                 }
                             })
                     })
@@ -175,23 +231,23 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
 
 
-        allNoteCardViewModel.favourite_item.observe(this.viewLifecycleOwner, Observer { favouriteItems ->
-            allNoteCardViewModel.unfavourtie_item.observe(this.viewLifecycleOwner, Observer {unFavourite ->
+        allNoteCardallNoteCardViewModel.favourite_item.observe(this.viewLifecycleOwner, Observer { favouriteItems ->
+            allNoteCardallNoteCardViewModel.unfavourtie_item.observe(this.viewLifecycleOwner, Observer {unFavourite ->
 
                 if ((favouriteItems == 0) && (unFavourite == 0)){
-                    allNoteCardViewModel.favouriteState.value = "makeFavourite"
+                    allNoteCardallNoteCardViewModel.favouriteState.value = "makeFavourite"
                 }
 
                 else if ((favouriteItems > 0) && (unFavourite == 0)){
-                    allNoteCardViewModel.favouriteState.value = "unFavourite"
+                    allNoteCardallNoteCardViewModel.favouriteState.value = "unFavourite"
                 }
 
                 else if ((favouriteItems == 0) && (unFavourite > 0)){
-                    allNoteCardViewModel.favouriteState.value = "makeFavourite"
+                    allNoteCardallNoteCardViewModel.favouriteState.value = "makeFavourite"
                 }
 
                 else if ((favouriteItems > 0) && (unFavourite > 0)){
-                    allNoteCardViewModel.favouriteState.value = "Nothing"
+                    allNoteCardallNoteCardViewModel.favouriteState.value = "Nothing"
                 }
 
             })
@@ -199,17 +255,17 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                if (allNoteCardViewModel.isEnabled.value == true){
-                    allNoteCardViewModel.isEnabled.value = false
-                    allNoteCardViewModel.checkedBoxClicked.value = false
-                    allNoteCardViewModel.selectAndDeSelectAll(false)
+                if (allNoteCardallNoteCardViewModel.isEnabled.value == true){
+                    allNoteCardallNoteCardViewModel.isEnabled.value = false
+                    allNoteCardallNoteCardViewModel.checkedBoxClicked.value = false
+                    allNoteCardallNoteCardViewModel.selectAndDeSelectAll(false)
                     val data = mutableListOf<String>()
                         allNoteCardAdapter.data = data
-                    allNoteCardViewModel.selectedList.value = data
+                    allNoteCardallNoteCardViewModel.selectedList.value = data
                     val emptyData = mutableListOf<NoteData>()
-                    allNoteCardViewModel.notesListSelected = emptyData
-                    allNoteCardViewModel.favourite_item.value = 0
-                    allNoteCardViewModel.unfavourtie_item.value = 0
+                    allNoteCardallNoteCardViewModel.notesListSelected = emptyData
+                    allNoteCardallNoteCardViewModel.favourite_item.value = 0
+                    allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
                 }
                 (activity as HomePageActivity).onSupportNavigateUp()
@@ -219,9 +275,9 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,callback)
 
 
-        allNoteCardViewModel.favouriteState.observe(this.viewLifecycleOwner, Observer { value ->
+        allNoteCardallNoteCardViewModel.favouriteState.observe(this.viewLifecycleOwner, Observer { value ->
 
-            if (allNoteCardViewModel.isEnabled.value == true){
+            if (allNoteCardallNoteCardViewModel.isEnabled.value == true){
 
                 if (value == "makeFavourite"){
                     requireActivity().invalidateOptionsMenu()
@@ -249,14 +305,14 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == android.R.id.home){
-            if (allNoteCardViewModel.isEnabled.value == true){
+            if (allNoteCardallNoteCardViewModel.isEnabled.value == true){
                 requireActivity().onBackPressed()
             }else{
                 onDestroy()
             }
         }else if (item.itemId == R.id.move_button) {
 
-            if (allNoteCardViewModel.size <= 1) {
+            if (allNoteCardallNoteCardViewModel.size <= 1) {
 
                 val builder = AlertDialog.Builder(this.context)
                 builder.setTitle("Move Notes")
@@ -266,29 +322,29 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                 dialogBox.show()
                 builder.setCancelable(false)
 
-            } else if (allNoteCardViewModel.size > 1) {
+            } else if (allNoteCardallNoteCardViewModel.size > 1) {
 
-                view?.let { Navigation.findNavController(it).navigate(HomeFragmentDirections.actionHomeFragmentToMoveFragment(allNoteCardViewModel.defaultId, "allNoteCards", allNoteCardAdapter.data.toTypedArray(), allNoteCardViewModel.defaultId, "move")) }
+                view?.let { Navigation.findNavController(it).navigate(HomeFragmentDirections.actionHomeFragmentToMoveFragment(allNoteCardallNoteCardViewModel.defaultId, "allNoteCards", allNoteCardAdapter.data.toTypedArray(), allNoteCardallNoteCardViewModel.defaultId, "move")) }
 
-                allNoteCardViewModel.isEnabled.value = false
+                allNoteCardallNoteCardViewModel.isEnabled.value = false
 
-                allNoteCardViewModel.checkedBoxClicked.value = false
+                allNoteCardallNoteCardViewModel.checkedBoxClicked.value = false
 
-                allNoteCardViewModel.selectAndDeSelectAll(false)
+                allNoteCardallNoteCardViewModel.selectAndDeSelectAll(false)
 
                 val data = mutableListOf<String>()
 
                 allNoteCardAdapter.data = data
 
-                allNoteCardViewModel.selectedList.value = data
+                allNoteCardallNoteCardViewModel.selectedList.value = data
 
                 val emptyData = mutableListOf<NoteData>()
 
-                allNoteCardViewModel.notesListSelected = emptyData
+                allNoteCardallNoteCardViewModel.notesListSelected = emptyData
 
-                allNoteCardViewModel.favourite_item.value = 0
+                allNoteCardallNoteCardViewModel.favourite_item.value = 0
 
-                allNoteCardViewModel.unfavourtie_item.value = 0
+                allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
                 val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
                 val editor: SharedPreferences.Editor? = sharedPreference?.edit()
@@ -300,27 +356,27 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
         } else if (item.itemId == R.id.copy_button) {
 
-            view?.let { Navigation.findNavController(it).navigate(HomeFragmentDirections.actionHomeFragmentToMoveFragment("", "allNoteCards", allNoteCardAdapter.data.toTypedArray(), allNoteCardViewModel.defaultId, "copy")) }
+            view?.let { Navigation.findNavController(it).navigate(HomeFragmentDirections.actionHomeFragmentToMoveFragment("", "allNoteCards", allNoteCardAdapter.data.toTypedArray(), allNoteCardallNoteCardViewModel.defaultId, "copy")) }
 
-            allNoteCardViewModel.isEnabled.value = false
+            allNoteCardallNoteCardViewModel.isEnabled.value = false
 
-            allNoteCardViewModel.checkedBoxClicked.value = false
+            allNoteCardallNoteCardViewModel.checkedBoxClicked.value = false
 
-            allNoteCardViewModel.selectAndDeSelectAll(false)
+            allNoteCardallNoteCardViewModel.selectAndDeSelectAll(false)
 
             val data = mutableListOf<String>()
 
             allNoteCardAdapter.data = data
 
-            allNoteCardViewModel.selectedList.value = data
+            allNoteCardallNoteCardViewModel.selectedList.value = data
 
             val emptyData = mutableListOf<NoteData>()
 
-            allNoteCardViewModel.notesListSelected = emptyData
+            allNoteCardallNoteCardViewModel.notesListSelected = emptyData
 
-            allNoteCardViewModel.favourite_item.value = 0
+            allNoteCardallNoteCardViewModel.favourite_item.value = 0
 
-            allNoteCardViewModel.unfavourtie_item.value = 0
+            allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
             val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
             val editor: SharedPreferences.Editor? = sharedPreference?.edit()
@@ -328,9 +384,22 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
             editor?.apply()
             editor?.commit()
 
-        } else if (item.itemId == R.id.delete_button) {
+        }
 
-            if (allNoteCardViewModel.selectedList.value?.isEmpty() == true) {
+        else if (item.itemId == R.id.sort_button){
+            sortDialogFragment.show(childFragmentManager, "SortBottomSheetFragment")
+            sortDialogFragment.isCancelable = false
+
+            sortDialogFragment.setFragmentResultListener("requestKey",){key: String, bundle: Bundle ->
+                val reponseData = bundle.getString("data")
+//                allNoteCardViewModel.sortState.value = reponseData
+            }
+
+        }
+
+        else if (item.itemId == R.id.delete_button) {
+
+            if (allNoteCardallNoteCardViewModel.selectedList.value?.isEmpty() == true) {
 
             } else {
 
@@ -340,25 +409,25 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                 builder.setNegativeButton("No") { DialogInterface, which -> }
                 builder.setPositiveButton("Yes") { DialogInterface, which ->
 
-                    allNoteCardViewModel.isEnabled.value = false
+                    allNoteCardallNoteCardViewModel.isEnabled.value = false
 
-                    allNoteCardViewModel.deleteSelectedItem()
+                    allNoteCardallNoteCardViewModel.deleteSelectedItem()
 
-                    allNoteCardViewModel.selectAndDeSelectAll(false)
+                    allNoteCardallNoteCardViewModel.selectAndDeSelectAll(false)
 
                     val data = mutableListOf<String>()
 
                     allNoteCardAdapter.data = data
 
-                    allNoteCardViewModel.selectedList.value = data
+                    allNoteCardallNoteCardViewModel.selectedList.value = data
 
                     val emptyData = mutableListOf<NoteData>()
 
-                    allNoteCardViewModel.notesListSelected = emptyData
+                    allNoteCardallNoteCardViewModel.notesListSelected = emptyData
 
-                    allNoteCardViewModel.favourite_item.value = 0
+                    allNoteCardallNoteCardViewModel.favourite_item.value = 0
 
-                    allNoteCardViewModel.unfavourtie_item.value = 0
+                    allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
                 }
                 val dialogBox = builder.create()
@@ -378,45 +447,45 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
     else if(item.itemId == R.id.select_button) {
 
-        if (allNoteCardViewModel.checkedBoxClicked.value == false) {
+        if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == false) {
 
-            allNoteCardViewModel.checkedBoxClicked.value = true
+            allNoteCardallNoteCardViewModel.checkedBoxClicked.value = true
 
-        } else if (allNoteCardViewModel.checkedBoxClicked.value == true) {
+        } else if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == true) {
 
-            allNoteCardViewModel.checkedBoxClicked.value = false
+            allNoteCardallNoteCardViewModel.checkedBoxClicked.value = false
 
         }
 
-        if (allNoteCardViewModel.checkedBoxClicked.value == true) {
+        if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == true) {
 
-            if (allNoteCardViewModel.allItemsSelected.value == false) {
+            if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false) {
 
-                allNoteCardViewModel.selectedAllItem.value = true
+                allNoteCardallNoteCardViewModel.selectedAllItem.value = true
 
-                allNoteCardViewModel.selectAndDeSelectAll(true)
+                allNoteCardallNoteCardViewModel.selectAndDeSelectAll(true)
 
                 var data = mutableListOf<String>()
 
-                allNoteCardViewModel.allNoteIdList?.let { data.addAll(it) }
+                allNoteCardallNoteCardViewModel.allNoteIdList?.let { data.addAll(it) }
 
                 allNoteCardAdapter.data = data
 
-                allNoteCardViewModel.selectedList.value = data
+                allNoteCardallNoteCardViewModel.selectedList.value = data
 
-                allNoteCardViewModel.allItemsSelected.value = true
+                allNoteCardallNoteCardViewModel.allItemsSelected.value = true
 
                 requireActivity().invalidateOptionsMenu()
 
             }
-        } else if (allNoteCardViewModel.checkedBoxClicked.value == false) {
-            if (allNoteCardViewModel.allItemsSelected.value == true) {
+        } else if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == false) {
+            if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true) {
 
-                allNoteCardViewModel.selectAndDeSelectAll(false)
+                allNoteCardallNoteCardViewModel.selectAndDeSelectAll(false)
                 val data = mutableListOf<String>()
                 allNoteCardAdapter.data = data
-                allNoteCardViewModel.selectedList.value = data
-                allNoteCardViewModel.allItemsSelected.value = false
+                allNoteCardallNoteCardViewModel.selectedList.value = data
+                allNoteCardallNoteCardViewModel.allItemsSelected.value = false
                 requireActivity().invalidateOptionsMenu()
 
             }
@@ -425,29 +494,29 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
     }
         else if (item.itemId == R.id.favourite_button){
 
-            allNoteCardViewModel.getNotesList()
+            allNoteCardallNoteCardViewModel.getNotesList()
 
-            if (allNoteCardViewModel.favouriteState.value == "makeFavourite"){
+            if (allNoteCardallNoteCardViewModel.favouriteState.value == "makeFavourite"){
 
-                allNoteCardViewModel.isEnabled.value = false
+                allNoteCardallNoteCardViewModel.isEnabled.value = false
 
-                allNoteCardViewModel.checkedBoxClicked.value = false
+                allNoteCardallNoteCardViewModel.checkedBoxClicked.value = false
 
                 val data = mutableListOf<String>()
 
-                allNoteCardViewModel.makeFavourite(true)
+                allNoteCardallNoteCardViewModel.makeFavourite(true)
 
                 allNoteCardAdapter.data = data
 
-                allNoteCardViewModel.selectedList.value = data
+                allNoteCardallNoteCardViewModel.selectedList.value = data
 
                 val emptyData = mutableListOf<NoteData>()
 
-                allNoteCardViewModel.notesListSelected = emptyData
+                allNoteCardallNoteCardViewModel.notesListSelected = emptyData
 
-                allNoteCardViewModel.favourite_item.value = 0
+                allNoteCardallNoteCardViewModel.favourite_item.value = 0
 
-                allNoteCardViewModel.unfavourtie_item.value = 0
+                allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
                 val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
                 val editor: SharedPreferences.Editor? = sharedPreference?.edit()
@@ -455,27 +524,27 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                 editor?.apply()
                 editor?.commit()
 
-            }else if (allNoteCardViewModel.favouriteState.value == "unFavourite"){
+            }else if (allNoteCardallNoteCardViewModel.favouriteState.value == "unFavourite"){
 
-                allNoteCardViewModel.isEnabled.value = false
+                allNoteCardallNoteCardViewModel.isEnabled.value = false
 
-                allNoteCardViewModel.checkedBoxClicked.value = false
+                allNoteCardallNoteCardViewModel.checkedBoxClicked.value = false
 
-                allNoteCardViewModel.makeFavourite(false)
+                allNoteCardallNoteCardViewModel.makeFavourite(false)
 
                 val data = mutableListOf<String>()
 
                 allNoteCardAdapter.data = data
 
-                allNoteCardViewModel.selectedList.value = data
+                allNoteCardallNoteCardViewModel.selectedList.value = data
 
                 val emptyData = mutableListOf<NoteData>()
 
-                allNoteCardViewModel.notesListSelected = emptyData
+                allNoteCardallNoteCardViewModel.notesListSelected = emptyData
 
-                allNoteCardViewModel.favourite_item.value = 0
+                allNoteCardallNoteCardViewModel.favourite_item.value = 0
 
-                allNoteCardViewModel.unfavourtie_item.value = 0
+                allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
                 val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
                 val editor: SharedPreferences.Editor? = sharedPreference?.edit()
@@ -489,22 +558,22 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
 
-        allNoteCardViewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { value ->
+        allNoteCardallNoteCardViewModel.isEnabled.observe(this.viewLifecycleOwner, Observer { value ->
 
             if (value) {
 
-                if (allNoteCardViewModel.favouriteState.value == "makeFavourite"){
+                if (allNoteCardallNoteCardViewModel.favouriteState.value == "makeFavourite"){
 
-                    if (allNoteCardViewModel.checkedBoxClicked.value == true){
+                    if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == true){
 
-                        if (allNoteCardViewModel.allItemsSelected.value == false){
+                        if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false){
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
 
                         }
 
-                        else if (allNoteCardViewModel.allItemsSelected.value == true){
+                        else if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true){
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_select_all_on)
@@ -513,9 +582,9 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     }
 
-                    else if (allNoteCardViewModel.checkedBoxClicked.value == false) {
+                    else if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == false) {
 
-                        if (allNoteCardViewModel.allItemsSelected.value == true) {
+                        if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true) {
 
                             val selectButton = menu.findItem(R.id.select_button)
 
@@ -523,7 +592,7 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                         }
 
-                        else if (allNoteCardViewModel.allItemsSelected.value == false) {
+                        else if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false) {
 
                             val selectButton = menu.findItem(R.id.select_button)
 
@@ -533,7 +602,7 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     }
 
-                    allNoteCardViewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
+                    allNoteCardallNoteCardViewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
 
                         if (value){
 
@@ -552,6 +621,9 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     val searchItem = menu.findItem(R.id.search_button)
                     searchItem.setVisible(false)
+
+                    val sortItem = menu.findItem(R.id.sort_button)
+                    sortItem.setVisible(false)
 
                     val moveItem = menu.findItem(R.id.move_button)
                     moveItem.setVisible(true)
@@ -571,17 +643,17 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                 }
 
-                else if (allNoteCardViewModel.favouriteState.value == "unFavourite"){
-                    if (allNoteCardViewModel.checkedBoxClicked.value == true){
+                else if (allNoteCardallNoteCardViewModel.favouriteState.value == "unFavourite"){
+                    if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == true){
 
-                        if (allNoteCardViewModel.allItemsSelected.value == false){
+                        if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false){
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
 
                         }
 
-                        else if (allNoteCardViewModel.allItemsSelected.value == true){
+                        else if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true){
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_select_all_on)
@@ -590,16 +662,16 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     }
 
-                    else if (allNoteCardViewModel.checkedBoxClicked.value == false) {
+                    else if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == false) {
 
-                        if (allNoteCardViewModel.allItemsSelected.value == true) {
+                        if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true) {
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_select_all_on)
 
                         }
 
-                        else if (allNoteCardViewModel.allItemsSelected.value == false) {
+                        else if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false) {
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
@@ -608,7 +680,7 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     }
 
-                    allNoteCardViewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
+                    allNoteCardallNoteCardViewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
 
                         if (value){
 
@@ -625,6 +697,9 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     val searchItem = menu.findItem(R.id.search_button)
                     searchItem.setVisible(false)
+
+                    val sortItem = menu.findItem(R.id.sort_button)
+                    sortItem.setVisible(false)
 
                     val moveItem = menu.findItem(R.id.move_button)
                     moveItem.setVisible(true)
@@ -644,17 +719,17 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                 }
 
-                else if (allNoteCardViewModel.favouriteState.value == "Nothing"){
-                    if (allNoteCardViewModel.checkedBoxClicked.value == true){
+                else if (allNoteCardallNoteCardViewModel.favouriteState.value == "Nothing"){
+                    if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == true){
 
-                        if (allNoteCardViewModel.allItemsSelected.value == false){
+                        if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false){
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
 
                         }
 
-                        else if (allNoteCardViewModel.allItemsSelected.value == true){
+                        else if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true){
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_select_all_on)
@@ -663,16 +738,16 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     }
 
-                    else if (allNoteCardViewModel.checkedBoxClicked.value == false) {
+                    else if (allNoteCardallNoteCardViewModel.checkedBoxClicked.value == false) {
 
-                        if (allNoteCardViewModel.allItemsSelected.value == true) {
+                        if (allNoteCardallNoteCardViewModel.allItemsSelected.value == true) {
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_select_all_on)
 
                         }
 
-                        else if (allNoteCardViewModel.allItemsSelected.value == false) {
+                        else if (allNoteCardallNoteCardViewModel.allItemsSelected.value == false) {
 
                             val selectButton = menu.findItem(R.id.select_button)
                             selectButton.setIcon(R.drawable.ic_baseline_select_all_24)
@@ -681,7 +756,7 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     }
 
-                    allNoteCardViewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
+                    allNoteCardallNoteCardViewModel.allItemsSelected.observe(this.viewLifecycleOwner, Observer { value ->
 
                         if (value){
 
@@ -698,6 +773,9 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
                     val searchItem = menu.findItem(R.id.search_button)
                     searchItem.setVisible(false)
+
+                    val sortItem = menu.findItem(R.id.sort_button)
+                    sortItem.setVisible(false)
 
                     val moveItem = menu.findItem(R.id.move_button)
                     moveItem.setVisible(true)
@@ -720,25 +798,28 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
                 val searchItem = menu.findItem(R.id.search_button)
                 searchItem.setVisible(true)
 
+                val sortItem = menu.findItem(R.id.sort_button)
+                sortItem.setVisible(true)
+
                 Log.i("TestingApp", "Entered into False")
                 val moveItem = menu.findItem(R.id.move_button)
                 moveItem.setVisible(false)
-                Log.i("TestingApp", "Move Item = " + moveItem.isVisible.toString())
+//                Log.i("TestingApp", "Move Item = " + moveItem.isVisible.toString())
 
                 val copyItem = menu.findItem(R.id.copy_button)
                 copyItem.setVisible(false)
-                Log.i("TestingApp", "Copy Item = " + copyItem.isVisible.toString())
+//                Log.i("TestingApp", "Copy Item = " + copyItem.isVisible.toString())
 
                 val deleteItem = menu.findItem(R.id.delete_button)
                 deleteItem.setVisible(false)
-                Log.i("TestingApp", "Delete Item = " + deleteItem.isVisible.toString())
+//                Log.i("TestingApp", "Delete Item = " + deleteItem.isVisible.toString())
 
                 val favourite = menu.findItem(R.id.favourite_button)
                 favourite.setVisible(false)
 
                 val checkBox = menu.findItem(R.id.select_button)
                 checkBox.setVisible(false)
-                Log.i("TestingApp", "Delete Item = " + deleteItem.isVisible.toString())
+//                Log.i("TestingApp", "Delete Item = " + deleteItem.isVisible.toString())
             }
         })
         super.onPrepareOptionsMenu(menu)
@@ -749,15 +830,15 @@ class AllNotesCardFragment : Fragment(R.layout.fragment_all_notes_card) {
 
         allNoteCardAdapter.data = data
 
-        allNoteCardViewModel.selectedList.value = data
+        allNoteCardallNoteCardViewModel.selectedList.value = data
 
         val emptyData = mutableListOf<NoteData>()
 
-        allNoteCardViewModel.notesListSelected = emptyData
+        allNoteCardallNoteCardViewModel.notesListSelected = emptyData
 
-        allNoteCardViewModel.favourite_item.value = 0
+        allNoteCardallNoteCardViewModel.favourite_item.value = 0
 
-        allNoteCardViewModel.unfavourtie_item.value = 0
+        allNoteCardallNoteCardViewModel.unfavourtie_item.value = 0
 
         val sharedPreference = activity?.getSharedPreferences(selected, Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor? = sharedPreference?.edit()

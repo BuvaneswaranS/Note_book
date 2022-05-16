@@ -1,4 +1,4 @@
-package com.example.note_book.search
+package com.example.note_book.Search
 
 import android.app.SearchManager
 import android.content.Context
@@ -7,16 +7,13 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.note_book.HomePageActivity
-import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.R
 import com.example.note_book.databinding.FragmentSearchBinding
 

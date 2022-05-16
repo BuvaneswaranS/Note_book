@@ -39,7 +39,15 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
 
     override fun getItemViewType(position: Int): Int {
 
-        if(position == 0){
+//        Log.i("TestingApp","ViewModel data --> ${viewModel.data}")
+//        Log.i("TestingApp","Sort 1 --> ${viewModel.sortOrderA1.value?.get(position)?.folderId}")
+//        Log.i("TestingApp","Sort 2 --> ${viewModel.sortOrderA2.value?.get(position)?.folderId}")
+//        Log.i("TestingApp","Sort 3 --> ${viewModel.sortOrderA3.value?.get(position)?.folderId}")
+//        Log.i("TestingApp","Sort 4 --> ${viewModel.sortOrderA4.value?.get(position)?.folderId}")
+//        Log.i("TestingApp","Sort 5 --> ${viewModel.sortOrderA5.value?.get(position)?.folderId}")
+//        Log.i("TestingApp","Sort 6 --> ${viewModel.sortOrderA6.value?.get(position)?.folderId}")
+
+        if(((viewModel.data == viewModel.sortOrderA1.value?.get(position)?.folderId) && viewModel.sortState.value == "A1")|| ((viewModel.data == viewModel.sortOrderA2.value?.get(position)?.folderId)  && (viewModel.sortState.value == "A2")) || ((viewModel.data == viewModel.sortOrderA3.value?.get(position)?.folderId) && (viewModel.sortState.value == "A3")) || ((viewModel.data == viewModel.sortOrderA4.value?.get(position)?.folderId) && (viewModel.sortState.value == "A4")) || ((viewModel.data == viewModel.sortOrderA5.value?.get(position)?.folderId) && (viewModel.sortState.value == "A5")) || ((viewModel.data == viewModel.sortOrderA6.value?.get(position)?.folderId) && (viewModel.sortState.value == "A6"))){
             return LAYOUT_ONE
         }else{
             return LAYOUT_TWO
@@ -72,8 +80,8 @@ class DisplayFolderListAdapter(displayFolderListAdapterViewModel: HomeFragmentVi
 //        This is for the title textView Clicking
 
         holder.folder_title.setOnClickListener {
-
-            itemClickListener.changeFolderName(getItem(position))
+            Log.i("TestingApp","Folder Title --> ${folderData.folderName}")
+            itemClickListener.changeFolderName(folderData)
 
        }
 

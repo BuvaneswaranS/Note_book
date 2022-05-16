@@ -41,5 +41,19 @@
     <string name="fragment_search_notes_head">Notes</string>
 
     <string name="test_string">textView</string>
+    <string name="men_item_text">Sort By</string>
+    <string name="sort_button_text">Close</string>
+
+
+<!-- Sorting -->
+    <string name="sort_title_text_A1_A2">Title</string>
+    <string name="sort_subtitle_text_A1">Ascending</string>
+    <string name="sort_subtitle_text_A2">Descending</string>
+
+    <string name="sort_title_text_A3_A4">Date Modified</string>
+    <string name="sort_subtitle_text_A3_A5">Oldest First</string>
+
+    <string name="sort_title_text_A5_A6">Date Created</string>
+    <string name="sort_subtitle_text_A4_A6">Newest First</string>
 
 </resources>

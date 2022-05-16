@@ -25,6 +25,8 @@ class ApplicationInitialize: Application() {
             getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
         val shared = sharedPreferenceInsertDefaultFolder.getBoolean("STARTED", false)
 
+        val sharedSort = sharedPreferenceInsertDefaultFolder.getString("SORT_OPTION","notCreated")
+
         if (!shared) {
 //            Log.i("Tester","DefaultFolder --> ${shared}")
             val sharedPreferenceInsertDefaultFolder = getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
@@ -33,7 +35,14 @@ class ApplicationInitialize: Application() {
             editor.apply()
             editor.commit()
 
-    }
+        }
+
+        if (sharedSort == "notCreated"){
+            val editor: SharedPreferences.Editor = sharedPreferenceInsertDefaultFolder.edit()
+            editor.putString("SORT_OPTION","A3")
+            editor.apply()
+            editor.commit()
+        }
 
 }
 }

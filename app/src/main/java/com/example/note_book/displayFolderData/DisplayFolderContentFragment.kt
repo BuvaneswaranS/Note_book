@@ -7,18 +7,20 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.note_book.HomeFragment.HomeFragmentDirections
 import com.example.note_book.HomePageActivity
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.R
+import com.example.note_book.Sort.SortBottomSheet
 import com.example.note_book.databinding.FragmentDisplayFolderContentBinding
 
 class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_content) {
@@ -47,6 +49,10 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
     var defaultid: String = ""
 
     val shared_value = "drawer_shared"
+
+    private val sharedPref = "sharedPref"
+
+    var sortDialogFragment = SortBottomSheet()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +92,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //      defaultFolderId in the arguments[Safe Args] is initialized to the "defaultid" variable
         defaultid= arguments.defaultFolderId
 
-//      Setting the Title of the Toolbar from the safeArgs arguments
-
 
 
 //      Add Note OnClickListener
@@ -103,11 +107,13 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 //      viewModel is initialized
         viewModel = ViewModelProvider(this, viewModelFactory).get(DisplayFolderContentViewModel::class.java)
 
+        viewModel.initialize(arguments.displayFolderId)
 //
         viewModel.getNotesList(arguments.displayFolderId)
 
 //
         viewModel.size = arguments.folderListSize
+
 
 //      Initializing the Adapter[displayNoteListAdapter]
         displayNoteListAdapter = DisplayNoteListAdapter(viewModel)
@@ -154,8 +160,6 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
         }
 
-
-
         viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
 
             if(!list.isEmpty()){
@@ -170,7 +174,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
             }
 
-            displayNoteListAdapter.submitList(list)
+//            displayNoteListAdapter.submitList(list)
 
         })
 
@@ -181,6 +185,54 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
         drawerLayout?.isEnabled = false
 
         viewModel.getNoteIdList(arguments.displayFolderId)
+
+        //      Shared Preferences for the Sort Option
+        val sharedPreferenceInsertDefaultFolder =
+            activity?.getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val sharedForSort = sharedPreferenceInsertDefaultFolder?.getString("SORT_OPTION","A1")
+
+        //  -----------------------------------------------------------------------------------------------------------
+//          SORTING IMPLEMENTATION
+//  -----------------------------------------------------------------------------------------------------------
+
+//        Toast.makeText(this.context,"Response Started --> ${sharedForSort}",Toast.LENGTH_LONG).show()
+        viewModel.sortState.value = sharedForSort
+
+//      -----------------------------------------------------------------------------------------------------------
+        viewModel.sortState.observe(this.viewLifecycleOwner, Observer { order ->
+            if (order == "A1"){
+                viewModel.sortOrderA1.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayNoteListAdapter.submitList(list)
+                })
+
+            }else if (order == "A2"){
+                viewModel.sortOrderA2.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayNoteListAdapter.submitList(list)
+                })
+
+            }else if (order == "A3"){
+                viewModel.sortOrderA3.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayNoteListAdapter.submitList(list)
+                })
+
+            }else if (order == "A4"){
+                viewModel.sortOrderA4.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayNoteListAdapter.submitList(list)
+                })
+
+            }else if (order == "A5"){
+                viewModel.sortOrderA5.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayNoteListAdapter.submitList(list)
+                })
+
+            }else if (order == "A6"){
+                viewModel.sortOrderA6.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayNoteListAdapter.submitList(list)
+                })
+
+            }
+        })
+
 
         viewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value ->
 
@@ -207,13 +259,13 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     viewModel.notesListFolder?.observe(this.viewLifecycleOwner, Observer { list ->
 
                         if (selectedListSize == list.size){
-                            Log.i("TestingApp", "Called 1")
+//                            Log.i("TestingApp", "Called 1")
                             viewModel.allItemsSelected.value = true
 
                         }
 
                         else{
-                            Log.i("TestingApp", "Called 2")
+//                            Log.i("TestingApp", "Called 2")
                             viewModel.allItemsSelected.value = false
 
                         }
@@ -326,7 +378,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             }
         }
 
-        if (item.itemId == R.id.move_button){
+        else if (item.itemId == R.id.move_button){
 
             if (viewModel.size <= 1){
 
@@ -418,6 +470,16 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
             editor?.apply()
             editor?.commit()
 
+        }
+
+        else if (item.itemId == R.id.sort_button){
+            sortDialogFragment.show(childFragmentManager, "SortBottomSheetFragment")
+            sortDialogFragment.isCancelable = false
+            sortDialogFragment.setFragmentResultListener("requestKey",){key: String, bundle: Bundle ->
+                val reponseData = bundle.getString("data")
+                viewModel.sortState.value = reponseData
+                Log.i("TestingApp","Display Folder Data Notes Response Data --> ${reponseData}")
+            }
         }
 
         else if(item.itemId == R.id.select_button){
@@ -668,6 +730,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     val searchItem = menu.findItem(R.id.search_button)
                     searchItem.setVisible(false)
 
+                    val sortItem = menu.findItem(R.id.sort_button)
+                    sortItem.setVisible(false)
+
                 }
 
                 else if (viewModel.favouriteState.value == "unFavourite"){
@@ -742,6 +807,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     val searchItem = menu.findItem(R.id.search_button)
                     searchItem.setVisible(false)
 
+                    val sortItem = menu.findItem(R.id.sort_button)
+                    sortItem.setVisible(false)
+
                 }
 
                 else if (viewModel.favouriteState.value == "Nothing"){
@@ -799,6 +867,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     val searchItem = menu.findItem(R.id.search_button)
                     searchItem.setVisible(false)
 
+                    val sortItem = menu.findItem(R.id.sort_button)
+                    sortItem.setVisible(false)
+
                     val moveItem = menu.findItem(R.id.move_button)
                     moveItem.setVisible(true)
 
@@ -814,6 +885,7 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
                     val favourite = menu.findItem(R.id.favourite_button)
                     favourite.setVisible(false)
 
+
                 }
             }
 
@@ -821,6 +893,9 @@ class DisplayFolderContentFragment : Fragment(R.layout.fragment_display_folder_c
 
                 val searchItem = menu.findItem(R.id.search_button)
                 searchItem.setVisible(true)
+
+                val sortItem = menu.findItem(R.id.sort_button)
+                sortItem.setVisible(true)
 
                 val moveItem = menu.findItem(R.id.move_button)
                 moveItem.setVisible(false)

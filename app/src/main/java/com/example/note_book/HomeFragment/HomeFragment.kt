@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.note_book.HomePageActivity
 import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.R
+import com.example.note_book.Sort.SortBottomSheet
 import com.example.note_book.databinding.FragmentHomeBinding
 
 class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
@@ -29,6 +31,8 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
     private lateinit var displayfolderAdapter: DisplayFolderListAdapter
 
     val shared_value = "drawer_shared"
+
+    private val sharedPref = "sharedPref"
 
     //  For FAB button animation
     private val rotateOpenAnimation: Animation by lazy {
@@ -62,6 +66,8 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
         clicked = parcel.readByte() != 0.toByte()
     }
 
+    var sortDialogFragment = SortBottomSheet()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +89,11 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
         editor?.apply()
         editor?.commit()
 
+        val sharedPreferenceInsertDefaultFolder =
+            activity?.getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val shared = sharedPreferenceInsertDefaultFolder?.getString("SORT_OPTION","A1")
+
+
         val application = requireNotNull(this.activity).application
 
 
@@ -103,9 +114,11 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                 viewModel.filesCame.value = true
 
             }
-            displayfolderAdapter.submitList(list)
+//            displayfolderAdapter.submitList(list)
         })
-
+//      --------------------------------------------------------------------------------
+        viewModel.sortState.value = shared
+//      -------------------------------------------------------------------------------
         viewModel.viewModelCreated.observe(this.viewLifecycleOwner, Observer { created ->
             if (created) {
 
@@ -140,10 +153,12 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                 .navigate(HomeFragmentDirections.actionHomeFragmentToCreateNewNoteFragment(viewModel.data.toString()))
         }
 
+
         binding.addFolder.setOnClickListener { view ->
             val data = FolderData(folderName = "Untitled", createdTime = System.currentTimeMillis())
             viewModel.insertUserDefinedFolder(data)
         }
+
 
         val builder = AlertDialog.Builder(this.context)
         builder.setView(inflater.inflate(R.layout.loading_menu_moving, null))
@@ -156,6 +171,47 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                 dialogBox.dismiss()
             }
         })
+
+//      ---------------------------------------------------------------------------------------------------------------------------------------
+//        FOR SORTING
+//      ---------------------------------------------------------------------------------------------------------------------------------------
+
+        viewModel.sortState.observe(this.viewLifecycleOwner, Observer { order ->
+            if (order == "A1"){
+                viewModel.sortOrderA1.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayfolderAdapter.submitList(list)
+                })
+
+            }else if (order == "A2"){
+                viewModel.sortOrderA2.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayfolderAdapter.submitList(list)
+                })
+
+            }else if (order == "A3"){
+                viewModel.sortOrderA3.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayfolderAdapter.submitList(list)
+                })
+
+            }else if (order == "A4"){
+                viewModel.sortOrderA4.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayfolderAdapter.submitList(list)
+                })
+
+            }else if (order == "A5"){
+                viewModel.sortOrderA5.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayfolderAdapter.submitList(list)
+                })
+
+            }else if (order == "A6"){
+                viewModel.sortOrderA6.observe(this.viewLifecycleOwner, Observer {list ->
+                    displayfolderAdapter.submitList(list)
+                })
+
+            }
+        })
+
+
+//      ---------------------------------------------------------------------------------------------------------------------------------------
 
 
 //      ---------------------------------------------------------------------------------------------------------------------------------------
@@ -171,7 +227,7 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
             }else{
                 viewModel.allItemsSelected.value = false
                 viewModel.checkBoxSelected.value = false
-            }
+             }
         })
 
 
@@ -285,8 +341,14 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
     }
 
     override fun onStart() {
+        Log.i("TestingApp","onStart Home Fragment Called")
         (activity as HomePageActivity).drawerLocked()
         (activity as HomePageActivity).drawerUnLocked()
+//        val sharedPreferenceInsertDefaultFolder =
+//            activity?.getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+//        val shared = sharedPreferenceInsertDefaultFolder?.getString("SORT_OPTION","A1")
+//        viewModel.sortState.value = shared
+
         super.onStart()
     }
 
@@ -315,6 +377,21 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
          else if (item.itemId == R.id.search_button){
             view?.let { Navigation.findNavController(it).navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment()) }
          }
+
+        else if (item.itemId == R.id.sort_button){
+            sortDialogFragment.show(childFragmentManager, "SortBottomSheetFragment")
+            sortDialogFragment.isCancelable = false
+//            val sharedPreferenceInsertDefaultFolder =
+//                activity?.getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+//            val shared = sharedPreferenceInsertDefaultFolder?.getString("SORT_OPTION","A1")
+            sortDialogFragment.setFragmentResultListener("requestKey",){key: String, bundle: Bundle ->
+                val reponseData = bundle.getString("data")
+                viewModel.sortState.value = reponseData
+            }
+
+//            viewModel.sortState.value = shared
+//            Log.i("Testing","Sort State in the Sort Button --> ${shared}")
+        }
 
          else if (item.itemId == R.id.delete_button) {
 
@@ -452,6 +529,9 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                             val searchItem = menu.findItem(R.id.search_button)
                             searchItem.setVisible(false)
 
+                            val sortItem = menu.findItem(R.id.sort_button)
+                            sortItem.setVisible(false)
+
                             val checkBox = menu.findItem(R.id.select_button)
                             checkBox.setVisible(true)
 
@@ -459,6 +539,9 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
 
                             val searchItem = menu.findItem(R.id.search_button)
                             searchItem.setVisible(true)
+
+                            val sortItem = menu.findItem(R.id.sort_button)
+                            sortItem.setVisible(true)
 
                             val moveItem = menu.findItem(R.id.move_button)
                             moveItem.setVisible(false)
@@ -484,6 +567,18 @@ class HomeFragment() : Fragment(R.layout.fragment_home_), itemClickListener {
                     })
         super.onPrepareOptionsMenu(menu)
     }
+
+    override fun onResume() {
+
+        super.onResume()
+        Log.i("TestingApp","onResume Home Fragment Called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+    }
+
 
     override fun onStop() {
         clicked = false

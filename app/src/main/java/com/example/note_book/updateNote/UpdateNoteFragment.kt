@@ -40,7 +40,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 //           onBackPressed is called to move back
 //            requireActivity().onBackPressed()
             (activity as HomePageActivity).onSupportNavigateUp()
-            (activity as HomePageActivity).drawerUnLocked()
+//            (activity as HomePageActivity).drawerUnLocked()
             (requireActivity() as AppCompatActivity).supportActionBar?.hide()
 
         }
@@ -120,7 +120,7 @@ class UpdateNoteFragment : Fragment(R.layout.fragment_update_note) {
 
 //          onDestroyView is called
 //            onDestroyView()
-            (activity as HomePageActivity).drawerUnLocked()
+//            (activity as HomePageActivity).drawerUnLocked()
         }
 
         return binding.root

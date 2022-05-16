@@ -6,8 +6,13 @@
         android:id="@+id/favourite_search_button"
         android:icon="@drawable/ic_search_button"
         android:title="@string/menu_item_search_text"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/sort_button"
+        android:icon="@drawable/ic_sort_button"
+        android:title="Sort By"
+        app:showAsAction="always"/>
 
     <item
         android:id="@+id/select_deselect_all_button"

@@ -84,6 +84,11 @@
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_18sp">18sp</dimen>
     <dimen name="text_size_20sp">20sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
+    <dimen name="text_size_26sp">26sp</dimen>
+    <dimen name="text_size_28sp">28sp</dimen>
+    <dimen name="text_size_32sp">32sp</dimen>
+    <dimen name="text_size_40sp">40sp</dimen>
 
     <dimen name="elevation_4dp">4dp</dimen>
 
@@ -92,4 +97,7 @@
 
     <dimen name="item_layout_search_note_width">80dp</dimen>
     <dimen name="item_layout_search_note_height">80dp</dimen>
+
+    <dimen name="layout_sort_items_height_64dp">64dp</dimen>
+
 </resources>

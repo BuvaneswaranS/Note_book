@@ -1,6 +1,7 @@
 package com.example.note_book.NotebookDatabase
 
 
+import android.icu.text.CaseMap
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -56,5 +57,28 @@ interface FolderDataDao {
 
     @Query("DELETE from folder_table WHERE folderId= :folderId")
     fun deleteFolderData(folderId: String)
+
+//   --------------------------------------------------------------------------
+//    Sort FOLDER
+//   --------------------------------------------------------------------------
+    @Query("SELECT * FROM folder_table ORDER BY Folder_Name ASC")
+    fun getFolderTitleSortASC(): LiveData<List<FolderData>>
+
+    @Query("SELECT  * FROM folder_table ORDER BY Folder_Name DESC")
+    fun getFolderTitleSortDESC(): LiveData<List<FolderData>>
+
+    @Query("SELECT * FROM folder_table ORDER BY Created_Time ASC")
+    fun getFolderCreatedTimeSortASC(): LiveData<List<FolderData>>
+
+    @Query("SELECT * FROM FOLDER_TABLE ORDER BY Created_Time DESC")
+    fun getFolderCreatedTimeSortDESC(): LiveData<List<FolderData>>
+
+    @Query("SELECT * FROM folder_table ORDER BY Modified_Time ASC")
+    fun getFolderModifiedTimeSortASC(): LiveData<List<FolderData>>
+
+    @Query("SELECT * FROM folder_table ORDER By Modified_Time DESC")
+    fun getFolderModifiedTimeSortDESC(): LiveData<List<FolderData>>
+
+//   --------------------------------------------------------------------------
 
 }

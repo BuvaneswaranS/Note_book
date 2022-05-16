@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.note_book.NotebookDatabase.FolderData
 import com.example.note_book.NotebookDatabase.FolderRepository
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.NotebookDatabase.NotebookDatabase
@@ -77,6 +78,19 @@ class DisplayFolderContentViewModel(val application: Application): ViewModel() {
 //  For Detecting the state of the favourite [Make Favourite / Unfavourite / Nothing will be displayed]
     var favouriteState = MutableLiveData<String>()
 
+    //  -------------------------------------------------------------
+    var sortState = MutableLiveData<String>()
+
+    lateinit var sortOrderA1 : LiveData<List<NoteData>>
+    lateinit var sortOrderA2 : LiveData<List<NoteData>>
+    lateinit var sortOrderA3 : LiveData<List<NoteData>>
+    lateinit var sortOrderA4 : LiveData<List<NoteData>>
+    lateinit var sortOrderA5 : LiveData<List<NoteData>>
+    lateinit var sortOrderA6 : LiveData<List<NoteData>>
+//  -----------------------------------------------------------------
+
+
+
     init {
         val folderDao = NotebookDatabase.getDatabaseInstance(application).folderDataDao
         val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
@@ -94,6 +108,7 @@ class DisplayFolderContentViewModel(val application: Application): ViewModel() {
         favourite_item.value = 0
         unfavourtie_item.value = 0
         favouriteState.value = "makeFavourite"
+        sortState.value = "A1"
         noteListSelectedFav.add(NoteData("","","","",0,0,false,false))
 
     }
@@ -104,6 +119,18 @@ class DisplayFolderContentViewModel(val application: Application): ViewModel() {
                 notesListFolder = folderRepository.getNotesListFolder(folderId)
             }
         }
+    }
+
+    fun initialize(folderId: String){
+//      ------------------------------------------
+        getSortOrderA1(folderId)
+        getSortOrderA2(folderId)
+        getSortOrderA3(folderId)
+        getSortOrderA4(folderId)
+        getSortOrderA5(folderId)
+        getSortOrderA6(folderId)
+//     ------------------------------------------
+
     }
 
     fun getNoteIdList(folderId: String){
@@ -131,6 +158,56 @@ class DisplayFolderContentViewModel(val application: Application): ViewModel() {
             }
         }
     }
+
+    fun getSortOrderA1(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA1 = folderRepository.getFolderNoteListSortTitleAscending(folderId)
+            }
+        }
+    }
+
+    fun getSortOrderA2(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA2 = folderRepository.getFolderNoteListSortTitleDescending(folderId)
+            }
+        }
+    }
+
+    fun getSortOrderA3(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA3 = folderRepository.getFolderNoteListSortModifiedTimeAscending(folderId)
+            }
+        }
+    }
+
+    fun getSortOrderA4(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA4 = folderRepository.getFolderNoteListSortModifiedTimeDescending(folderId)
+            }
+        }
+    }
+
+    fun getSortOrderA5(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA5 = folderRepository.getFolderNoteListSortCreatedTimeAscending(folderId)
+            }
+        }
+    }
+
+    fun getSortOrderA6(folderId: String){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA6 = folderRepository.getFolderNoteListSortModifiedTimeDescending(folderId)
+            }
+        }
+    }
+
+
 
 
 //  For Selecting and  Deselecting all the items in the list of recyclerview Items

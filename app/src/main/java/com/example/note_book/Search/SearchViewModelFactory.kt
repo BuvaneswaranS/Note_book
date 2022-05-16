@@ -1,4 +1,4 @@
-package com.example.note_book.search
+package com.example.note_book.Search
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

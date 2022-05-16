@@ -70,6 +70,35 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
         return folderDataDao.getSearchFolderData(searchText)
     }
 
+//  -------------------------------------------------------------------------------------------
+
+    suspend fun getFolderListSortTitleAscending(): LiveData<List<FolderData>>{
+        return folderDataDao.getFolderTitleSortASC()
+    }
+
+    suspend fun getFolderListSortTitleDescending(): LiveData<List<FolderData>>{
+        return folderDataDao.getFolderTitleSortDESC()
+    }
+
+    suspend fun getFolderListSortCreatedTimeAscending(): LiveData<List<FolderData>>{
+        return folderDataDao.getFolderCreatedTimeSortASC()
+    }
+
+    suspend fun getFolderListSortCreatedTimeDescending(): LiveData<List<FolderData>>{
+        return folderDataDao.getFolderCreatedTimeSortDESC()
+    }
+
+    suspend fun getFolderListSortModifiedTimeAscending(): LiveData<List<FolderData>>{
+        return folderDataDao.getFolderModifiedTimeSortASC()
+    }
+
+    suspend fun getFolderListSortModifiedTimeDescending(): LiveData<List<FolderData>>{
+        return folderDataDao.getFolderModifiedTimeSortDESC()
+    }
+//  -------------------------------------------------------------------------------------------
+
+
+
 //    ---------------------------------------------------------------------------------------------------------------------------
 //    Note Area
 //    ----------------------------------------------------------------------------------------------------------------------------
@@ -136,5 +165,89 @@ class FolderRepository(val folderDataDao: FolderDataDao, val noteDataDao: NoteDa
     fun getSearchNoteData(searchText: String): Flow<List<NoteData>>{
         return noteDataDao.getSearchNotesCard(searchText)
     }
+//  -------------------------------------------------------------------------------------------
+
+    suspend fun getNoteListSortTitleAscending(): LiveData<List<NoteData>>{
+        return noteDataDao.getTitleSortAscending()
+    }
+
+    suspend fun getNoteListSortTitleDescending(): LiveData<List<NoteData>>{
+        return noteDataDao.getTitleSortDescending()
+    }
+
+    suspend fun getNoteListSortCreatedTimeAscending(): LiveData<List<NoteData>>{
+        return noteDataDao.getCreatedTimeSortOld()
+    }
+
+    suspend fun getNoteListSortCreatedTimeDescending(): LiveData<List<NoteData>>{
+        return noteDataDao.getCreatedTimeSortNew()
+    }
+
+    suspend fun getNoteListSortModifiedTimeAscending(): LiveData<List<NoteData>>{
+        return noteDataDao.getModifiedTimeSortOld()
+    }
+
+    suspend fun getNoteListSortModifiedTimeDescending(): LiveData<List<NoteData>>{
+        return noteDataDao.getModifiedTimeSortNew()
+    }
+
+//  -------------------------------------------------------------------------------------------
+//  Display Notes based on the Folder
+//  -------------------------------------------------------------------------------------------
+
+    suspend fun getFolderNoteListSortTitleAscending(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderBasedNoteTitleSortAscending(folderId)
+    }
+
+    suspend fun getFolderNoteListSortTitleDescending(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderBasedNoteTitleSortDescending(folderId)
+    }
+
+    suspend fun getFolderNoteListSortCreatedTimeAscending(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderBasedNoteCreatedTimeSortOld(folderId)
+    }
+
+    suspend fun getFolderNoteListSortCreatedTimeDescending(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderBasedNoteCreatedTimeSortOld(folderId)
+    }
+
+    suspend fun getFolderNoteListSortModifiedTimeAscending(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderBasedNoteModifiedTimeSortOld(folderId)
+    }
+
+    suspend fun getFolderNoteListSortModifiedTimeDescending(folderId: String): LiveData<List<NoteData>>{
+        return noteDataDao.getFolderBasedNoteModifiedTimeSortNew(folderId)
+    }
+
+//  -------------------------------------------------------------------------------------------
+//  Favourite
+//  -------------------------------------------------------------------------------------------
+
+    suspend fun getFavNoteListSortTitleAscending(): LiveData<List<NoteData>>{
+        return noteDataDao.getFavTitleSortAscending(fav = true)
+    }
+
+    suspend fun getFavNoteListSortTitleDescending(): LiveData<List<NoteData>>{
+        return noteDataDao.getFavTitleSortDescending(fav = true)
+    }
+
+    suspend fun getFavNoteListSortCreatedTimeAscending(): LiveData<List<NoteData>>{
+        return noteDataDao.getFavCreatedTimeSortOld(fav = true)
+    }
+
+    suspend fun getFavNoteListSortCreatedTimeDescending(): LiveData<List<NoteData>>{
+        return noteDataDao.getFavCreatedTimeSortNew(fav = true)
+    }
+
+    suspend fun getFavNoteListSortModifiedTimeAscending(): LiveData<List<NoteData>>{
+        return noteDataDao.getFavModifiedTimeSortOld(fav = true)
+    }
+
+    suspend fun getFavNoteListSortModifiedTimeDescending(): LiveData<List<NoteData>>{
+        return noteDataDao.getFavModifiedTimeSortNew(fav = true)
+    }
+
+//  -------------------------------------------------------------------------------------------
+//  -------------------------------------------------------------------------------------------
 
 }

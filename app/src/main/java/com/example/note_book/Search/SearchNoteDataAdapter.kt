@@ -1,4 +1,4 @@
-package com.example.note_book.search
+package com.example.note_book.Search
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.note_book.NotebookDatabase.NoteData
 import com.example.note_book.R
-import org.w3c.dom.Text
 
 class SearchNoteDataAdapter(searchViewModel: SearchViewModel): ListAdapter<NoteData, SearchNoteDataAdapter.ViewHolder>(noteDataCallBack()) {
 
@@ -28,7 +28,7 @@ class SearchNoteDataAdapter(searchViewModel: SearchViewModel): ListAdapter<NoteD
 
         holder.itemView.setOnClickListener {view ->
             viewModel.changeFragment = "Changed"
-            Navigation.findNavController(view).navigate(SearchFragmentDirections.actionSearchFragmentToUpdateNoteFragment(updateNoteId = noteData.noteId, updateNoteFolderId = noteData.folderId, updateNoteNoteTitle = noteData.noteTitle, updateNoteNoteDescription = noteData.noteDescription, updateNoteNoteCreatedTime = noteData.createdTime, favourite = noteData.favourite))
+//            findNavController(view).navigate(SearchFragmentDirections.actionSearchFragmentToUpdateNoteFragment(updateNoteId = noteData.noteId, updateNoteFolderId = noteData.folderId, updateNoteNoteTitle = noteData.noteTitle, updateNoteNoteDescription = noteData.noteDescription, updateNoteNoteCreatedTime = noteData.createdTime, favourite = noteData.favourite))
         }
     }
 

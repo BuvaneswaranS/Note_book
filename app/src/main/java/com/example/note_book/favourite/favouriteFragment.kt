@@ -9,6 +9,7 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -17,6 +18,7 @@ import com.example.note_book.HomePageActivity
 import com.example.note_book.NotebookDatabase.NoteData
 
 import com.example.note_book.R
+import com.example.note_book.Sort.SortBottomSheet
 import com.example.note_book.databinding.FragmentFavouriteBinding
 
 class favouriteFragment : Fragment(R.layout.fragment_favourite) {
@@ -30,6 +32,11 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
     private val selected = "sharedSelect"
 
     val shared_value = "drawer_shared"
+
+    private val sharedPref = "sharedPref"
+
+//  Bottom Sheet for the Sort Selection
+    var sortDialogFragment = SortBottomSheet()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +74,56 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
 
 
         favouriteViewModel.favouriteList?.observe(this.viewLifecycleOwner, Observer {list ->
-            favouriteAdapter.submitList(list)
+//            favouriteAdapter.submitList(list)
         })
 
+//      --------------------------------------------------------------------------------------------
+//      Sorting Implementation  
+//      --------------------------------------------------------------------------------------------
+
+        val sharedPreferenceInsertDefaultFolder =
+            activity?.getSharedPreferences(sharedPref, Context.MODE_PRIVATE)
+        val shared = sharedPreferenceInsertDefaultFolder?.getString("SORT_OPTION","A1")
+
+
+        favouriteViewModel.sortState.value = shared
+
+//      -----------------------------------------------------------------------------------------------------------  
+        favouriteViewModel.sortState.observe(this.viewLifecycleOwner, Observer { order ->
+            if (order == "A1"){
+                favouriteViewModel.sortOrderA1.observe(this.viewLifecycleOwner, Observer {list ->
+                    favouriteAdapter.submitList(list)
+                })
+
+            }else if (order == "A2"){
+                favouriteViewModel.sortOrderA2.observe(this.viewLifecycleOwner, Observer {list ->
+                    favouriteAdapter.submitList(list)
+                })
+
+            }else if (order == "A3"){
+                favouriteViewModel.sortOrderA3.observe(this.viewLifecycleOwner, Observer {list ->
+                    favouriteAdapter.submitList(list)
+                })
+
+            }else if (order == "A4"){
+                favouriteViewModel.sortOrderA4.observe(this.viewLifecycleOwner, Observer {list ->
+                    favouriteAdapter.submitList(list)
+                })
+
+            }else if (order == "A5"){
+                favouriteViewModel.sortOrderA5.observe(this.viewLifecycleOwner, Observer {list ->
+                    favouriteAdapter.submitList(list)
+                })
+
+            }else if (order == "A6"){
+                favouriteViewModel.sortOrderA6.observe(this.viewLifecycleOwner, Observer {list ->
+                    favouriteAdapter.submitList(list)
+                })
+
+            }
+        })
+//      --------------------------------------------------------------------------------------------        
+        
         favouriteViewModel.isEnabled.observe(this.viewLifecycleOwner, Observer {value ->
 
             if (value){
@@ -255,6 +309,17 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
             view?.let { Navigation.findNavController(it).navigate(favouriteFragmentDirections.actionFavouriteFragmentToSearchFragment()) }
         }
 
+        else if (item.itemId == R.id.sort_button){
+            sortDialogFragment.show(childFragmentManager, "SortBottomSheetFragment")
+            sortDialogFragment.isCancelable = false
+
+            sortDialogFragment.setFragmentResultListener("requestKey",){key: String, bundle: Bundle ->
+                val reponseData = bundle.getString("data")
+                favouriteViewModel.sortState.value = reponseData
+            }
+
+        }
+
         else if (item.itemId == R.id.unfavourite_button){
             favouriteViewModel.getNotesList()
             favouriteViewModel.isEnabled.value = false
@@ -355,10 +420,16 @@ class favouriteFragment : Fragment(R.layout.fragment_favourite) {
                 val searchItem = menu.findItem(R.id.favourite_search_button)
                 searchItem.setVisible(false)
 
+                val sortItem = menu.findItem(R.id.sort_button)
+                sortItem.setVisible(false)
+
             } else if (!value) {
 
                 val searchItem = menu.findItem(R.id.favourite_search_button)
                 searchItem.setVisible(true)
+
+                val sortItem = menu.findItem(R.id.sort_button)
+                sortItem.setVisible(true)
 
                 val deleteItem = menu.findItem(R.id.favourite_delete_button)
                 deleteItem.setVisible(false)

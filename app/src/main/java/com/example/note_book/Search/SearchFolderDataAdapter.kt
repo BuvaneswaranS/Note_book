@@ -1,12 +1,12 @@
-package com.example.note_book.search
+package com.example.note_book.Search
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -52,7 +52,7 @@ class SearchFolderDataAdapter(searchViewModel: SearchViewModel, defaultFolderId:
 
         holder.itemView.setOnClickListener {view ->
             viewModel.changeFragment = "Changed"
-            Navigation.findNavController(view).navigate(SearchFragmentDirections.actionSearchFragmentToDisplayFolderContentFragment(displayFolderId = folderData.folderId , displayFolderName = folderData.folderName , defaultFolderId = defaultFolderIdAdapter, folderListSize = 0))
+//            findNavController(view).navigate(SearchFragmentDirections.actionSearchFragmentToDisplayFolderContentFragment(displayFolderId = folderData.folderId , displayFolderName = folderData.folderName , defaultFolderId = defaultFolderIdAdapter, folderListSize = 0))
         }
     }
 

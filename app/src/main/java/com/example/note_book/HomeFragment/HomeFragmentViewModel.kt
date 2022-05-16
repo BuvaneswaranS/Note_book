@@ -2,6 +2,7 @@ package com.example.note_book.HomeFragment
 
 
 import android.app.Application
+import android.icu.text.CaseMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +44,16 @@ class HomeFragmentViewModel(val application: Application): ViewModel() {
     var all_folder_id_list: MutableList<String>? = null
 
     var allNotesCard: LiveData<List<NoteData>>? = null
+//  -------------------------------------------------------------
+    var sortState = MutableLiveData<String>()
+
+    lateinit var sortOrderA1 : LiveData<List<FolderData>>
+    lateinit var sortOrderA2 : LiveData<List<FolderData>>
+    lateinit var sortOrderA3 : LiveData<List<FolderData>>
+    lateinit var sortOrderA4 : LiveData<List<FolderData>>
+    lateinit var sortOrderA5 : LiveData<List<FolderData>>
+    lateinit var sortOrderA6 : LiveData<List<FolderData>>
+//  -----------------------------------------------------------------
 
     val viewModelJob = Job()
 
@@ -53,6 +64,7 @@ class HomeFragmentViewModel(val application: Application): ViewModel() {
         val noteDataDao = NotebookDatabase.getDatabaseInstance(application).noteDataDao
         folderRepository = FolderRepository(folderDao, noteDataDao)
         folder_list = folderRepository.folderDataDao.getAllDataByFolder()
+        getDefaultFolderId()
         isEnabled.value = false
         deleteButtonEnabled.value = true
         displayFolderDataDeleted.value = false
@@ -64,6 +76,20 @@ class HomeFragmentViewModel(val application: Application): ViewModel() {
         getNotesCard()
 //        drawerState.value = "notebooks"
         checkBoxSelected.value = false
+
+        sortState.value = "A1"
+
+
+
+//     ------------------------------------------
+        getSortOrderA1()
+        getSortOrderA2()
+        getSortOrderA3()
+        getSortOrderA4()
+        getSortOrderA5()
+        getSortOrderA6()
+//     ------------------------------------------
+
     }
 
     var data: String? =  ""
@@ -150,4 +176,51 @@ class HomeFragmentViewModel(val application: Application): ViewModel() {
         }
     }
 
+    fun getSortOrderA1(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA1 = folderRepository.getFolderListSortTitleAscending()
+            }
+        }
+    }
+
+    fun getSortOrderA2(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA2 = folderRepository.getFolderListSortTitleDescending()
+            }
+        }
+    }
+
+    fun getSortOrderA3(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA3 = folderRepository.getFolderListSortModifiedTimeAscending()
+            }
+        }
+    }
+
+    fun getSortOrderA4(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA4 = folderRepository.getFolderListSortModifiedTimeDescending()
+            }
+        }
+    }
+
+    fun getSortOrderA5(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA5 = folderRepository.getFolderListSortCreatedTimeAscending()
+            }
+        }
+    }
+
+    fun getSortOrderA6(){
+        scope.launch {
+            return@launch withContext(Dispatchers.IO){
+                sortOrderA6 = folderRepository.getFolderListSortCreatedTimeDescending()
+            }
+        }
+    }
 }
